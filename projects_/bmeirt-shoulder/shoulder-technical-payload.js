@@ -140,7 +140,7 @@ window.__portfolioMountTechnical({"html":`<style id="bmerit-process-final">
 
 <footer aria-label="Project navigation" class="project-footer">
   <a class="all-projects-link" href="../../index.html"><span aria-hidden="true">←</span><span>Back to all projects</span></a>
-  <a class="next-project-link" href="../emg/emgband.html"><span class="next-project-label">Next project</span><span class="next-project-title">Wearable EMG Sleeve</span></a>
+  <a class="next-project-link" href="../emg/"><span class="next-project-label">Next project</span><span class="next-project-title">Wearable EMG Sleeve</span></a>
 </footer>
 </article>
 </main>`,"scripts":[]});
