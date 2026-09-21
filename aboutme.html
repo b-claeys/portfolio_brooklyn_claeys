@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About | Brooklyn Claeys">
+  <meta property="og:description" content="About Brooklyn Claeys, a University of Calgary mechanical engineering student focused on technical design, modelling, mechatronics, and hands-on engineering projects.">
+    <meta property="og:image" content="photos-main/headshot.jpg">
+  <meta name="twitter:image" content="photos-main/headshot.jpg">
+<meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+<title>About | Brooklyn Claeys</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    /*
+      If you have licensed TT Interphases webfont files, place them in /fonts
+      and uncomment this block.
+*/
+
+    :root {
+      --bg: #0b0707;
+      --panel: #100c0c;
+      --text: #f4f0ea;
+      --muted: #aaa39a;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.13);
+
+      --accent: #00162A;
+      --accent-line: #123A5A;
+      --accent-text: #6FA0C8;
+
+      --max: 1366px;
+      --outer: clamp(24px, 4vw, 64px);
+      --gap: clamp(24px, 3.4vw, 54px);
+
+      --display: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'TT Interphases', Inter, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+      scrollbar-color: rgba(244, 240, 234, 0.28) rgba(11, 7, 7, 0.78);
+      scrollbar-width: thin;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(11, 7, 7, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(244, 240, 234, 0.24);
+      border: 2px solid rgba(11, 7, 7, 0.78);
+      border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(244, 240, 234, 0.38);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(100%, var(--max));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 38px var(--outer) 44px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .about {
+      min-height: 640px;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.92fr) minmax(430px, 1.08fr);
+      gap: var(--gap);
+      align-items: center;
+      border-bottom: 1px solid var(--line-soft);
+      padding-bottom: 48px;
+    }
+
+    .photo {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      overflow: visible;
+      box-shadow: none;
+    }
+
+    .photo img {
+      width: 100%;
+      height: auto;
+      max-height: 620px;
+      display: block;
+      object-fit: contain;
+      object-position: center top;
+      filter: none;
+    }
+
+    .content {
+      max-width: 650px;
+      align-self: center;
+      display: grid;
+      gap: 34px;
+      padding-top: 8px;
+    }
+
+    .title-block {
+      display: grid;
+      gap: 12px;
+      transform: translateY(-22px);
+    }
+
+    .title {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(62px, 7.4vw, 112px);
+      line-height: 0.82;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .name {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 400;
+    }
+
+    .statement {
+      max-width: 560px;
+      margin: 0;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: clamp(15px, 1.1vw, 18px);
+      line-height: 1.58;
+      letter-spacing: 0.026em;
+    }
+
+    .career-statement {
+      color: var(--muted);
+    }
+
+    .contact-section {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.8fr) minmax(420px, 1.2fr);
+      gap: clamp(36px, 5vw, 76px);
+      align-items: start;
+      padding: 48px 0;
+    }
+
+    .contact-section h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 0.95;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .contact-left {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      max-width: 430px;
+    }
+
+    .contact-left p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .contact-info {
+      display: grid;
+      gap: 6px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .contact-info a {
+      border-bottom: 1px solid transparent;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .contact-info a:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+
+    .contact-form {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      align-content: start;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .contact-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .contact-field label {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-soft);
+      background: var(--panel);
+      color: var(--text);
+      font: inherit;
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 160ms ease;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: var(--accent-line);
+    }
+
+    .contact-field textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .contact-submit-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .contact-submit {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      padding: 12px 22px 11px;
+      font: inherit;
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .contact-submit:hover {
+      color: var(--text);
+      border-color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .footer {
+      border-top: 1px solid var(--line-soft);
+      padding: 40px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
+      padding: 14px 30px 13px;
+      border: 1px solid var(--accent-line);
+      color: var(--accent-text);
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      transition: color 160ms ease, border-color 160ms ease, transform 160ms ease, background 160ms ease;
+    }
+
+    .footer a:hover {
+      color: var(--text);
+      border-color: var(--accent-text);
+      background: rgba(255, 255, 255, 0.025);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 860px) {
+      .about {
+        grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1.28fr);
+        gap: clamp(20px, 3vw, 32px);
+        min-height: 0;
+        align-items: center;
+      }
+
+      .photo {
+        width: 100%;
+        max-width: 320px;
+        justify-self: start;
+      }
+
+      .photo img {
+        max-height: 500px;
+      }
+
+      .content {
+        max-width: none;
+        min-width: 0;
+        gap: 24px;
+        padding-top: 0;
+      }
+
+      .title-block {
+        transform: none;
+      }
+
+      .title {
+        font-size: clamp(48px, 8vw, 72px);
+      }
+
+      .statement {
+        font-size: clamp(13px, 1.8vw, 16px);
+        line-height: 1.5;
+      }
+
+      .contact-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        padding-inline: 22px;
+      }
+
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .photo {
+        width: min(100%, 420px);
+        max-width: none;
+      }
+
+      .content {
+        gap: 28px;
+      }
+
+      .title {
+        font-size: 58px;
+      }
+
+      .statement {
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .contact-section {
+        padding: 34px 0;
+      }
+
+      .contact-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-wrap: wrap;
+      }
+    }
+
+
+    /* ---- Matched to current index visual system ---- */
+    :root {
+      --ref-bg: #000102;
+      --ref-panel: #010407;
+      --ref-blue: #49636f;
+      --ref-blue-hover: #78909a;
+      --ref-muted: #87949a;
+      --ref-line: rgba(54, 75, 86, 0.18);
+      --ref-line-soft: rgba(54, 75, 86, 0.085);
+    }
+
+    html { background: var(--ref-bg); }
+
+    body {
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.028), transparent 78%),
+        linear-gradient(180deg, #000102 0%, #000102 52%, #000000 100%);
+      color: #eef1f2;
+      font-family: 'Inter', var(--sans);
+      scrollbar-color: rgba(73, 99, 111, 0.34) rgba(0, 1, 2, 0.86);
+    }
+
+    *::-webkit-scrollbar-track { background: rgba(0, 1, 2, 0.86); }
+    *::-webkit-scrollbar-thumb {
+      background: rgba(73, 99, 111, 0.30);
+      border-color: rgba(0, 1, 2, 0.86);
+    }
+    *::-webkit-scrollbar-thumb:hover { background: rgba(91, 120, 132, 0.44); }
+
+    .page {
+      width: min(100%, var(--max));
+      min-height: 100vh;
+      padding-top: 26px;
+      padding-bottom: 56px;
+      display: block;
+    }
+
+    .about,
+    .contact-section {
+      width: min(100%, 1220px);
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .about {
+      padding-top: 34px;
+      padding-bottom: 58px;
+      border-bottom: 0;
+    }
+
+    .about::before,
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 10, 16, 0.29) 16%,
+        rgba(5, 14, 21, 0.41) 52%,
+        rgba(3, 9, 14, 0.25) 86%,
+        rgba(0, 1, 2, 0) 100%
+      );
+    }
+
+    .about::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 64%;
+      height: 92%;
+      left: 0;
+      top: 3%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 18% 54%, rgba(15, 34, 46, 0.105), transparent 72%);
+    }
+
+    .contact-section {
+      padding: 58px 0 32px;
+      margin-top: 24px;
+    }
+
+    .contact-section::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 9, 15, 0.23) 18%,
+        rgba(4, 12, 18, 0.32) 52%,
+        rgba(2, 8, 13, 0.20) 84%,
+        rgba(0, 1, 2, 0) 100%
+      );
+    }
+
+    /* Header treatment from the current index. */
+    .refined-nav {
+      position: absolute;
+      top: 34px;
+      right: 0;
+      z-index: 5;
+    }
+
+    .refined-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+      color: #737f85;
+      font-size: 12px;
+      line-height: 1;
+      letter-spacing: .075em;
+      text-transform: uppercase;
+    }
+
+    .refined-nav a {
+      position: relative;
+      padding: 4px 0 9px;
+      transition: color 170ms ease;
+    }
+
+    .refined-nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: #435d68;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    .refined-nav a:hover,
+    .refined-nav a:focus-visible,
+    .refined-nav a[aria-current="page"] {
+      color: #a2adb2;
+      outline: none;
+    }
+
+    .refined-nav a:hover::after,
+    .refined-nav a:focus-visible::after,
+    .refined-nav a[aria-current="page"]::after {
+      transform: scaleX(1);
+    }
+
+    .photo {
+      position: relative;
+      overflow: hidden;
+      background: #020609;
+      border: 1px solid rgba(54, 75, 86, .12);
+      box-shadow: 0 18px 42px rgba(0,0,0,.28);
+    }
+
+    .photo::after {
+      content: none;
+    }
+
+    .photo img {
+      filter: brightness(.97) saturate(1) contrast(1);
+      transition: filter 220ms ease, transform 220ms ease;
+    }
+
+    .photo:hover img {
+      filter: brightness(1) saturate(1) contrast(1);
+      transform: scale(1.006);
+    }
+
+    .title {
+      color: #c8d2d7;
+      text-shadow: 0 0 34px rgba(20, 43, 56, 0.11);
+    }
+
+    .name { color: #58717c; }
+    .career-statement { color: #aeb8bc; }
+
+    .contact-section h2 { color: var(--ref-blue); }
+    .contact-left p { color: #8c999f; }
+    .contact-info { color: #c8d0d3; }
+
+    .contact-info a:hover {
+      color: var(--ref-blue-hover);
+      border-color: rgba(73, 99, 111, 0.46);
+    }
+
+    .contact-field label { color: #718087; }
+
+    .contact-field input,
+    .contact-field textarea {
+      background: #010407;
+      border-color: var(--ref-line);
+      color: #e9edef;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: rgba(73, 99, 111, .56);
+      box-shadow: 0 0 0 1px rgba(73, 99, 111, .08), 0 0 24px rgba(18, 40, 52, .08);
+    }
+
+    .contact-submit {
+      border-color: rgba(73, 99, 111, .34);
+      color: #87949a;
+    }
+
+    .contact-submit:hover,
+    .contact-submit:focus-visible {
+      color: #c8d2d7;
+      border-color: rgba(83, 111, 124, .62);
+      box-shadow: 0 0 24px rgba(18, 40, 52, .11);
+      outline: none;
+    }
+
+    /* This About page intentionally has no footer. */
+    .footer { display: none !important; }
+
+    @media (max-width: 860px) {
+      .about { padding-top: 54px; }
+      .refined-nav { top: 26px; }
+      .refined-nav-inner { gap: 18px; font-size: 10px; }
+      .contact-section { padding-top: 48px; }
+    }
+
+    @media (max-width: 620px) {
+      .about { padding-top: 64px; }
+      .refined-nav { top: 22px; right: 0; }
+      .refined-nav-inner { gap: 12px; font-size: 9px; }
+      .contact-section { padding-top: 40px; }
+    }
+
+  </style>
+<meta content="#000102" name="theme-color"/><meta content="About Brooklyn Claeys, a University of Calgary mechanical engineering student focused on technical design, modelling, mechatronics, and hands-on engineering projects." name="description"/><link href="assets/site-theme.css" rel="stylesheet"/>
+<style id="about-explicit-orange-fixes">
+  /* Explicit page-level accents so they remain visible even if the shared theme is unavailable. */
+  .about-page .name {
+    color: #FF7A32 !important;
+  }
+  .about-page .contact-section .section-accent-rule {
+    display: block !important;
+    width: 58px !important;
+    height: 2px !important;
+    margin: 0 0 18px !important;
+    background: #FF7A32 !important;
+    box-shadow: 0 0 18px rgba(255,122,50,.18);
+  }
+  .about-page .contact-info span:first-child {
+    color: #4B6572 !important;
+  }
+  .about-page .contact-info a,
+  .about-page .contact-info a:visited {
+    color: #E7EBED !important;
+  }
+  .about-page .contact-info a:hover,
+  .about-page .contact-info a:focus-visible {
+    color: #FF7A32 !important;
+  }
+  .about-page .contact-info span:last-child {
+    color: #7F8B92 !important;
+  }
+  .about-page .contact-submit {
+    color: #FF7A32 !important;
+  }
+  .about-page .contact-submit {
+    border-color: rgba(255,122,50,.50) !important;
+  }
+  .about-page .contact-info a:hover,
+  .about-page .contact-info a:focus-visible,
+  .about-page .contact-submit:hover,
+  .about-page .contact-submit:focus-visible {
+    color: #FF9A63 !important;
+    border-color: #FF7A32 !important;
+  }
+  .about-page .contact-field:focus-within label {
+    color: #FF7A32 !important;
+  }
+</style>
+</head>
+<body class="about-page">
+<main class="page">
+<section aria-label="About Brooklyn Claeys" class="about">
+<nav aria-label="Primary navigation" class="refined-nav">
+<div class="refined-nav-inner">
+<a href="index.html">Projects</a>
+<a aria-current="page" href="aboutme.html">About Me</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
+<div aria-label="Portrait of Brooklyn Claeys" class="photo">
+<img alt="Brooklyn Claeys" decoding="async" src="photos-main/headshot.jpg"/ loading="lazy" decoding="async">
+</div>
+<div class="content">
+<div class="title-block"><span aria-hidden="true" class="section-accent-rule"></span>
+<h1 class="title">About Me</h1>
+<p class="name">Brooklyn Claeys</p>
+</div>
+<p class="statement career-statement">
+         I’m a third-year Mechanical Engineering student at the University of Calgary with a Biomedical Engineering minor. I enjoy working on hands on technical projects and have experience across mechanical design, research, prototyping, electronics, and testing. I’m always looking for opportunities to learn new things and build practical experience.
+        </p>
+</div>
+</section>
+<section aria-labelledby="contact-heading" class="contact-section" id="contact">
+<div class="contact-left">
+<span aria-hidden="true" class="section-accent-rule"></span>
+<h2 id="contact-heading">Contact Me</h2>
+<p>
+          Have a project, research opportunity, or idea worth talking about? I’d love to connect.
+        </p>
+<div aria-label="Contact information" class="contact-info">
+<span>Brooklyn Claeys</span>
+<a href="mailto:5brooklync15@gmail.com">5brooklync15@gmail.com</a>
+<span>Calgary, AB</span>
+</div>
+</div>
+<form class="contact-form" id="contact-form">
+<div class="contact-row">
+<div class="contact-field">
+<label for="contact-name">Name</label>
+<input autocomplete="name" id="contact-name" name="name" placeholder="Your name" type="text"/>
+</div>
+<div class="contact-field">
+<label for="contact-reply">Email</label>
+<input autocomplete="email" id="contact-reply" name="email" placeholder="you@example.com" type="email"/>
+</div>
+</div>
+<div class="contact-field">
+<label for="contact-message">Message</label>
+<textarea id="contact-message" name="message" placeholder="Your message" required=""></textarea>
+</div>
+<div class="contact-submit-row">
+<button class="contact-submit" type="submit">Send message →</button>
+</div>
+</form>
+</section>
+</main>
+<script>
+    const contactForm = document.getElementById('contact-form');
+
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById('contact-name').value.trim();
+      const replyEmail = document.getElementById('contact-reply').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      const subject = name ? `Portfolio contact: ${name}` : 'Portfolio contact';
+      const bodyParts = [];
+
+      if (name) bodyParts.push(`Name: ${name}`);
+      if (replyEmail) bodyParts.push(`Reply email: ${replyEmail}`);
+      if (name || replyEmail) bodyParts.push('');
+      bodyParts.push(message);
+
+      const mailto = `mailto:5brooklync15@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyParts.join('\n'))}`;
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3569 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Brooklyn Claeys | Mechanical Engineering">
+  <meta property="og:description" content="Brooklyn Claeys — Mechanical Engineering portfolio featuring dynamics research, robotics, wearable sensing, controls, CAD, and prototyping.">
+    <meta property="og:image" content="photos-main/bike_sensors.JPG">
+  <meta name="twitter:image" content="photos-main/bike_sensors.JPG">
+<meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+<meta content="Brooklyn Claeys — Mechanical Engineering portfolio featuring dynamics research, robotics, wearable sensing, controls, CAD, and prototyping." name="description"/>
+<meta content="#000102" name="theme-color"/>
+<script>document.documentElement.classList.add('js');</script>
+<title>Brooklyn Claeys | Mechanical Engineering</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --bg: #0b0707;
+      --text: #f4f0ea;
+      --muted: #b8b1a8;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.14);
+      --panel: #100c0c;
+
+      --accent: #00162A;
+      --accent-line: #123A5A;
+      --accent-text: #6FA0C8;
+
+      --max: 1366px;
+      --work-max: 1220px;
+      --outer: clamp(24px, 4vw, 64px);
+      --gap: clamp(16px, 2vw, 28px);
+      --artifact-height: 430px;
+      --project-text-width: 340px;
+
+      --display: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Inter', Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding: 26px var(--outer) 44px;
+    }
+
+    .site-header {
+      position: relative;
+      min-height: 300px;
+      display: block;
+      padding-bottom: 34px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .header-pdf-link {
+      position: absolute;
+      top: 26px;
+      right: 0;
+      width: fit-content;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 3px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .header-pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .name {
+      margin: 28px 0 18px;
+      font-family: var(--display);
+      font-size: clamp(64px, 8.8vw, 124px);
+      line-height: 0.78;
+      font-weight: 600;
+      letter-spacing: 0.015em;
+      text-transform: uppercase;
+    }
+
+    .name-link {
+      color: inherit;
+      transition: color 160ms ease;
+    }
+
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: var(--accent-text);
+    }
+
+    .identity {
+      display: grid;
+      gap: 6px;
+      color: var(--text);
+      font-size: clamp(12px, 1.05vw, 15px);
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .identity span:nth-child(2) {
+      color: var(--muted);
+    }
+
+    .featured,
+    .supporting {
+      width: min(100%, var(--work-max));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .featured {
+      display: grid;
+      gap: 76px;
+      padding: 54px 0 70px;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: 0.9fr 1.25fr 0.8fr;
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    .project.reverse {
+      grid-template-columns: 0.8fr 1.25fr 0.9fr;
+    }
+
+    .project.reverse .project-info {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .project.reverse .main-artifact {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .project.reverse .support-artifacts {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .support-artifacts {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: var(--gap);
+      height: var(--artifact-height);
+    }
+
+    .artifact {
+      position: relative;
+      display: block;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      min-height: 160px;
+      overflow: hidden;
+      color: inherit;
+      cursor: default;
+      transition: border-color 160ms ease;
+    }
+
+    .artifact.viewable {
+      cursor: pointer;
+    }
+
+    .artifact.viewable:hover {
+      border-color: var(--accent-line);
+    }
+
+    .garden-icon {
+      display: grid;
+      place-items: center;
+    }
+
+    .garden-icon svg {
+      width: 46%;
+      height: 46%;
+      fill: none;
+      stroke: rgba(244, 240, 234, 0.72);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .garden-icon:hover svg {
+      stroke: var(--accent-text);
+    }
+
+    .artifact img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .emg-main-index {
+      object-fit: cover !important;
+      object-position: center 44%;
+    }
+
+    .emg-dashboard-index {
+      object-fit: contain !important;
+      object-position: center;
+      padding: 4px;
+      background: #050505;
+    }
+
+    .emg-open-pod-index {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center;
+      background: var(--panel);
+      transform: scale(1.12);
+      transform-origin: center;
+    }
+
+    .table-cad-index {
+      object-fit: contain !important;
+      object-position: center;
+      padding: 8px;
+      background: #f1f2f4;
+    }
+
+    .gear-front-frame {
+      background: linear-gradient(90deg, #d9d7ce 0 38%, #e6e6db 38% 100%);
+    }
+
+    .gear-front-fit {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      object-position: center;
+      padding: 0;
+      transform: none;
+      transform-origin: center;
+      background: transparent;
+    }
+
+    .full-arm-crop {
+      object-position: left center;
+    }
+
+    .bike-cad-frame,
+    .coordinate-frame {
+      background: #f1f2f4;
+    }
+
+    .shoulder-main-frame {
+      background: #ffffff;
+    }
+
+    .bike-cad-crop,
+    .coordinate-fit,
+    .shoulder-main-fit {
+      object-fit: contain !important;
+      object-position: center;
+    }
+
+    .coordinate-fit {
+      transform: scale(1.18);
+      transform-origin: center;
+    }
+
+    .invert-drawing {
+      filter: invert(1) grayscale(1) contrast(1.35) brightness(0.82);
+      opacity: 1;
+      background: #000;
+    }
+
+    .artifact:has(.invert-drawing) {
+      background: #000;
+    }
+
+    .artifact::before {
+      content: none;
+    }
+
+    .artifact.empty {
+      box-shadow:
+        inset 0 0 0 24px var(--panel),
+        inset 0 0 0 25px var(--line-soft);
+    }
+
+    .artifact.viewable::after {
+      content: 'View Project';
+      position: absolute;
+      right: 13px;
+      bottom: 11px;
+      z-index: 2;
+      color: var(--accent-text);
+      font-family: var(--sans);
+      font-size: 9px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      pointer-events: none;
+    }
+
+    .artifact.viewable:hover::after {
+      opacity: 0.88;
+      transform: translateY(0);
+    }
+
+    .main-artifact {
+      min-height: var(--artifact-height);
+      height: var(--artifact-height);
+    }
+
+    .project-info {
+      min-height: var(--artifact-height);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 6px 0;
+      min-width: 0;
+    }
+
+    .project-title {
+      width: 100%;
+      max-width: var(--project-text-width);
+      margin: 0 0 16px;
+      font-family: var(--sans);
+      font-size: clamp(28px, 2.55vw, 42px);
+      line-height: 0.9;
+      font-weight: 400;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.035em;
+    }
+
+    .project-title a {
+      transition: color 160ms ease;
+    }
+
+    .project-title a:hover {
+      color: var(--accent-text);
+    }
+
+    .project:has(.main-artifact:hover) .project-title a,
+    .project:has(.main-artifact:focus-visible) .project-title a,
+    .project:has(.project-title a:hover) .project-title a,
+    .project:has(.project-title a:focus-visible) .project-title a {
+      color: var(--accent-text);
+    }
+
+    .project:has(.main-artifact:hover) .main-artifact,
+    .project:has(.main-artifact:focus-visible) .main-artifact,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: var(--accent-line);
+    }
+
+    .project:has(.main-artifact:hover) .main-artifact::before,
+    .project:has(.main-artifact:focus-visible) .main-artifact::before,
+    .project:has(.project-title a:hover) .main-artifact::before,
+    .project:has(.project-title a:focus-visible) .main-artifact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(18, 58, 90, 0.24);
+      pointer-events: none;
+    }
+
+    .project:has(.main-artifact:hover) .main-artifact::after,
+    .project:has(.main-artifact:focus-visible) .main-artifact::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      opacity: 0.88;
+      transform: translateY(0);
+    }
+
+    .featured .support-artifacts a.artifact {
+      cursor: pointer;
+    }
+
+    .chamber-title {
+      font-size: clamp(26px, 2.35vw, 38px);
+      max-width: 320px;
+    }
+
+    .project-links {
+      display: flex;
+      justify-content: flex-start;
+      gap: 18px;
+      width: 100%;
+      max-width: var(--project-text-width);
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .project-links a {
+      padding: 0;
+      font-size: inherit;
+      text-transform: uppercase;
+      letter-spacing: inherit;
+      transition: color 160ms ease;
+    }
+
+    .project-links a:hover {
+      color: var(--accent-text);
+    }
+
+    .caption {
+      width: 100%;
+      max-width: var(--project-text-width);
+      color: var(--text);
+      font-family: var(--display);
+      font-size: clamp(17px, 1.45vw, 22px);
+      line-height: 1.18;
+      letter-spacing: 0.01em;
+      text-align: left;
+    }
+
+
+    .joint-series {
+      width: min(100%, var(--work-max));
+      margin: 0 auto;
+      padding: 0 0 70px;
+    }
+
+    .joint-series-header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-top: 44px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .joint-series-title {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: clamp(28px, 3vw, 44px);
+      line-height: 0.92;
+      font-weight: 400;
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
+    }
+
+    .joint-series-type {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .joint-series-project-link {
+      display: block;
+      color: inherit;
+      outline: none;
+    }
+
+    .joint-image-group {
+      position: relative;
+      padding: 10px;
+      border: 1px solid transparent;
+      transition: border-color 160ms ease;
+    }
+
+    .joint-image-group::after {
+      content: "View Project";
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      z-index: 3;
+      color: var(--accent-text);
+      font-family: var(--sans);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      pointer-events: none;
+    }
+
+    .joint-series-project-link:hover .joint-image-group,
+    .joint-series-project-link:focus-visible .joint-image-group {
+      border-color: var(--accent-line);
+    }
+
+    .joint-series-project-link:hover .joint-image-group::after,
+    .joint-series-project-link:focus-visible .joint-image-group::after {
+      opacity: 0.88;
+      transform: translateY(0);
+    }
+
+    .joint-image-grid,
+    .joint-label-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+
+    .joint-label-grid {
+      margin-top: 13px;
+    }
+
+    .joint-artifact {
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      box-shadow:
+        inset 0 0 0 24px var(--panel),
+        inset 0 0 0 25px var(--line-soft);
+    }
+
+    .joint-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: rgba(244, 240, 234, 0.36);
+      font-size: 10px;
+      line-height: 1.5;
+      letter-spacing: 0.10em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .joint-title {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: 0.045em;
+      text-align: center;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .joint-series-project-link:hover .joint-title,
+    .joint-series-project-link:focus-visible .joint-title {
+      color: var(--accent-text);
+    }
+
+    .joint-series-title a {
+      transition: color 160ms ease;
+    }
+
+    .joint-series:hover .joint-series-title a,
+    .joint-series:focus-within .joint-series-title a {
+      color: var(--accent-text);
+    }
+
+    .supporting {
+      border-top: 1px solid var(--line-soft);
+      padding: 44px 0 56px;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+
+    .support-card {
+      min-height: 260px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 13px;
+    }
+
+    .support-card .artifact {
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+    }
+
+    .support-title {
+      margin: 0 0 7px;
+      font-size: 15px;
+      line-height: 1.05;
+      text-transform: uppercase;
+      font-weight: 400;
+      letter-spacing: 0.045em;
+    }
+
+    .support-title a {
+      transition: color 160ms ease;
+    }
+
+    .support-title a:hover {
+      color: var(--accent-text);
+    }
+
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a {
+      color: var(--accent-text);
+    }
+
+    .support-card:hover .artifact,
+    .support-card:focus-within .artifact {
+      border-color: var(--accent-line);
+    }
+
+    .support-card:hover .artifact::before,
+    .support-card:focus-within .artifact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(18, 58, 90, 0.20);
+      pointer-events: none;
+    }
+
+    .support-card:hover .artifact::after,
+    .support-card:focus-within .artifact::after {
+      opacity: 0.88;
+      transform: translateY(0);
+    }
+
+    .support-descriptor {
+      display: block;
+      width: 100%;
+      padding: 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line-soft);
+      padding: 32px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-social {
+      display: contents;
+    }
+
+    .footer a,
+    .footer button {
+      border: 0;
+      border-bottom: 1px solid transparent;
+      padding: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .footer a:hover,
+    .footer button:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .contact-dialog {
+      width: min(520px, calc(100vw - 36px));
+      margin: auto;
+      padding: 0;
+      overflow: hidden;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    }
+
+    .contact-dialog::backdrop {
+      background: rgba(11, 7, 7, 0.72);
+      backdrop-filter: blur(3px);
+    }
+
+    .contact-card {
+      position: relative;
+      padding: 34px;
+    }
+
+    .contact-kicker {
+      margin: 0 0 10px;
+      color: var(--accent-text);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .contact-title {
+      margin: 0 42px 12px 0;
+      font-family: var(--display);
+      font-size: clamp(30px, 4vw, 38px);
+      line-height: 0.98;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .contact-copy {
+      margin: 0 0 24px;
+      max-width: 420px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .contact-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .contact-field label {
+      color: rgba(244, 240, 234, 0.58);
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+      width: 100%;
+      border: 1px solid var(--line-soft);
+      border-radius: 0;
+      padding: 11px 12px;
+      background: rgba(244, 240, 234, 0.025);
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+      outline: none;
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+
+    .contact-field input::placeholder,
+    .contact-field textarea::placeholder {
+      color: rgba(244, 240, 234, 0.30);
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: var(--accent-line);
+      background: rgba(244, 240, 234, 0.04);
+    }
+
+    .contact-field textarea {
+      min-height: 128px;
+      resize: vertical;
+    }
+
+    .contact-submit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .contact-email {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .contact-email a {
+      border-bottom: 1px solid transparent;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .contact-email a:hover {
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .contact-submit {
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .contact-submit:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .contact-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      border: 0;
+      padding: 4px;
+      background: none;
+      color: var(--muted);
+      font: inherit;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 160ms ease;
+    }
+
+    .contact-close:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 560px) {
+      .contact-card {
+        padding: 28px 22px 24px;
+      }
+
+      .contact-row {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-submit-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    .about-link,
+    .about-link:visited {
+      color: inherit;
+      border-bottom: 1px solid transparent;
+    }
+
+    .about-link:hover {
+      color: var(--accent-text);
+      border-bottom-color: var(--accent-line);
+    }
+
+    @media (max-width: 980px) {
+      :root {
+        --artifact-height: 335px;
+      }
+
+      .featured {
+        gap: 52px;
+        padding: 40px 0 54px;
+      }
+
+      .site-header {
+        min-height: 260px;
+      }
+
+      .project,
+      .project.reverse {
+        grid-template-columns: 1fr;
+      }
+
+      .project.reverse .project-info,
+      .project.reverse .main-artifact,
+      .project.reverse .support-artifacts {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .project-info,
+      .project.reverse .project-info {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(240px, 1fr) minmax(220px, 0.85fr);
+        column-gap: var(--gap);
+        row-gap: 0;
+        align-items: start;
+        order: 1;
+      }
+
+      .project-title {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: 360px;
+        font-size: clamp(32px, 4vw, 48px);
+        line-height: 0.9;
+        margin-bottom: 14px;
+      }
+
+      .chamber-title {
+        font-size: clamp(30px, 3.7vw, 44px);
+        max-width: 360px;
+      }
+
+      .project-links {
+        grid-column: 1;
+        grid-row: 2;
+        max-width: 360px;
+        margin: 4px 0 0;
+        align-self: start;
+      }
+
+      .caption {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: start;
+        width: 100%;
+        max-width: none;
+        margin-top: 8px;
+        padding-bottom: 24px;
+        text-align: left;
+      }
+
+      .main-artifact {
+        order: 2;
+        min-height: var(--artifact-height);
+        height: var(--artifact-height);
+      }
+
+      .support-artifacts {
+        order: 3;
+        height: auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: none;
+      }
+
+      .support-artifacts .artifact {
+        min-height: 150px;
+        height: 150px;
+      }
+
+      /* EMG framing for the actual split-view breakpoint */
+      .emg-main-index {
+        object-fit: cover !important;
+        object-position: center bottom;
+        padding: 0;
+        background: var(--panel);
+      }
+
+      .emg-dashboard-index {
+        object-fit: cover !important;
+        object-position: center 78%;
+        padding: 0;
+        background: #050505;
+      }
+
+      .emg-open-pod-index {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        object-position: center;
+        padding: 0;
+        transform: scale(1.10);
+        transform-origin: center;
+        background: #cfcec9;
+      }
+
+      .support-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --artifact-height: 300px;
+      }
+
+      .page {
+        padding-inline: 22px;
+      }
+
+      .site-header {
+        min-height: 230px;
+      }
+
+      .name {
+        font-size: 62px;
+      }
+
+      .project-info,
+      .project.reverse .project-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .project-title,
+      .project-links,
+      .caption {
+        max-width: none;
+      }
+
+      .caption {
+        margin-top: 0;
+      }
+
+      .joint-image-grid,
+      .joint-label-grid,
+      .support-artifacts,
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .joint-label-grid {
+        gap: 18px;
+      }
+
+      .joint-artifact {
+        min-height: 300px;
+      }
+
+      .footer-social,
+      .footer {
+        flex-wrap: wrap;
+      }
+    }
+  
+
+/* Match PDF-link typography used on project pages */
+    .header-pdf-link {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+
+    /* =========================================================
+       REFINED HOMEPAGE SYSTEM — layered over current source file
+       ========================================================= */
+    :root {
+      --ref-bg: #010305;
+      --ref-bg-deep: #000102;
+      --ref-panel: #03070a;
+      --ref-text: #edf0f2;
+      --ref-muted: #747d83;
+      --ref-blue: #263a46;
+      --ref-blue-hover: #3d5665;
+      --ref-line: rgba(46, 62, 72, 0.16);
+      --ref-line-soft: rgba(46, 62, 72, 0.075);
+      --ref-glow: rgba(10, 20, 27, 0.030);
+    }
+
+    html { background: var(--ref-bg); }
+
+    body {
+      color: var(--ref-text);
+      background:
+        radial-gradient(900px 620px at 90% 0%, rgba(13, 25, 33, 0.038), transparent 76%),
+        radial-gradient(760px 540px at 4% 58%, rgba(7, 15, 21, 0.017), transparent 82%),
+        linear-gradient(180deg, var(--ref-bg) 0%, #020507 52%, var(--ref-bg-deep) 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Non-sticky, minimal top navigation. */
+    .refined-nav {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      background: transparent;
+    }
+
+    .refined-nav-inner {
+      width: min(100%, var(--max));
+      min-height: 54px;
+      margin: 0 auto;
+      padding: 0 var(--outer);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: clamp(18px, 2.4vw, 34px);
+      color: var(--ref-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .refined-nav a,
+    .refined-nav button {
+      position: relative;
+      border: 0;
+      padding: 20px 0 17px;
+      background: none;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      cursor: pointer;
+      transition: color 160ms ease;
+    }
+
+    .refined-nav a::after,
+    .refined-nav button::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 12px;
+      height: 1px;
+      background: var(--ref-blue-hover);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    .refined-nav a:hover,
+    .refined-nav a:focus-visible,
+    .refined-nav button:hover,
+    .refined-nav button:focus-visible {
+      color: var(--ref-text);
+      outline: none;
+    }
+
+    .refined-nav a:hover::after,
+    .refined-nav a:focus-visible::after,
+    .refined-nav button:hover::after,
+    .refined-nav button:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    .refined-nav a[aria-current="page"] {
+      color: var(--ref-text);
+    }
+
+    .refined-nav a[aria-current="page"]::after {
+      transform: scaleX(1);
+      background: var(--ref-blue);
+    }
+
+    .page {
+      padding-top: 0;
+    }
+
+    .site-header {
+      min-height: 290px;
+      padding-top: 20px;
+      padding-bottom: 38px;
+      border-bottom-color: var(--ref-line-soft);
+    }
+
+    .header-pdf-link {
+      top: 34px;
+      color: var(--ref-muted);
+      border-bottom-color: var(--ref-line);
+    }
+
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible {
+      color: var(--ref-blue-hover);
+      border-color: var(--ref-blue-hover);
+    }
+
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: #cbd1d5;
+    }
+
+    .identity span:nth-child(2) { color: var(--ref-muted); }
+
+    .featured {
+      gap: clamp(68px, 7vw, 92px);
+      padding-top: 58px;
+      padding-bottom: 76px;
+    }
+
+    .project {
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* Extremely subtle spatial light instead of a surrounding project box. */
+    .project::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 72%;
+      height: 110%;
+      left: 14%;
+      top: -5%;
+      background: radial-gradient(ellipse, rgba(12, 25, 33, 0.026), transparent 74%);
+      pointer-events: none;
+    }
+
+    .project:nth-child(even)::after {
+      left: 5%;
+      background: radial-gradient(ellipse, rgba(9, 20, 27, 0.021), transparent 75%);
+    }
+
+    .project-title a {
+      color: var(--ref-blue);
+      transition: color 180ms ease;
+    }
+
+    .project-title a:hover,
+    .project-title a:focus-visible,
+    .project:has(.artifact:hover) .project-title a,
+    .project:has(.artifact:focus-visible) .project-title a,
+    .project:has(.project-title a:hover) .project-title a,
+    .project:has(.project-title a:focus-visible) .project-title a {
+      color: var(--ref-blue-hover);
+    }
+
+    .project-links,
+    .support-descriptor { color: var(--ref-muted); }
+
+    .artifact {
+      border-color: var(--ref-line-soft);
+      background: var(--ref-panel);
+      transition: border-color 180ms ease, box-shadow 220ms ease, transform 220ms ease;
+    }
+
+    /* Remove old blue image wash and View Project label while keeping the linked image itself. */
+    .artifact.viewable::after { content: none !important; }
+    .project:has(.main-artifact:hover) .main-artifact::before,
+    .project:has(.main-artifact:focus-visible) .main-artifact::before,
+    .project:has(.project-title a:hover) .main-artifact::before,
+    .project:has(.project-title a:focus-visible) .main-artifact::before,
+    .support-card:hover .artifact::before,
+    .support-card:focus-within .artifact::before {
+      content: none !important;
+    }
+
+    /* Synced project interaction: image -> title, title -> main image. */
+    .project:has(.artifact:hover) .main-artifact,
+    .project:has(.artifact:focus-visible) .main-artifact,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: rgba(52, 73, 86, 0.24);
+      box-shadow: 0 0 24px rgba(13, 27, 36, 0.060), 0 19px 44px rgba(0, 0, 0, 0.20);
+      transform: translateY(-2px);
+    }
+
+    .support-card:hover .artifact,
+    .support-card:focus-within .artifact {
+      border-color: rgba(52, 73, 86, 0.21);
+      box-shadow: 0 0 20px rgba(13, 27, 36, 0.048), 0 14px 32px rgba(0,0,0,0.17);
+      transform: translateY(-2px);
+    }
+
+    .support-title a {
+      color: var(--ref-blue);
+      transition: color 160ms ease;
+    }
+
+    .support-title a:hover,
+    .support-title a:focus-visible,
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a {
+      color: var(--ref-blue-hover);
+    }
+
+    /* Past Projects retains the full regular line treatment selected earlier. */
+    .supporting {
+      border-top: 0;
+      padding-top: 22px;
+    }
+
+    .past-heading-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+
+    .past-heading {
+      margin: 0;
+      color: var(--ref-blue);
+      font-family: var(--sans);
+      font-size: clamp(18px, 1.7vw, 24px);
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .past-heading-line {
+      width: 100%;
+      height: 1px;
+      background: var(--ref-line);
+    }
+
+    /* Dots only progress indicator. */
+    .progress-rail {
+      position: fixed;
+      right: clamp(12px, 1.5vw, 22px);
+      top: 50%;
+      z-index: 60;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 13px;
+      justify-items: center;
+      padding: 8px 5px;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      margin: 0;
+      padding: 0;
+      border: 1px solid rgba(104, 116, 124, 0.28);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .progress-dot:hover,
+    .progress-dot:focus-visible {
+      transform: scale(1.35);
+      border-color: var(--ref-blue-hover);
+      outline: none;
+    }
+
+    .progress-dot.is-active {
+      transform: scale(1.18);
+      background: var(--ref-blue-hover);
+      border-color: var(--ref-blue-hover);
+      box-shadow: 0 0 8px rgba(37, 55, 66, 0.14);
+    }
+
+    /* Scroll reveal. */
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 340ms ease-out, transform 340ms ease-out;
+    }
+
+    .js .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Split footer: contact/email left; actions right. */
+    .page-footer {
+      width: min(100%, var(--work-max));
+      margin: 0 auto;
+      padding: 40px 0 20px;
+      border-top: 1px solid var(--ref-line-soft);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: end;
+      color: var(--ref-muted);
+    }
+
+    .footer-contact {
+      display: grid;
+      gap: 7px;
+      justify-items: start;
+      min-width: 0;
+    }
+
+    .footer-label {
+      color: var(--ref-blue);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .footer-email {
+      color: var(--ref-muted);
+      font-size: 12px;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      overflow-wrap: anywhere;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 18px;
+      color: var(--ref-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .page-footer a,
+    .page-footer button {
+      position: relative;
+      border: 0;
+      padding: 3px 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      cursor: pointer;
+      transition: color 160ms ease;
+    }
+
+    .footer-email::after,
+    .footer-actions a::after,
+    .footer-actions button::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--ref-blue-hover);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    .page-footer a:hover,
+    .page-footer a:focus-visible,
+    .page-footer button:hover,
+    .page-footer button:focus-visible {
+      color: var(--ref-text);
+      outline: none;
+    }
+
+    .footer-email:hover::after,
+    .footer-email:focus-visible::after,
+    .footer-actions a:hover::after,
+    .footer-actions a:focus-visible::after,
+    .footer-actions button:hover::after,
+    .footer-actions button:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    @media (max-width: 760px) {
+      .page-footer {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .footer-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        white-space: normal;
+      }
+    }
+
+    /* Contact dialog inherits the same deeper navy without changing its content. */
+    .contact-dialog {
+      background: #03080c;
+      border-color: var(--ref-line);
+      color: var(--ref-text);
+    }
+    .contact-dialog::backdrop { background: rgba(0, 1, 2, 0.84); }
+    .contact-kicker,
+    .contact-title { color: var(--ref-blue); }
+    .contact-copy,
+    .contact-email { color: var(--ref-muted); }
+    .contact-field input:focus,
+    .contact-field textarea:focus,
+    .contact-submit:hover { border-color: var(--ref-blue-hover); }
+    .contact-submit:hover,
+    .contact-close:hover { color: var(--ref-blue-hover); }
+
+    @media (max-width: 980px) {
+      .site-header { min-height: 250px; }
+      .progress-rail { right: 10px; }
+    }
+
+    @media (max-width: 700px) {
+      .refined-nav-inner { justify-content: center; min-height: 48px; }
+      .refined-nav a,
+      .refined-nav button { padding-top: 17px; padding-bottom: 15px; }
+      .refined-nav a::after,
+      .refined-nav button::after { bottom: 10px; }
+      .progress-rail { display: none; }
+      .past-heading-row { gap: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+
+
+
+    /* =========================================================
+       V6 refinement: identity emphasis, image slot fills, project washes
+       ========================================================= */
+
+    /* The header stays quiet, but the identity now participates in the navy system. */
+    .site-header {
+      display: flex;
+      align-items: flex-end;
+      background:
+        radial-gradient(620px 270px at 11% 70%, rgba(10, 26, 37, 0.18), transparent 76%);
+    }
+
+    .identity-block {
+      width: 100%;
+      position: relative;
+    }
+
+    .name {
+      text-shadow: 0 0 34px rgba(10, 28, 40, 0.10);
+    }
+
+    .name-link {
+      color: #d7dde1;
+    }
+
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: #e5e9ec;
+    }
+
+    .identity {
+      width: min(100%, 610px);
+      gap: 7px;
+    }
+
+    .identity-major {
+      color: #435866;
+    }
+
+    .identity-bottom-row {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .identity-university {
+      color: #75828a;
+    }
+
+    /* Portfolio PDF now belongs to the University row instead of floating above the hero. */
+    .header-pdf-link {
+      position: relative !important;
+      inset: auto !important;
+      flex: 0 0 auto;
+      margin-left: auto;
+      padding: 0 0 3px;
+      color: #536774;
+      border-bottom: 1px solid rgba(61, 80, 92, 0.20);
+      font-size: 10px;
+      letter-spacing: 0.11em;
+      white-space: nowrap;
+    }
+
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible {
+      color: #748a97;
+      border-color: #536b79;
+    }
+
+    /* A deep tonal wash separates projects without enclosing them in cards. */
+    .featured {
+      gap: clamp(48px, 5.4vw, 72px);
+      overflow: visible;
+    }
+
+    .project {
+      padding-top: clamp(34px, 4vw, 50px);
+      padding-bottom: clamp(34px, 4vw, 50px);
+    }
+
+    .project::before {
+      content: '';
+      position: absolute;
+      z-index: -2;
+      top: 0;
+      bottom: 0;
+      left: max(-7vw, -86px);
+      right: max(-7vw, -86px);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(4, 12, 18, 0.24) 16%,
+          rgba(5, 14, 21, 0.32) 50%,
+          rgba(3, 10, 15, 0.22) 84%,
+          rgba(1, 3, 5, 0) 100%
+        );
+      pointer-events: none;
+    }
+
+    .project:nth-child(2)::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(5, 11, 18, 0.20) 16%,
+          rgba(6, 13, 21, 0.28) 50%,
+          rgba(4, 10, 17, 0.20) 84%,
+          rgba(1, 3, 5, 0) 100%
+        );
+    }
+
+    .project:nth-child(3)::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(3, 12, 18, 0.22) 16%,
+          rgba(4, 15, 22, 0.30) 50%,
+          rgba(3, 10, 16, 0.20) 84%,
+          rgba(1, 3, 5, 0) 100%
+        );
+    }
+
+    /* Keep the earlier local light pool, but make it blend into the new section band. */
+    .project::after {
+      width: 78%;
+      height: 112%;
+      left: 11%;
+      top: -6%;
+      background: radial-gradient(ellipse, rgba(15, 31, 42, 0.052), transparent 73%);
+    }
+
+    .project:nth-child(even)::after {
+      left: 4%;
+      background: radial-gradient(ellipse, rgba(13, 27, 39, 0.044), transparent 74%);
+    }
+
+    /* Make contain/letterboxed assets look intentionally framed, not padded by the page color. */
+    .bike-cad-frame,
+    .coordinate-frame,
+    .artifact:has(.table-cad-index) {
+      background: #f1f2f4 !important;
+    }
+
+    .shoulder-main-frame {
+      background: #ffffff !important;
+    }
+
+    .gear-front-frame {
+      background: #deddd4 !important;
+    }
+
+    .artifact:has(.emg-dashboard-index) {
+      background: #050505 !important;
+    }
+
+    .artifact:has(.emg-open-pod-index) {
+      background: #cfcec9 !important;
+    }
+
+    .emg-open-pod-index {
+      background: #cfcec9 !important;
+    }
+
+    .artifact:has(.garden-icon),
+    .artifact:has(img[src*="plant_pot_leaves"]) {
+      background: #05090c !important;
+    }
+
+    /* Keep titles darker than earlier concepts while giving them enough separation from the deepest navy. */
+    .project-title a,
+    .support-title a,
+    .past-heading,
+    .footer-label {
+      color: #304955;
+    }
+
+    .project-title a:hover,
+    .project-title a:focus-visible,
+    .project:has(.artifact:hover) .project-title a,
+    .project:has(.artifact:focus-visible) .project-title a,
+    .support-title a:hover,
+    .support-title a:focus-visible,
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a {
+      color: #4b6572;
+    }
+
+    @media (max-width: 700px) {
+      .site-header {
+        align-items: stretch;
+        background: radial-gradient(520px 240px at 20% 60%, rgba(10, 26, 37, 0.16), transparent 78%);
+      }
+
+      .identity-bottom-row {
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .header-pdf-link {
+        margin-left: 0;
+      }
+
+      .project {
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+
+      .project::before {
+        left: -22px;
+        right: -22px;
+      }
+    }
+
+
+    /* =========================================================
+       V7 refinement: stronger hierarchy + controlled image luminance
+       ========================================================= */
+
+    /* Integrate nav into the hero: top-right, aligned with the top of the name. */
+    .site-header {
+      position: relative;
+      display: block;
+      min-height: 300px;
+      padding-top: 34px;
+      padding-bottom: 38px;
+      background:
+        radial-gradient(650px 300px at 11% 58%, rgba(7, 20, 29, 0.22), transparent 76%);
+    }
+
+    .identity-block {
+      width: 100%;
+      padding-top: 0;
+    }
+
+    .name {
+      margin-top: 0;
+    }
+
+    .refined-nav {
+      position: absolute;
+      top: 34px;
+      right: 0;
+      z-index: 20;
+      width: auto;
+      background: transparent;
+    }
+
+    .refined-nav-inner {
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      gap: clamp(22px, 2.5vw, 38px);
+      justify-content: flex-end;
+      color: #7f8b92;
+      font-size: 12px;
+      letter-spacing: 0.095em;
+    }
+
+    .refined-nav a,
+    .refined-nav button {
+      padding: 4px 0 8px;
+    }
+
+    .refined-nav a::after,
+    .refined-nav button::after {
+      bottom: 0;
+      background: #314651;
+    }
+
+    .refined-nav a[aria-current="page"] {
+      color: #a9b2b7;
+    }
+
+    .refined-nav a[aria-current="page"]::after {
+      background: #405762;
+    }
+
+    /* Identity is brighter than before, but stays blue-grey rather than electric blue. */
+    .name-link {
+      color: #ccd4d8;
+      text-shadow: 0 0 34px rgba(18, 40, 53, 0.12);
+    }
+
+    .identity {
+      width: 100%;
+      max-width: none;
+      padding-right: 0;
+    }
+
+    .identity-major {
+      color: #526a76;
+    }
+
+    .identity-university {
+      color: #89959c;
+    }
+
+    .identity-bottom-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 26px;
+    }
+
+    .header-pdf-link {
+      margin-left: 0;
+      color: #667983;
+      font-size: 11px;
+      letter-spacing: 0.105em;
+      justify-self: end;
+    }
+
+    /* Titles are slightly brighter so they balance the real photography. */
+    .project-title a,
+    .support-title a,
+    .past-heading,
+    .footer-label {
+      color: #3f5965;
+    }
+
+    .project-title a:hover,
+    .project-title a:focus-visible,
+    .project:has(.artifact:hover) .project-title a,
+    .project:has(.artifact:focus-visible) .project-title a,
+    .support-title a:hover,
+    .support-title a:focus-visible,
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a {
+      color: #5b7480;
+    }
+
+    /* The source imagery is much brighter than the mock palette: calm it down at rest. */
+    .artifact {
+      isolation: isolate;
+    }
+
+    .artifact::after,
+    .artifact.viewable::after {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 4 !important;
+      background: rgba(0, 5, 9, 0.17) !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: none !important;
+      transition: background 220ms ease, opacity 220ms ease !important;
+    }
+
+    .project:has(.artifact:hover) .artifact::after,
+    .project:has(.artifact:focus-visible) .artifact::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after,
+    .support-card:hover .artifact::after,
+    .support-card:focus-within .artifact::after {
+      background: rgba(0, 5, 9, 0.09) !important;
+    }
+
+    /* Soften the brightest letterbox fills while still matching each asset family. */
+    .bike-cad-frame,
+    .coordinate-frame,
+    .artifact:has(.table-cad-index) {
+      background: #d9dcdf !important;
+    }
+
+    .shoulder-main-frame {
+      background: #e5e6e6 !important;
+    }
+
+    .gear-front-frame {
+      background: #d2d1c8 !important;
+    }
+
+    /* Slightly stronger chapter washes: enough to separate projects, never boxed. */
+    .project::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(3, 10, 15, 0.30) 14%,
+          rgba(4, 13, 19, 0.40) 50%,
+          rgba(3, 9, 14, 0.28) 86%,
+          rgba(1, 3, 5, 0) 100%
+        );
+    }
+
+    .project:nth-child(2)::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(4, 9, 15, 0.27) 14%,
+          rgba(5, 12, 19, 0.36) 50%,
+          rgba(3, 9, 15, 0.26) 86%,
+          rgba(1, 3, 5, 0) 100%
+        );
+    }
+
+    .project:nth-child(3)::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(1, 3, 5, 0) 0%,
+          rgba(3, 10, 16, 0.28) 14%,
+          rgba(4, 13, 20, 0.38) 50%,
+          rgba(3, 9, 15, 0.26) 86%,
+          rgba(1, 3, 5, 0) 100%
+        );
+    }
+
+    /* Reversible reveal should feel soft, not like content is popping in/out. */
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(13px);
+      transition: opacity 420ms ease-out, transform 420ms ease-out;
+    }
+
+    .js .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer: left contact block, right stacked navigation/actions. */
+    .page-footer {
+      align-items: end;
+    }
+
+    .footer-actions {
+      display: grid;
+      justify-items: end;
+      align-items: end;
+      gap: 9px;
+      white-space: normal;
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        min-height: 270px;
+        padding-top: 30px;
+      }
+
+      .refined-nav {
+        top: 30px;
+      }
+
+      .refined-nav-inner {
+        font-size: 11px;
+        gap: 22px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        min-height: 300px;
+        padding-top: 24px;
+      }
+
+      .refined-nav {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 0 0 24px;
+      }
+
+      .refined-nav-inner {
+        justify-content: flex-start;
+        gap: 20px;
+      }
+
+      .identity-bottom-row {
+        grid-template-columns: 1fr auto;
+      }
+
+      .page-footer {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .footer-actions {
+        justify-items: end;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .identity-bottom-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .header-pdf-link {
+        justify-self: start;
+      }
+
+      .page-footer {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-actions {
+        justify-items: end;
+        text-align: right;
+      }
+    }
+
+</style>
+<style id="v8-precision-overrides">
+    /* V8: restore original-feeling hover, deepen palette, align all tonal sections. */
+    :root {
+      --ref-bg: #000102;
+      --ref-bg-deep: #000000;
+      --ref-panel: #010407;
+      --ref-blue: #405b68;
+      --ref-blue-hover: #6a828d;
+      --ref-line: rgba(54, 75, 86, 0.18);
+      --ref-line-soft: rgba(54, 75, 86, 0.085);
+    }
+
+    html { background: #000102 !important; }
+    body {
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.028), transparent 78%),
+        linear-gradient(180deg, #000102 0%, #000102 48%, #000000 100%) !important;
+    }
+
+    /* Hero and project washes now share exactly the same width. */
+    .site-header,
+    .featured,
+    .supporting,
+    .page-footer {
+      width: min(100%, var(--work-max));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .site-header {
+      position: relative;
+      isolation: isolate;
+      overflow: visible;
+      background: none !important;
+    }
+
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 9, 14, 0.24) 16%,
+        rgba(4, 12, 18, 0.34) 52%,
+        rgba(2, 7, 11, 0.20) 86%,
+        rgba(0, 1, 2, 0) 100%
+      );
+      pointer-events: none;
+    }
+
+    .site-header::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 64%;
+      height: 92%;
+      left: 0;
+      top: 3%;
+      background: radial-gradient(ellipse at 18% 54%, rgba(14, 31, 42, 0.09), transparent 72%);
+      pointer-events: none;
+    }
+
+    /* Nav stays top-right, level with the top edge of the name. */
+    .refined-nav {
+      position: absolute !important;
+      top: 34px !important;
+      right: 0 !important;
+      left: auto !important;
+      width: auto !important;
+      margin: 0 !important;
+    }
+
+    .refined-nav-inner {
+      justify-content: flex-end !important;
+      font-size: 12px;
+      color: #737f85;
+    }
+
+    .refined-nav a[aria-current="page"] {
+      color: #a2adb2;
+    }
+
+    .refined-nav a[aria-current="page"]::after {
+      background: #435d68;
+    }
+
+    /* Identity gets enough blue to balance the real photographs. */
+    .name-link {
+      color: #c8d2d7;
+      text-shadow: 0 0 34px rgba(20, 43, 56, 0.11);
+    }
+
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: #dde3e6;
+    }
+
+    .identity-major { color: #58717c !important; }
+    .identity-university { color: #87949a !important; }
+    .header-pdf-link { color: #617681 !important; }
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible { color: #8196a0 !important; }
+
+    /* Keep the selected chapter separation, but every band is exactly project width. */
+    .project::before {
+      left: 0 !important;
+      right: 0 !important;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 9, 14, 0.27) 14%,
+        rgba(4, 12, 18, 0.38) 50%,
+        rgba(2, 8, 13, 0.25) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+
+    .project:nth-child(2)::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 8, 14, 0.24) 14%,
+        rgba(4, 11, 18, 0.34) 50%,
+        rgba(2, 7, 13, 0.23) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+
+    .project:nth-child(3)::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(2, 9, 15, 0.25) 14%,
+        rgba(3, 12, 19, 0.36) 50%,
+        rgba(2, 8, 13, 0.23) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+
+    .project::after {
+      width: 70% !important;
+      left: 15% !important;
+      background: radial-gradient(ellipse, rgba(13, 29, 40, 0.052), transparent 74%) !important;
+    }
+
+    .project:nth-child(even)::after {
+      left: 7% !important;
+      background: radial-gradient(ellipse, rgba(11, 25, 36, 0.044), transparent 74%) !important;
+    }
+
+    /* Titles are brighter than the band, but still clearly deep navy. */
+    .project-title a,
+    .support-title a,
+    .past-heading,
+    .footer-label {
+      color: #49636f !important;
+    }
+
+    .project-title a:hover,
+    .project-title a:focus-visible,
+    .project:has(.artifact:hover) .project-title a,
+    .project:has(.artifact:focus-visible) .project-title a,
+    .project:has(.project-title a:hover) .project-title a,
+    .project:has(.project-title a:focus-visible) .project-title a,
+    .support-title a:hover,
+    .support-title a:focus-visible,
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a {
+      color: #78909a !important;
+    }
+
+    /* Restore the original site's obvious linked image response, without text overlays. */
+    .artifact {
+      transition:
+        border-color 180ms ease,
+        box-shadow 220ms ease,
+        transform 220ms ease !important;
+    }
+
+    .artifact::after,
+    .artifact.viewable::after {
+      background: rgba(0, 4, 8, 0.18) !important;
+      transition: background 200ms ease, opacity 200ms ease !important;
+    }
+
+    .project .artifact:hover,
+    .project .artifact:focus-visible,
+    .support-card .artifact:hover,
+    .support-card .artifact:focus-visible {
+      border-color: rgba(79, 107, 121, 0.48) !important;
+      box-shadow:
+        0 0 0 1px rgba(69, 94, 107, 0.12),
+        0 0 28px rgba(25, 52, 67, 0.13),
+        0 18px 40px rgba(0, 0, 0, 0.28) !important;
+      transform: translateY(-2px) !important;
+      outline: none;
+    }
+
+    .project .artifact:hover::after,
+    .project .artifact:focus-visible::after,
+    .support-card .artifact:hover::after,
+    .support-card .artifact:focus-visible::after {
+      background: rgba(0, 4, 8, 0.055) !important;
+    }
+
+    /* Hovering any image brightens the project title; hovering title highlights main image. */
+    .project:has(.artifact:hover) .main-artifact,
+    .project:has(.artifact:focus-visible) .main-artifact,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: rgba(79, 107, 121, 0.48) !important;
+      box-shadow:
+        0 0 0 1px rgba(69, 94, 107, 0.12),
+        0 0 30px rgba(25, 52, 67, 0.13),
+        0 19px 44px rgba(0, 0, 0, 0.27) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      background: rgba(0, 4, 8, 0.055) !important;
+    }
+
+    /* Keep footer split and right-side stack exactly as selected. */
+    .footer-actions {
+      display: grid !important;
+      justify-items: end !important;
+      gap: 9px !important;
+    }
+
+    @media (max-width: 980px) {
+      .refined-nav { top: 30px !important; }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        padding-top: 24px;
+        min-height: 300px;
+      }
+
+      .refined-nav {
+        position: absolute !important;
+        top: 24px !important;
+        right: 0 !important;
+        margin: 0 !important;
+      }
+
+      .refined-nav-inner {
+        justify-content: flex-end !important;
+        gap: 16px !important;
+        font-size: 10px !important;
+      }
+
+      .project::before { left: 0 !important; right: 0 !important; }
+    }
+
+    @media (max-width: 560px) {
+      .refined-nav-inner { gap: 12px !important; font-size: 9px !important; }
+      .name { font-size: 58px; }
+    }
+  </style>
+<style id="v9-surgical-polish">
+    /* PDF: no underline, slightly larger/distinct, nudged inward. */
+    .header-pdf-link,
+    .header-pdf-link:visited {
+      border-bottom: 0 !important;
+      text-decoration: none !important;
+      color: #70838c !important;
+      font-size: 12px !important;
+      letter-spacing: 0.085em !important;
+      transform: translateX(-7px);
+    }
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible {
+      border-bottom: 0 !important;
+      color: #92a2a9 !important;
+    }
+
+    /* Real photos/renders sit a touch quieter and cooler against the near-black navy. */
+    .artifact img {
+      filter: brightness(0.94) saturate(0.96) !important;
+      transition: filter 200ms ease !important;
+    }
+    .artifact::after,
+    .artifact.viewable::after {
+      background: rgba(2, 12, 20, 0.105) !important;
+    }
+    .project .artifact:hover img,
+    .project .artifact:focus-visible img,
+    .support-card .artifact:hover img,
+    .support-card .artifact:focus-visible img,
+    .project:has(.project-title a:hover) .main-artifact img,
+    .project:has(.project-title a:focus-visible) .main-artifact img {
+      filter: brightness(0.975) saturate(0.98) !important;
+    }
+    .project .artifact:hover::after,
+    .project .artifact:focus-visible::after,
+    .support-card .artifact:hover::after,
+    .support-card .artifact:focus-visible::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      background: rgba(2, 10, 17, 0.035) !important;
+    }
+
+    /* Slightly brighter tonal section separation, still blended rather than boxed. */
+    .site-header::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 10, 16, 0.29) 16%,
+        rgba(5, 14, 21, 0.41) 52%,
+        rgba(3, 9, 14, 0.25) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+    .site-header::after {
+      background: radial-gradient(ellipse at 18% 54%, rgba(15, 34, 46, 0.105), transparent 72%) !important;
+    }
+    .project::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 10, 16, 0.32) 14%,
+        rgba(5, 14, 21, 0.45) 50%,
+        rgba(3, 9, 15, 0.30) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+    .project:nth-child(2)::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 9, 15, 0.29) 14%,
+        rgba(5, 13, 21, 0.41) 50%,
+        rgba(3, 8, 14, 0.28) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+    .project:nth-child(3)::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 10, 16, 0.30) 14%,
+        rgba(4, 14, 22, 0.43) 50%,
+        rgba(3, 9, 15, 0.28) 86%,
+        rgba(0, 1, 2, 0) 100%
+      ) !important;
+    }
+  </style>
+<style id="v10-past-hover-pdf">
+    /* Portfolio PDF: clearer hierarchy while staying aligned with University of Calgary. */
+    .header-pdf-link,
+    .header-pdf-link:visited {
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.075em !important;
+    }
+
+    /* Past Projects now belongs to the same atmospheric section system as the hero/projects. */
+    .supporting {
+      position: relative !important;
+      isolation: isolate;
+      padding-top: 50px !important;
+      padding-bottom: 62px !important;
+      border-top: 0 !important;
+    }
+
+    .supporting::before {
+      content: '';
+      position: absolute;
+      inset: -22px 0 -18px;
+      z-index: -2;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 1, 2, 0) 0%,
+        rgba(3, 9, 15, 0.25) 15%,
+        rgba(5, 14, 21, 0.37) 50%,
+        rgba(3, 9, 15, 0.24) 85%,
+        rgba(0, 1, 2, 0) 100%
+      );
+    }
+
+    .supporting::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 72%;
+      height: 96%;
+      left: 14%;
+      top: 2%;
+      pointer-events: none;
+      background: radial-gradient(ellipse, rgba(13, 30, 41, 0.065), transparent 74%);
+    }
+
+    /* Main project image hover: deliberately clearer than secondary-image hover. */
+    .main-artifact {
+      transition:
+        border-color 190ms ease,
+        box-shadow 190ms ease,
+        transform 190ms ease !important;
+    }
+
+    .project .main-artifact:hover,
+    .project .main-artifact:focus-visible,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: rgba(66, 103, 124, 0.72) !important;
+      box-shadow:
+        0 0 0 1px rgba(49, 81, 100, 0.42),
+        0 0 28px rgba(25, 57, 76, 0.24),
+        0 18px 42px rgba(0, 0, 0, 0.30) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .project .main-artifact:hover::after,
+    .project .main-artifact:focus-visible::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      background: rgba(24, 54, 70, 0.10) !important;
+    }
+
+    .project .main-artifact:hover img,
+    .project .main-artifact:focus-visible img,
+    .project:has(.project-title a:hover) .main-artifact img,
+    .project:has(.project-title a:focus-visible) .main-artifact img {
+      filter: brightness(0.985) saturate(0.96) contrast(1.01) !important;
+    }
+
+    @media (max-width: 760px) {
+      .supporting::before { inset-inline: 0; }
+      .header-pdf-link,
+      .header-pdf-link:visited { font-size: 13px !important; }
+    }
+  </style>
+<style id="v11-compact-index-header">
+    /* V11: compact the index without changing the selected visual system. */
+
+    /* Cleaner hero geometry: same left/right edges, fewer competing offsets. */
+    .site-header {
+      min-height: 248px !important;
+      padding-top: 18px !important;
+      padding-bottom: 28px !important;
+      display: block !important;
+    }
+
+    .identity-block {
+      width: 100% !important;
+      padding: 0 !important;
+    }
+
+    .name {
+      max-width: 620px;
+      margin: 0 0 24px !important;
+      font-size: clamp(66px, 8.2vw, 116px) !important;
+      line-height: 0.82 !important;
+      letter-spacing: 0.012em !important;
+    }
+
+    .identity {
+      width: 100% !important;
+      max-width: none !important;
+      gap: 8px !important;
+    }
+
+    .identity-major {
+      font-size: clamp(11px, 1vw, 14px) !important;
+      line-height: 1.15 !important;
+      letter-spacing: 0.085em !important;
+    }
+
+    .identity-bottom-row {
+      width: 100% !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      align-items: baseline !important;
+      gap: 28px !important;
+    }
+
+    .identity-university {
+      font-size: clamp(11px, 1vw, 14px) !important;
+      line-height: 1.15 !important;
+      letter-spacing: 0.08em !important;
+    }
+
+    .header-pdf-link,
+    .header-pdf-link:visited {
+      justify-self: end !important;
+      transform: translateX(-3px) !important;
+      margin: 0 !important;
+      line-height: 1.1 !important;
+    }
+
+    /* Nav shares the same right edge and top datum as the name. */
+    .refined-nav {
+      top: 19px !important;
+      right: 3px !important;
+    }
+
+    .refined-nav-inner {
+      gap: clamp(20px, 2.1vw, 30px) !important;
+      font-size: 11px !important;
+      letter-spacing: 0.09em !important;
+    }
+
+    .refined-nav a,
+    .refined-nav button {
+      padding: 2px 0 8px !important;
+    }
+
+    /* Keep the chapter washes, remove the marathon-length dead space between them. */
+    .featured {
+      gap: clamp(22px, 2.8vw, 38px) !important;
+      padding-top: 34px !important;
+      padding-bottom: 46px !important;
+    }
+
+    .project {
+      padding-top: clamp(27px, 2.8vw, 36px) !important;
+      padding-bottom: clamp(27px, 2.8vw, 36px) !important;
+    }
+
+    /* Preserve the faded project separation at the tighter rhythm. */
+    .project::before {
+      top: -2px !important;
+      bottom: -2px !important;
+    }
+
+    /* Past Projects also arrives sooner after the final featured project. */
+    .supporting {
+      padding-top: 38px !important;
+      padding-bottom: 48px !important;
+    }
+
+    /* Footer is intentionally gone on the index. */
+    .page-footer { display: none !important; }
+
+    @media (max-width: 980px) {
+      .site-header {
+        min-height: 232px !important;
+        padding-top: 18px !important;
+      }
+      .refined-nav { top: 19px !important; }
+      .name { max-width: 58vw; }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        min-height: 278px !important;
+        padding-top: 22px !important;
+        padding-bottom: 26px !important;
+      }
+      .refined-nav {
+        top: 22px !important;
+        right: 0 !important;
+      }
+      .refined-nav-inner {
+        gap: 15px !important;
+        font-size: 9.5px !important;
+      }
+      .name {
+        max-width: 58vw;
+        font-size: clamp(54px, 10vw, 74px) !important;
+        margin-bottom: 22px !important;
+      }
+      .featured {
+        gap: 22px !important;
+        padding-top: 28px !important;
+      }
+      .project {
+        padding-top: 26px !important;
+        padding-bottom: 26px !important;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .site-header {
+        min-height: 300px !important;
+      }
+      .refined-nav {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        margin-bottom: 20px !important;
+      }
+      .refined-nav-inner {
+        justify-content: flex-start !important;
+        font-size: 9px !important;
+      }
+      .name {
+        max-width: none;
+        font-size: 58px !important;
+      }
+      .identity-bottom-row {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+      .header-pdf-link,
+      .header-pdf-link:visited {
+        justify-self: start !important;
+        transform: none !important;
+      }
+    }
+  </style>
+<style id="v16-cad-accent-hover-fix">
+    /* =========================================================
+       FINAL INDEX PATCH
+       Base design remains unchanged. This block only:
+       1) introduces the CAD orange as a second accent,
+       2) resolves the stacked homepage hover overrides,
+       3) keeps supporting/CAD imagery passive.
+       ========================================================= */
+    :root {
+      --cad-accent: #FF7A32;
+      --cad-accent-soft: rgba(255, 122, 50, 0.16);
+      --cad-accent-line: rgba(255, 122, 50, 0.72);
+      --cad-accent-glow: rgba(255, 122, 50, 0.24);
+    }
+
+    /* Small, deliberate second-accent moments. */
+    .refined-nav a[aria-current="page"]::after {
+      background: var(--cad-accent) !important;
+    }
+
+    .project-links {
+      color: var(--cad-accent) !important;
+    }
+
+    .progress-dot.is-active {
+      background: var(--cad-accent) !important;
+      border-color: var(--cad-accent) !important;
+      box-shadow: 0 0 9px var(--cad-accent-soft) !important;
+    }
+
+    .progress-dot:hover,
+    .progress-dot:focus-visible {
+      border-color: var(--cad-accent-line) !important;
+    }
+
+    .past-heading-line {
+      background: linear-gradient(90deg, var(--cad-accent-line), var(--ref-line) 22%, var(--ref-line) 100%) !important;
+    }
+
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible {
+      color: var(--cad-accent) !important;
+    }
+
+    .contact-kicker {
+      color: var(--cad-accent) !important;
+    }
+
+    /* ---------------------------------------------------------
+       Featured support images: still clickable, visually passive.
+       They must never trigger the featured title/main-image hover.
+       --------------------------------------------------------- */
+    .featured .support-artifacts .artifact,
+    .featured .support-artifacts .artifact:hover,
+    .featured .support-artifacts .artifact:focus-visible {
+      border-color: rgba(93, 126, 148, 0.12) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+      transform: none !important;
+      outline: none !important;
+    }
+
+    .featured .support-artifacts .artifact img,
+    .featured .support-artifacts .artifact:hover img,
+    .featured .support-artifacts .artifact:focus-visible img {
+      filter: brightness(0.82) saturate(0.92) contrast(0.98) !important;
+      transform: none !important;
+    }
+
+    .featured .support-artifacts .artifact::after,
+    .featured .support-artifacts .artifact:hover::after,
+    .featured .support-artifacts .artifact:focus-visible::after {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 4 !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: none !important;
+      background: rgba(7, 24, 37, 0.06) !important;
+      box-shadow: none !important;
+    }
+
+    .project:has(.support-artifacts .artifact:hover) .project-title a,
+    .project:has(.support-artifacts .artifact:focus-visible) .project-title a {
+      color: #49636f !important;
+      text-shadow: none !important;
+    }
+
+    .project:has(.support-artifacts .artifact:hover) .main-artifact,
+    .project:has(.support-artifacts .artifact:focus-visible) .main-artifact {
+      border-color: rgba(93, 126, 148, 0.12) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+      transform: none !important;
+    }
+
+    .project:has(.support-artifacts .artifact:hover) .main-artifact img,
+    .project:has(.support-artifacts .artifact:focus-visible) .main-artifact img {
+      filter: brightness(0.82) saturate(0.92) contrast(0.98) !important;
+      transform: none !important;
+    }
+
+    .project:has(.support-artifacts .artifact:hover) .main-artifact::after,
+    .project:has(.support-artifacts .artifact:focus-visible) .main-artifact::after {
+      background: rgba(7, 24, 37, 0.06) !important;
+      box-shadow: none !important;
+    }
+
+    /* ---------------------------------------------------------
+       Featured main image + title: one clear, synced hover state.
+       Orange is the perimeter/accent; the established title blue stays.
+       --------------------------------------------------------- */
+    .project .main-artifact {
+      border-radius: 5px !important;
+      border-color: rgba(93, 126, 148, 0.12) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+      overflow: hidden !important;
+      transition: border-color 180ms ease, box-shadow 200ms ease, transform 180ms ease !important;
+    }
+
+    .project .main-artifact img {
+      filter: brightness(0.82) saturate(0.92) contrast(0.98) !important;
+      transition: filter 220ms ease, transform 220ms ease !important;
+    }
+
+    .project .main-artifact::after {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 4 !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: none !important;
+      background: rgba(7, 24, 37, 0.06) !important;
+      transition: background 180ms ease, box-shadow 180ms ease !important;
+    }
+
+    .project .main-artifact:hover,
+    .project .main-artifact:focus-visible,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: var(--cad-accent) !important;
+      box-shadow:
+        0 0 0 1px var(--cad-accent-line),
+        0 0 30px var(--cad-accent-glow),
+        0 18px 38px rgba(0, 0, 0, 0.28) !important;
+      transform: translateY(-1px) !important;
+      outline: none !important;
+    }
+
+    .project .main-artifact:hover::after,
+    .project .main-artifact:focus-visible::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      background: rgba(255, 122, 50, 0.055) !important;
+      box-shadow: inset 0 0 0 1px rgba(255, 190, 150, 0.14) !important;
+    }
+
+    .project .main-artifact:hover img,
+    .project .main-artifact:focus-visible img,
+    .project:has(.project-title a:hover) .main-artifact img,
+    .project:has(.project-title a:focus-visible) .main-artifact img {
+      filter: brightness(0.96) saturate(0.98) contrast(1.01) !important;
+      transform: scale(1.012) !important;
+    }
+
+    .project:has(.main-artifact:hover) .project-title a,
+    .project:has(.main-artifact:focus-visible) .project-title a,
+    .project:has(.project-title a:hover) .project-title a,
+    .project:has(.project-title a:focus-visible) .project-title a {
+      color: #91b6ca !important;
+      text-shadow: 0 0 18px rgba(71, 132, 167, 0.26) !important;
+    }
+
+    /* Past-project images remain as they were visually: no blanket image glow. */
+    .support-card .artifact,
+    .support-card:hover .artifact,
+    .support-card:focus-within .artifact,
+    .support-card .artifact:hover,
+    .support-card .artifact:focus-visible {
+      border-radius: 5px !important;
+      border-color: rgba(93, 126, 148, 0.12) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+      transform: none !important;
+      outline: none !important;
+    }
+
+    .support-card .artifact img,
+    .support-card:hover .artifact img,
+    .support-card:focus-within .artifact img,
+    .support-card .artifact:hover img,
+    .support-card .artifact:focus-visible img {
+      filter: brightness(0.82) saturate(0.92) contrast(0.98) !important;
+      transform: none !important;
+    }
+
+    .support-card .artifact::after,
+    .support-card:hover .artifact::after,
+    .support-card:focus-within .artifact::after,
+    .support-card .artifact:hover::after,
+    .support-card .artifact:focus-visible::after {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 4 !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: none !important;
+      background: rgba(7, 24, 37, 0.06) !important;
+      box-shadow: none !important;
+    }
+  </style>
+<style id="v17-production-polish">
+    /* =========================================================
+       PRODUCTION POLISH
+       No layout redesign. Refines hierarchy, interaction,
+       accessibility, image treatment, and accent consistency.
+       ========================================================= */
+
+    :root {
+      --cad-accent-hover: #FF7A32;
+      --cad-accent-hover-soft: rgba(255, 122, 50, 0.12);
+      --cad-accent-hover-line: rgba(255, 122, 50, 0.76);
+      --polish-muted: #849198;
+      --polish-caption: #bcc5ca;
+    }
+
+    html { color-scheme: dark; }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection {
+      color: var(--ref-text);
+      background: rgba(255, 122, 50, 0.28);
+    }
+
+    /* Calm defaults; orange communicates an active interaction. */
+    .project-links {
+      color: var(--polish-muted) !important;
+      line-height: 1.25;
+    }
+
+    .project-links::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      flex: 0 0 auto;
+      margin-right: 1px;
+      border-radius: 50%;
+      background: var(--cad-accent-hover);
+      opacity: 0.82;
+      align-self: center;
+    }
+
+    .caption {
+      color: var(--polish-caption) !important;
+      line-height: 1.32 !important;
+      text-wrap: pretty;
+    }
+
+    .project-title,
+    .support-title,
+    .past-heading {
+      text-wrap: balance;
+    }
+
+    .support-descriptor,
+    .identity-university,
+    .refined-nav-inner {
+      color: var(--polish-muted);
+    }
+
+    /* Link language: blue at rest, orange on hover/focus. */
+    .refined-nav a::after,
+    .refined-nav button::after,
+    .footer-email::after,
+    .footer-actions a::after,
+    .footer-actions button::after {
+      background: var(--cad-accent-hover) !important;
+    }
+
+    .refined-nav a:hover,
+    .refined-nav a:focus-visible,
+    .refined-nav button:hover,
+    .refined-nav button:focus-visible,
+    .header-pdf-link:hover,
+    .header-pdf-link:focus-visible,
+    .project-title a:hover,
+    .project-title a:focus-visible,
+    .support-title a:hover,
+    .support-title a:focus-visible,
+    .support-card:hover .support-title a,
+    .support-card:focus-within .support-title a,
+    .contact-inline-email:hover,
+    .contact-inline-email:focus-visible,
+    .page-footer a:hover,
+    .page-footer a:focus-visible,
+    .page-footer button:hover,
+    .page-footer button:focus-visible {
+      color: var(--cad-accent-hover) !important;
+    }
+
+    /* Keep the large name elegant instead of turning the hero orange. */
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: #e4e9ec !important;
+    }
+
+    .contact-inline-email {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(132, 145, 152, 0.38);
+      text-underline-offset: 3px;
+      transition: color 160ms ease, text-decoration-color 160ms ease;
+    }
+
+    .contact-inline-email:hover,
+    .contact-inline-email:focus-visible {
+      text-decoration-color: var(--cad-accent-hover);
+      outline: none;
+    }
+
+    /* Featured images: brighter at rest, crisp and unmistakably interactive on hover. */
+    .project .main-artifact,
+    .featured .support-artifacts .artifact,
+    .support-card .artifact {
+      border-color: rgba(93, 126, 148, 0.15) !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16) !important;
+    }
+
+    .project .main-artifact img {
+      filter: brightness(0.90) saturate(0.96) contrast(1.00) !important;
+    }
+
+    .featured .support-artifacts .artifact img {
+      filter: brightness(0.88) saturate(0.94) contrast(0.99) !important;
+    }
+
+    .support-card .artifact img {
+      filter: brightness(0.89) saturate(0.95) contrast(0.99) !important;
+      transition: filter 200ms ease, transform 200ms ease !important;
+    }
+
+    .project .main-artifact::after,
+    .featured .support-artifacts .artifact::after,
+    .support-card .artifact::after {
+      background: rgba(7, 24, 37, 0.025) !important;
+    }
+
+    .project .main-artifact:hover,
+    .project .main-artifact:focus-visible,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: var(--cad-accent-hover-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.24),
+        0 0 20px var(--cad-accent-hover-soft),
+        0 20px 44px rgba(0, 0, 0, 0.30) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .project .main-artifact:hover::after,
+    .project .main-artifact:focus-visible::after,
+    .project:has(.project-title a:hover) .main-artifact::after,
+    .project:has(.project-title a:focus-visible) .main-artifact::after {
+      background: rgba(255, 122, 50, 0.028) !important;
+      box-shadow: inset 0 0 0 1px rgba(255, 186, 143, 0.10) !important;
+    }
+
+    .project .main-artifact:hover img,
+    .project .main-artifact:focus-visible img,
+    .project:has(.project-title a:hover) .main-artifact img,
+    .project:has(.project-title a:focus-visible) .main-artifact img {
+      filter: brightness(1.00) saturate(1.00) contrast(1.01) !important;
+      transform: scale(1.009) !important;
+    }
+
+    .project:has(.main-artifact:hover) .project-title a,
+    .project:has(.main-artifact:focus-visible) .project-title a,
+    .project:has(.project-title a:hover) .project-title a,
+    .project:has(.project-title a:focus-visible) .project-title a {
+      color: var(--cad-accent-hover) !important;
+      text-shadow: none !important;
+    }
+
+    /* Secondary featured CAD/support images stay visually passive on mouse hover,
+       but retain an accessible keyboard focus indicator. */
+    .featured .support-artifacts .artifact:hover {
+      border-color: rgba(93, 126, 148, 0.15) !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16) !important;
+      transform: none !important;
+    }
+
+    .featured .support-artifacts .artifact:hover img {
+      filter: brightness(0.88) saturate(0.94) contrast(0.99) !important;
+      transform: none !important;
+    }
+
+    .featured .support-artifacts .artifact:focus-visible {
+      outline: 2px solid var(--cad-accent-hover) !important;
+      outline-offset: 3px !important;
+    }
+
+    /* Past-project cards get a smaller, quieter version of the same interaction. */
+    .support-card:hover .artifact,
+    .support-card:focus-within .artifact,
+    .support-card .artifact:hover,
+    .support-card .artifact:focus-visible {
+      border-color: rgba(255, 122, 50, 0.52) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.08),
+        0 16px 34px rgba(0, 0, 0, 0.22) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .support-card:hover .artifact img,
+    .support-card:focus-within .artifact img,
+    .support-card .artifact:hover img,
+    .support-card .artifact:focus-visible img {
+      filter: brightness(0.98) saturate(0.99) contrast(1.00) !important;
+      transform: scale(1.006) !important;
+    }
+
+    /* Focus states are intentional and match the interaction system. */
+    .project-title a:focus-visible,
+    .support-title a:focus-visible,
+    .header-pdf-link:focus-visible,
+    .refined-nav a:focus-visible,
+    .refined-nav button:focus-visible,
+    .contact-submit:focus-visible,
+    .contact-close:focus-visible,
+    .progress-dot:focus-visible {
+      outline: 2px solid rgba(255, 122, 50, 0.82) !important;
+      outline-offset: 4px !important;
+    }
+
+    /* Contact panel follows the same action language. */
+    .contact-dialog {
+      border-color: rgba(93, 126, 148, 0.22) !important;
+      border-radius: 6px;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: rgba(255, 122, 50, 0.68) !important;
+      box-shadow: 0 0 0 2px rgba(255, 122, 50, 0.055);
+    }
+
+    .contact-submit {
+      transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .contact-submit:hover,
+    .contact-submit:focus-visible {
+      color: var(--cad-accent-hover) !important;
+      border-color: rgba(255, 122, 50, 0.68) !important;
+      background: rgba(255, 122, 50, 0.035);
+    }
+
+    .contact-close:hover { color: var(--cad-accent-hover) !important; }
+
+    /* Small production details. */
+    .project,
+    .supporting { scroll-margin-top: 32px; }
+
+    .progress-dot {
+      touch-action: manipulation;
+    }
+
+    .progress-dot:hover,
+    .progress-dot:focus-visible {
+      border-color: var(--cad-accent-hover) !important;
+    }
+
+    .supporting { padding-bottom: 68px; }
+
+    @media (max-width: 980px) {
+      .caption { line-height: 1.38 !important; }
+    }
+
+    @media (max-width: 620px) {
+      .featured { gap: 44px !important; }
+      .project-links::before { width: 3px; height: 3px; }
+      .supporting { padding-bottom: 54px; }
+    }
+
+    @media (hover: none) {
+      .project .main-artifact:hover,
+      .support-card:hover .artifact,
+      .support-card .artifact:hover {
+        transform: none !important;
+      }
+    }
+  </style>
+<style id="v18-final-accent-details">
+    /* Final requested details only: top-left revision accent, name hover,
+       orange image borders on interaction, and two controlled image crops. */
+
+    .portfolio-revision {
+      margin: 0 0 12px;
+      color: var(--cad-accent-hover);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .name-link:hover,
+    .name-link:focus-visible {
+      color: var(--cad-accent-hover) !important;
+    }
+
+    /* Featured project hero images: orange perimeter is the interaction cue. */
+    .project .main-artifact:hover,
+    .project .main-artifact:focus-visible,
+    .project:has(.project-title a:hover) .main-artifact,
+    .project:has(.project-title a:focus-visible) .main-artifact {
+      border-color: var(--cad-accent-hover) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.34),
+        0 0 23px rgba(255, 122, 50, 0.14),
+        0 20px 44px rgba(0, 0, 0, 0.30) !important;
+    }
+
+    /* Past-project hero cards use the same border language so the interaction
+       remains consistent after the featured section. */
+    .support-card:hover .artifact,
+    .support-card:focus-within .artifact,
+    .support-card .artifact:hover,
+    .support-card .artifact:focus-visible {
+      border-color: var(--cad-accent-hover-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.18),
+        0 0 18px rgba(255, 122, 50, 0.08),
+        0 16px 34px rgba(0, 0, 0, 0.22) !important;
+    }
+
+    /* Slightly tighter crops requested for these two past-project images. */
+    .support-card .artifact .delivery-robot-index {
+      object-fit: cover !important;
+      object-position: center center !important;
+      transform: scale(1.065) !important;
+    }
+
+    .support-card:hover .artifact .delivery-robot-index,
+    .support-card:focus-within .artifact .delivery-robot-index,
+    .support-card .artifact:hover .delivery-robot-index,
+    .support-card .artifact:focus-visible .delivery-robot-index {
+      transform: scale(1.078) !important;
+    }
+
+    .support-card .artifact .garden-index {
+      object-fit: cover !important;
+      object-position: center center !important;
+      transform: scale(1.035) !important;
+    }
+
+    .support-card:hover .artifact .garden-index,
+    .support-card:focus-within .artifact .garden-index,
+    .support-card .artifact:hover .garden-index,
+    .support-card .artifact:focus-visible .garden-index {
+      transform: scale(1.045) !important;
+    }
+
+    @media (max-width: 620px) {
+      .portfolio-revision { margin-bottom: 10px; }
+    }
+  </style>
+<style id="homepage-hierarchy-flow-v19">
+/* Hierarchy only: two featured projects, moved EMG project, minimal Archive entry. */
+.archive-entry-card{position:relative!important;display:grid!important;place-items:center!important;isolation:isolate;background:radial-gradient(420px 240px at 72% 18%,rgba(98,130,149,.13),transparent 70%),linear-gradient(145deg,#152630 0%,#1b303b 55%,#162832 100%)!important;border:1px solid rgba(116,151,171,.19)!important;overflow:hidden!important}
+.archive-entry-card::before{content:''!important;position:absolute!important;inset:18px!important;border:1px solid rgba(179,200,211,.075)!important;pointer-events:none!important;background:none!important}
+.archive-entry-card::after{content:none!important}.archive-entry-arrow{position:relative;z-index:2;color:#90a9b7;font-size:clamp(42px,5vw,66px);line-height:1;font-weight:300;transform:translate(-3px,3px);transition:color 220ms ease,transform 520ms cubic-bezier(.22,1,.36,1)}
+.support-card-archive:hover .archive-entry-card,.support-card-archive:focus-within .archive-entry-card{border-color:var(--cad-accent-line)!important;box-shadow:0 0 0 1px rgba(255,122,50,.12),0 18px 34px rgba(0,0,0,.20)!important}.support-card-archive:hover .archive-entry-arrow,.support-card-archive:focus-within .archive-entry-arrow{color:var(--cad-accent)!important;transform:translate(8px,-8px)}
+.sleeve-support-index{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 44%!important;filter:brightness(.84) saturate(.92) contrast(.99)!important;transition:filter 220ms ease,transform 520ms cubic-bezier(.22,1,.36,1)!important}.support-card-sleeve:hover .sleeve-support-index,.support-card-sleeve:focus-within .sleeve-support-index{filter:brightness(.94) saturate(.98) contrast(1.01)!important;transform:scale(1.018)!important}
+.support-summary-original{margin-top:8px;color:#65727a;font-size:11px;line-height:1.45;letter-spacing:.01em;max-width:30ch}
+/* Disable legacy reveal toggles: scroll motion stays sharp and continuously positioned. */
+.js .reveal,.js .reveal.is-visible{opacity:1!important;transform:none!important;transition:none!important}
+@media (min-width:700px) and (prefers-reduced-motion:no-preference){
+ .home-flow-ready .featured .project .project-info,.home-flow-ready .featured .project .main-artifact,.home-flow-ready .featured .project .support-artifacts,.home-flow-ready .supporting .support-card{will-change:translate}
+ .home-flow-ready .featured .project .project-info{translate:var(--flow-copy-x,0px) var(--flow-copy-y,0px)}
+ .home-flow-ready .featured .project .main-artifact{translate:var(--flow-main-x,0px) var(--flow-main-y,0px)}
+ .home-flow-ready .featured .project .support-artifacts{translate:var(--flow-support-x,0px) var(--flow-support-y,0px)}
+ .home-flow-ready .featured .project .project-title{translate:var(--flow-title-x,0px) 0}
+ .home-flow-ready .featured .project .caption{translate:var(--flow-caption-x,0px) 0}
+ .home-flow-ready .featured .project .project-links{translate:var(--flow-meta-x,0px) 0}
+ .home-flow-ready .supporting .support-card{translate:var(--support-flow-x,0px) var(--support-flow-y,0px)}
+}
+@media (max-width:699px),(prefers-reduced-motion:reduce){.featured .project .project-info,.featured .project .main-artifact,.featured .project .support-artifacts,.featured .project .project-title,.featured .project .caption,.featured .project .project-links,.supporting .support-card{translate:none!important}}
+</style>
+
+
+
+<style id="homepage-scroll-choreography-v21">
+/* Scroll choreography: media enters from the sides; copy exits upward. No opacity/blur. */
+.js .reveal,.js .reveal.is-visible{opacity:1!important;transform:none!important;transition:none!important}
+@media (min-width:621px) and (prefers-reduced-motion:no-preference){
+  .home-scroll-choreo .featured .project .main-artifact,
+  .home-scroll-choreo .featured .project .support-artifacts,
+  .home-scroll-choreo .featured .project .project-info,
+  .home-scroll-choreo .support-grid>.support-card{
+    will-change:translate;
+  }
+  .home-scroll-choreo .featured .project .main-artifact{translate:var(--home-main-x,0px) 0}
+  .home-scroll-choreo .featured .project .support-artifacts{translate:var(--home-support-x,0px) 0}
+  .home-scroll-choreo .featured .project .project-info{translate:0 var(--home-copy-y,0px)}
+  .home-scroll-choreo .support-grid>.support-card{translate:var(--home-card-x,0px) 0}
+}
+@media (max-width:620px),(prefers-reduced-motion:reduce){
+  .featured .project .main-artifact,.featured .project .support-artifacts,.featured .project .project-info,.support-grid>.support-card{translate:none!important}
+}
+</style>
+
+
+<style id="homepage-header-flow-v22">
+/* Header leaves in pieces as the first project takes over. Manual scrolling remains completely native. */
+@media (min-width:621px) and (prefers-reduced-motion:no-preference){
+  .home-header-flow .portfolio-revision,
+  .home-header-flow .name-line,
+  .home-header-flow .identity-major,
+  .home-header-flow .identity-bottom-row{
+    will-change:translate;
+  }
+  .home-header-flow .name-link{display:block;overflow:visible}
+  .home-header-flow .name-line{display:block}
+  .home-header-flow .portfolio-revision{translate:0 var(--header-rev-y,0px)}
+  .home-header-flow .name-line-brooklyn{translate:var(--header-brooklyn-x,0px) var(--header-brooklyn-y,0px)}
+  .home-header-flow .name-line-claeys{translate:var(--header-claeys-x,0px) var(--header-claeys-y,0px)}
+  .home-header-flow .identity-major{translate:0 var(--header-major-y,0px)}
+  .home-header-flow .identity-bottom-row{translate:0 var(--header-bottom-y,0px)}
+}
+@media (max-width:620px),(prefers-reduced-motion:reduce){
+  .portfolio-revision,.name-line,.identity-major,.identity-bottom-row{translate:none!important}
+}
+</style>
+
+<style id="requested-static-homepage">
+.js .reveal,.js .reveal.is-visible{opacity:1!important;transform:none!important;translate:none!important;transition:none!important}
+</style>
+
+<style id="homepage-current-project-photo-fix">
+.shoulder-main-frame{background:#050708!important}.shoulder-current-photo-index{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 48%!important;transform:none!important;filter:brightness(.94) saturate(.92) contrast(1.02)!important}.shoulder-current-cad-index{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;background:#eef0f1!important;padding:4px!important}.shoulder-exploded-index{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;background:#f3f4f4!important;padding:3px!important}.chamber-current-index{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 52%!important}
+</style>
+</head>
+<body>
+<aside aria-label="Project position" class="progress-rail">
+<button aria-label="Go to project 1" class="progress-dot is-active" data-target="project-1" type="button"></button><button aria-label="Go to project 2" class="progress-dot" data-target="project-2" type="button"></button><button aria-label="Go to additional work" class="progress-dot" data-target="past-projects" type="button"></button></aside>
+<main class="page">
+<header class="site-header reveal">
+<div class="identity-block">
+<div class="portfolio-revision">Portfolio — Rev. 2026</div>
+<h1 class="name">
+<a class="name-link" href="aboutme.html">
+            <span class="name-line name-line-brooklyn">Brooklyn</span>
+            <span class="name-line name-line-claeys">Claeys</span>
+          </a>
+</h1>
+<div class="identity">
+<span class="identity-major">Mechanical Engineering | Biomedical Minor</span>
+<div class="identity-bottom-row">
+<span class="identity-university">University of Calgary</span>
+<a class="header-pdf-link" href="pdfs/Brooklyn_Claeys_Engineering_Portfolio.pdf" rel="noopener" target="_blank">Portfolio PDF</a>
+</div>
+</div>
+</div>
+<nav aria-label="Primary navigation" class="refined-nav">
+<div class="refined-nav-inner">
+<a aria-current="page" href="#work">Projects</a>
+<a href="aboutme.html">About Me</a>
+<button aria-controls="contact-dialog" aria-haspopup="dialog" id="contact-open" type="button">Contact</button>
+</div>
+</nav>
+</header>
+<section aria-label="Featured work" class="featured" id="work">
+<!-- Bicycle research overview page linked below. -->
+<article class="project reveal" data-progress="0" id="project-1">
+<div class="support-artifacts">
+<a aria-label="View 3D Bicycle Dynamics Research project" class="artifact bike-cad-frame" data-label="Model" href="projects_/Bike/bicycle.html">
+<img loading=lazy decoding=async alt="Labelled four-body bicycle CAD model" class="bike-cad-crop" src="photos-main/labeled_bike_CAD.JPG"/>
+</a>
+<a aria-label="View 3D Bicycle Dynamics Research project" class="artifact coordinate-frame" data-label="Validation" href="projects_/Bike/bicycle.html">
+<img loading=lazy decoding=async alt="Bicycle coordinate transformation diagram" class="coordinate-fit" src="photos-main/coordinate_tsf.webp"/>
+</a>
+</div>
+<a aria-label="View 3D Bicycle Dynamics Research project" class="artifact main-artifact viewable" data-label="System" href="projects_/Bike/bicycle.html">
+<img loading=lazy decoding=async alt="Instrumented bicycle used for experimental dynamics research" src="photos-main/bike_sensors.JPG"/>
+</a>
+<div class="project-info">
+<h2 class="project-title">
+<a href="projects_/Bike/bicycle.html">
+              3D Bicycle<br/>Dynamics Research
+            </a>
+</h2>
+<div class="project-links">
+<span>PURE Research</span>
+</div>
+<div class="caption">
+            Developing and validating a multibody bicycle dynamics model in MATLAB.
+          </div>
+</div>
+</article>
+<!-- Shoulder-joint overview page linked below. -->
+<article class="project reverse reveal" data-progress="1" id="project-2">
+<div class="project-info">
+<h2 class="project-title chamber-title">
+<a href="projects_/bmeirt-shoulder/shoulder.html">
+              Yankauer<br/>Robotic Arm
+            </a>
+</h2>
+<div class="project-links">
+<span>BMERIT · Biomechanical Systems Team</span>
+</div>
+<div class="caption">
+            Redesigning and integrating a planetary shoulder joint for a free-standing assistive arm.
+          </div>
+</div>
+<a aria-label="View Yankauer Robotic Arm project" class="artifact main-artifact viewable shoulder-main-frame" data-label="System" href="projects_/bmeirt-shoulder/shoulder.html">
+<img loading=lazy decoding=async alt="Current Yankauer arm prototype with the revised planetary shoulder joint integrated" class="shoulder-current-photo-index" src="projects_/bmeirt-shoulder/phots/current_arm_prototype.webp"/>
+</a>
+<div class="support-artifacts">
+<a aria-label="View Yankauer Robotic Arm project" class="artifact gear-front-frame" data-label="Assembly Drawing" href="projects_/bmeirt-shoulder/shoulder.html">
+<img loading=lazy decoding=async alt="Current open CAD view of the enclosed three-planet shoulder joint" class="gear-front-fit shoulder-current-cad-index" src="projects_/bmeirt-shoulder/phots/current_joint_render_open.png"/>
+</a>
+<a aria-label="View Yankauer Robotic Arm project" class="artifact" data-label="Assembly" href="projects_/bmeirt-shoulder/shoulder.html">
+<img loading=lazy decoding=async alt="Exploded CAD of the current enclosed planetary shoulder joint" class="shoulder-exploded-index" src="projects_/bmeirt-shoulder/phots/current_joint_exploded.webp"/>
+</a>
+</div>
+</article>
+</section>
+<section aria-label="Additional work" class="supporting reveal" data-progress="2" id="past-projects">
+<div class="past-heading-row">
+<h2 class="past-heading">Additional Work</h2>
+<span aria-hidden="true" class="past-heading-line"></span>
+</div>
+<div class="support-grid">
+
+<article class="support-card support-card-sleeve">
+<a aria-label="View Wearable EMG Sleeve project" class="artifact viewable" href="projects_/emg/emgband.html">
+<img loading=lazy decoding=async alt="Wearable EMG and motion-sensing sleeve for exercise analysis" class="sleeve-support-index" src="projects_/emg/emg_photos/emg_wear1.jpeg"/>
+</a>
+<div>
+<h3 class="support-title"><a href="projects_/emg/emgband.html">Wearable EMG Sleeve</a></h3>
+<div class="support-descriptor">Personal Project</div>
+</div>
+</article><article class="support-card">
+<a aria-label="View Environmental Control Chamber project" class="artifact viewable" href="projects_/control_chamber/chamber.html">
+<img loading=lazy decoding=async alt="Environmental control chamber operating beside its live dashboard" class="chamber-current-index" src="photos-main/chamber_live_dashboard.jpg"/>
+</a>
+<div>
+<h3 class="support-title">
+<a href="projects_/control_chamber/chamber.html">
+                Environmental Control Chamber
+              </a>
+</h3>
+<div class="support-descriptor">
+              Controls · Electronics · Validation
+            </div>
+</div>
+</article><article class="support-card">
+<a aria-label="View Scissor-Lift Workbench project" class="artifact viewable" href="projects_/Table/table_summary.html">
+<img loading=lazy decoding=async alt="Scissor-lift workbench CAD drawing" class="table-cad-index" src="photos-main/table_main.png"/>
+</a>
+<div>
+<h3 class="support-title">
+<a href="projects_/Table/table_summary.html">
+                Scissor-Lift Workbench
+              </a>
+</h3>
+<div class="support-descriptor">
+              CAD · Tolerancing · Assembly
+            </div>
+</div>
+</article><article class="support-card support-card-archive">
+<a aria-label="Open Archive" class="artifact viewable archive-entry-card" href="archive.html">
+<span aria-hidden="true" class="archive-entry-arrow">↗</span>
+</a>
+<div>
+<h3 class="support-title"><a href="archive.html">Archive</a></h3>
+</div>
+</article></div>
+</section>
+<dialog aria-labelledby="contact-title" class="contact-dialog" id="contact-dialog">
+<div class="contact-card">
+<button aria-label="Close contact panel" class="contact-close" type="button">×</button>
+<h2 class="contact-title" id="contact-title">Contact Me</h2>
+<p class="contact-copy">
+          Have a project, research opportunity, or idea worth talking about? I’d love to connect. Send a note below or reach me directly at <a class="contact-inline-email" href="mailto:5brooklync15@gmail.com">5brooklync15@gmail.com</a>.
+        </p>
+<form class="contact-form" id="contact-form">
+<div class="contact-row">
+<div class="contact-field">
+<label for="contact-name">Name</label>
+<input autocomplete="name" id="contact-name" name="name" placeholder="Your name" type="text"/>
+</div>
+<div class="contact-field">
+<label for="contact-reply">Email</label>
+<input autocomplete="email" id="contact-reply" name="email" placeholder="you@example.com" type="email"/>
+</div>
+</div>
+<div class="contact-field">
+<label for="contact-message">Message</label>
+<textarea id="contact-message" name="message" placeholder="Your message" required=""></textarea>
+</div>
+<div class="contact-submit-row">
+<button class="contact-submit" type="submit">Send message →</button>
+</div>
+</form>
+</div>
+</dialog>
+</main>
+<script>
+    const contactDialog = document.getElementById('contact-dialog');
+    const contactOpen = document.getElementById('contact-open');
+    const contactClose = contactDialog.querySelector('.contact-close');
+    const contactForm = document.getElementById('contact-form');
+
+    contactOpen.addEventListener('click', () => contactDialog.showModal());
+    contactClose.addEventListener('click', () => contactDialog.close());
+
+    contactDialog.addEventListener('click', (event) => {
+      const rect = contactDialog.getBoundingClientRect();
+      const inside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (!inside) contactDialog.close();
+    });
+
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById('contact-name').value.trim();
+      const replyEmail = document.getElementById('contact-reply').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      const subject = name ? `Portfolio contact — ${name}` : 'Portfolio contact';
+      const bodyParts = [];
+
+      if (name) bodyParts.push(`Name: ${name}`);
+      if (replyEmail) bodyParts.push(`Reply email: ${replyEmail}`);
+      if (name || replyEmail) bodyParts.push('');
+      bodyParts.push(message);
+
+      const mailto = `mailto:5brooklync15@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyParts.join('\n'))}`;
+      window.location.href = mailto;
+    });
+
+    // Refined navigation/footer contact entry points.
+    const footerContactOpen = document.getElementById('contact-open-footer');
+    if (footerContactOpen) footerContactOpen.addEventListener('click', () => contactDialog.showModal());
+
+    // One-time viewport reveal. Content remains visible once introduced, and
+    // falls back to visible if IntersectionObserver is unavailable.
+    const revealItems = [...document.querySelectorAll('.reveal')];
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.08, rootMargin: '-3% 0px -8% 0px' });
+      revealItems.forEach((item) => revealObserver.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    }
+
+    // Dots-only project position indicator with an accessible current state.
+    const progressDots = [...document.querySelectorAll('.progress-dot')];
+    const progressTargets = [...document.querySelectorAll('[data-progress]')];
+    const setActiveProgress = (index) => {
+      progressDots.forEach((dot, i) => {
+        const active = i === index;
+        dot.classList.toggle('is-active', active);
+        if (active) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+    };
+    setActiveProgress(0);
+
+    if ('IntersectionObserver' in window) {
+      const progressObserver = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        setActiveProgress(Number(visible.target.dataset.progress));
+      }, { threshold: [0.22, 0.42, 0.62], rootMargin: '-18% 0px -42% 0px' });
+      progressTargets.forEach((item) => progressObserver.observe(item));
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    progressDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const target = document.getElementById(dot.dataset.target);
+        if (target) target.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          block: 'center'
+        });
+      });
+    });
+
+  </script>
+</body>
+</html>

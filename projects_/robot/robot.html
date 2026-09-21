@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Autonomous mini delivery robot (ENG 200): CAD and 3D-printed body, lift and payload interface, subsystem testing and integration outcome.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mini Delivery Robot | Brooklyn Claeys">
+  <meta property="og:description" content="Autonomous mini delivery robot (ENG 200): CAD and 3D-printed body, lift and payload interface, subsystem testing and integration outcome.">
+    <meta property="og:image" content="../../photos-main/ROBOT.jpg">
+  <meta name="twitter:image" content="../../photos-main/ROBOT.jpg">
+<meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#020609">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+  <title>Mini Delivery Robot | Brooklyn Claeys</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0707;
+      --panel: #100c0c;
+      --panel-soft: rgba(244, 240, 234, 0.026);
+      --text: #f4f0ea;
+      --muted: #aaa39a;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.13);
+      --accent-line: #123A5A;
+      --accent-text: #6FA0C8;
+      --cad-bg: #f4f2ed;
+      --display: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+      scrollbar-color: rgba(244, 240, 234, 0.28) rgba(11, 7, 7, 0.78);
+      scrollbar-width: thin;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(11, 7, 7, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(244, 240, 234, 0.24);
+      border: 2px solid rgba(11, 7, 7, 0.78);
+      border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(244, 240, 234, 0.38);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .background-context {
+      position: fixed;
+      inset: 0;
+      padding: 42px clamp(22px, 4.6vw, 72px);
+      opacity: 0.1;
+      filter: blur(1.5px);
+      pointer-events: none;
+    }
+
+    .ghost-header {
+      height: 250px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .ghost-name {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(80px, 12vw, 150px);
+      line-height: 0.76;
+      text-transform: uppercase;
+    }
+
+    .ghost-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(18px, 2vw, 30px);
+      margin-top: 48px;
+    }
+
+    .ghost-block {
+      height: 340px;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+    }
+
+    .overlay-wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 42px 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .summary-panel {
+      width: min(960px, 90vw);
+      background: rgba(11, 7, 7, 0.965);
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+      padding: clamp(26px, 3.8vw, 48px);
+    }
+
+    .panel-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 700px;
+      font-family: var(--sans);
+      font-size: clamp(34px, 4.8vw, 56px);
+      line-height: 0.9;
+      font-weight: 400;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      width: fit-content;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .summary-intro {
+      max-width: 840px;
+      margin: 0 0 28px;
+      color: rgba(244, 240, 234, 0.76);
+      font-size: 13px;
+      line-height: 1.58;
+      font-weight: 400;
+      letter-spacing: 0.025em;
+    }
+
+    .summary-grid,
+    .visual-grid,
+    .cad-grid {
+      display: grid;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .visual-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 24px;
+    }
+
+    .visual-grid.tight {
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+
+    .cad-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .summary-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--line-soft);
+      padding: 18px;
+    }
+
+    .summary-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .visual-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 11px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(244, 240, 234, 0.10);
+      height: 100%;
+    }
+
+    .visual-card h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.095em;
+    }
+
+    .visual-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.42;
+      letter-spacing: 0.035em;
+    }
+
+    .summary-card h2 {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .section-heading {
+      margin: 0 0 16px;
+      color: rgba(244, 240, 234, 0.86);
+      font-family: var(--display);
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0.025em;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1.55;
+      letter-spacing: 0.035em;
+    }
+
+    .summary-card p + p {
+      margin-top: 12px;
+    }
+
+    .media-frame {
+      width: 100%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      border: 1px solid var(--line-soft);
+      box-shadow:
+        inset 0 0 0 14px var(--panel),
+        inset 0 0 0 15px var(--line-soft);
+      overflow: hidden;
+    }
+
+    .media-frame.hero,
+    .media-frame.video-main,
+    .media-frame.test {
+      aspect-ratio: 4 / 3;
+    }
+
+    .media-frame.cad {
+      aspect-ratio: 16 / 9;
+      background: var(--cad-bg);
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px rgba(0, 0, 0, 0.08);
+    }
+
+    .media-frame img,
+    .media-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .photo-crop,
+    .video-crop {
+      object-fit: cover;
+      transform-origin: center bottom;
+      background: var(--bg);
+      filter: saturate(0.88) contrast(1.03) brightness(0.93);
+    }
+
+    .robot-main {
+      object-position: 50% 100%;
+      transform: scale(1.18);
+    }
+
+    .course-video {
+      object-position: 50% 100%;
+      transform: scale(1.48);
+    }
+
+    .status-photo {
+      object-position: 52% 100%;
+      transform: scale(1.22);
+    }
+
+    .lift-video {
+      object-position: 50% 100%;
+      transform: scale(1.10);
+    }
+
+    .technical-img {
+      object-fit: contain;
+      object-position: center;
+      padding: 10px;
+      background: var(--cad-bg);
+      filter: saturate(0.76) contrast(1.04) brightness(0.99);
+    }
+
+    .swap-card {
+      display: block;
+      position: relative;
+      height: 100%;
+      outline: none;
+    }
+
+    .swap-card .media-frame {
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--accent-line);
+    }
+
+    .swap-card:hover .media-frame.cad,
+    .swap-card:focus-visible .media-frame.cad {
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px var(--accent-line);
+    }
+
+    .swap-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--cad-bg);
+    }
+
+    .swap-image img {
+      position: absolute;
+      inset: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .swap-image .image-before {
+      opacity: 0;
+    }
+
+    .swap-card:hover .swap-image .image-before,
+    .swap-card:focus-visible .swap-image .image-before {
+      opacity: 1;
+    }
+
+    .swap-card:hover .swap-image .image-after,
+    .swap-card:focus-visible .swap-image .image-after {
+      opacity: 0;
+    }
+
+    .image-label {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      z-index: 4;
+      padding: 5px 7px;
+      color: rgba(244, 240, 234, 0.82);
+      background: rgba(11, 7, 7, 0.74);
+      border: 1px solid rgba(244, 240, 234, 0.16);
+      font-size: 9px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      transition: opacity 180ms ease;
+    }
+
+    .label-before {
+      opacity: 0;
+    }
+
+    .swap-card:hover .label-before,
+    .swap-card:focus-visible .label-before {
+      opacity: 1;
+    }
+
+    .swap-card:hover .label-after,
+    .swap-card:focus-visible .label-after {
+      opacity: 0;
+    }
+
+    .system-list {
+      display: grid;
+      margin-top: 4px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .system-row {
+      display: grid;
+      grid-template-columns: 0.31fr 1fr;
+      gap: 18px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .system-row strong,
+    .system-row span {
+      font-size: 11px;
+      line-height: 1.45;
+      letter-spacing: 0.04em;
+    }
+
+    .system-row strong {
+      color: var(--text);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.075em;
+    }
+
+    .system-row span {
+      color: var(--muted);
+    }
+
+    .cta-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 22px;
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .home-link,
+    .archive-link {
+      padding: 10px 0;
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.085em;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .home-link {
+      justify-self: start;
+      color: rgba(244, 240, 234, 0.48);
+      border-bottom: 1px solid transparent;
+    }
+
+    .home-link:hover {
+      color: var(--muted);
+      border-bottom-color: var(--line-soft);
+    }
+
+    .archive-link {
+      justify-self: center;
+      min-width: 220px;
+      color: var(--text);
+      text-align: center;
+      border-top: 1px solid var(--accent-line);
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .archive-link:hover {
+      color: var(--accent-text);
+      border-top-color: var(--accent-text);
+      border-bottom-color: var(--accent-line);
+    }
+
+    @media (max-width: 760px) {
+      .background-context {
+        opacity: 0.08;
+        filter: blur(1px);
+      }
+
+      .overlay-wrap {
+        min-height: 100vh;
+        place-items: start center;
+        padding: 18px;
+      }
+
+      .summary-panel {
+        width: min(100%, 620px);
+        padding: 24px;
+      }
+
+      .panel-top {
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 36px;
+        line-height: 0.92;
+        letter-spacing: 0.05em;
+      }
+
+      .summary-intro {
+        margin-bottom: 24px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .visual-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .cad-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .system-row {
+        grid-template-columns: 0.42fr 1fr;
+        gap: 12px;
+      }
+
+      .visual-card p {
+        font-size: 10px;
+        line-height: 1.35;
+      }
+
+      .cta-row {
+        grid-template-columns: 1fr auto 1fr;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 20px;
+      }
+
+      .archive-link {
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .visual-grid,
+      .cad-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .panel-top,
+      .cta-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-link,
+      .home-link,
+      .archive-link {
+        justify-self: start;
+      }
+
+      .archive-link {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .system-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+    }
+  
+    /* Shared portfolio project footer */
+    .project-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      margin-top: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .footer-left {
+      display: grid;
+      justify-items: start;
+      gap: 10px;
+    }
+
+    .all-projects-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.48);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .all-projects-link:hover {
+      color: var(--text);
+    }
+
+    .project-files-link {
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .project-files-link:hover {
+      color: var(--muted);
+      border-bottom-color: var(--line-soft);
+    }
+
+    .next-project-link {
+      display: grid;
+      justify-items: end;
+      gap: 7px;
+      text-align: right;
+    }
+
+    .next-project-label {
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .next-project-title {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .next-project-link:hover .next-project-title {
+      color: var(--accent-text);
+    }
+
+    @media (max-width: 520px) {
+      .project-footer {
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+      }
+
+      .next-project-title {
+        font-size: 12px;
+      }
+    }
+
+  </style>
+
+  <style id="approved-project-accent-fix">
+    /* Approved finishing accents only — preserves the original corrected project-page design. */
+    :root {
+      --portfolio-orange: #FF7A32;
+      --portfolio-orange-hover: #FF9B65;
+      --portfolio-orange-line: rgba(255,122,50,.72);
+    }
+    .pdf-link, .pdf-link:visited {
+      color: var(--portfolio-orange) !important;
+      border-bottom-color: var(--portfolio-orange-line) !important;
+    }
+    .pdf-link:hover, .pdf-link:focus-visible {
+      color: var(--portfolio-orange-hover) !important;
+      border-bottom-color: var(--portfolio-orange-hover) !important;
+    }
+    a:hover, button:hover {
+      --accent-text: var(--portfolio-orange);
+    }
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--portfolio-orange-line) !important;
+    }
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title,
+    .archive-link:hover, .archive-link:focus-visible {
+      color: var(--portfolio-orange) !important;
+    }
+    :focus-visible { outline-color: var(--portfolio-orange) !important; }
+  </style>
+  <style id="project-homepage-aesthetic-match">
+    /* Project-page visual match to the approved homepage. Layout/content intentionally untouched. */
+    :root {
+      --project-bg: #000102;
+      --project-bg-deep: #000000;
+      --project-panel: #010407;
+      --project-panel-soft: rgba(5, 14, 21, 0.54);
+      --project-text: #edf0f2;
+      --project-muted: #87939a;
+      --project-blue: #405b68;
+      --project-blue-hover: #6a828d;
+      --project-line: rgba(54, 75, 86, 0.18);
+      --project-line-soft: rgba(54, 75, 86, 0.095);
+      --project-orange: #FF7A32;
+      --project-orange-hover: #FF9B65;
+      --project-orange-soft: rgba(255, 122, 50, 0.14);
+      --project-orange-line: rgba(255, 122, 50, 0.76);
+    }
+
+    html {
+      background: var(--project-bg) !important;
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--project-text) !important;
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.055), transparent 78%),
+        radial-gradient(760px 560px at 4% 58%, rgba(8, 20, 28, 0.035), transparent 80%),
+        linear-gradient(180deg, var(--project-bg) 0%, #010305 50%, var(--project-bg-deep) 100%) !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-color: rgba(106, 130, 141, 0.36) rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(106, 130, 141, 0.30) !important;
+      border-color: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(106, 130, 141, 0.48) !important;
+    }
+
+    ::selection {
+      color: var(--project-text);
+      background: rgba(255, 122, 50, 0.28);
+    }
+
+    /* Keep the original background composition but shift it into the homepage palette. */
+    .background-context {
+      opacity: 0.13 !important;
+      filter: blur(1.35px) !important;
+    }
+
+    .ghost-header {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .ghost-name {
+      color: rgba(106, 130, 141, 0.34) !important;
+    }
+
+    .ghost-block {
+      background: rgba(3, 8, 12, 0.82) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    /* Same blue-black depth as the homepage rather than the old brown/black panel. */
+    .summary-panel {
+      background:
+        radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.10), transparent 72%),
+        linear-gradient(180deg, rgba(3, 8, 12, 0.985), rgba(1, 4, 7, 0.985)) !important;
+      border-color: var(--project-line) !important;
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(64, 91, 104, 0.025) !important;
+    }
+
+    h1 {
+      color: var(--project-text) !important;
+      text-wrap: balance;
+    }
+
+    /* Small permanent orange cue: present on every project, including pages without PDFs. */
+    h1::after {
+      content: '';
+      display: block;
+      width: 34px;
+      height: 2px;
+      margin-top: 17px;
+      background: var(--project-orange);
+      box-shadow: 0 0 12px rgba(255, 122, 50, 0.10);
+    }
+
+    .summary-intro,
+    .summary-card p,
+    .visual-card p,
+    .system-row span,
+    .next-project-label,
+    .all-projects-link,
+    .project-files-link,
+    .home-link {
+      color: var(--project-muted) !important;
+    }
+
+    .summary-card {
+      background:
+        linear-gradient(180deg, rgba(5, 14, 21, 0.58), rgba(2, 7, 11, 0.52)) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .summary-card h2,
+    .section-heading {
+      color: var(--project-blue-hover) !important;
+    }
+
+    .visual-card {
+      border-top-color: var(--project-line-soft) !important;
+    }
+
+    .visual-card h3,
+    .system-row strong {
+      color: #c9d2d6 !important;
+    }
+
+    .system-list,
+    .project-footer,
+    .cta-row {
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .system-row {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    /* Image framing follows the homepage: cool neutral border at rest, orange only when interactive. */
+    .media-frame {
+      background: var(--project-bg) !important;
+      border-color: var(--project-line-soft) !important;
+      box-shadow:
+        inset 0 0 0 14px var(--project-panel),
+        inset 0 0 0 15px var(--project-line-soft) !important;
+    }
+
+    .media-frame.cad {
+      /* Preserve the existing light CAD plate while harmonizing its outer edge. */
+      border-color: rgba(64, 91, 104, 0.24) !important;
+    }
+
+    .swap-card .media-frame {
+      transition: border-color 180ms ease, box-shadow 200ms ease, transform 200ms ease !important;
+    }
+
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--project-orange-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.18),
+        0 0 22px var(--project-orange-soft) !important;
+      transform: translateY(-1px);
+    }
+
+    .swap-card:hover .media-frame.cad,
+    .swap-card:focus-visible .media-frame.cad {
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px var(--project-orange-line),
+        0 0 22px var(--project-orange-soft) !important;
+    }
+
+    /* Blue is the structural accent. Orange means action. */
+    .pdf-link,
+    .pdf-link:visited {
+      color: var(--project-orange) !important;
+      border-bottom-color: var(--project-orange-line) !important;
+    }
+
+    .pdf-link:hover,
+    .pdf-link:focus-visible {
+      color: var(--project-orange-hover) !important;
+      border-bottom-color: var(--project-orange-hover) !important;
+    }
+
+    .archive-link {
+      border-top-color: var(--project-blue) !important;
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible,
+    .archive-link:hover,
+    .archive-link:focus-visible,
+    .all-projects-link:hover,
+    .all-projects-link:focus-visible,
+    .project-files-link:hover,
+    .project-files-link:focus-visible,
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title {
+      color: var(--project-orange) !important;
+      border-color: var(--project-orange-line) !important;
+    }
+
+    .next-project-title {
+      color: var(--project-text) !important;
+    }
+
+    :focus-visible {
+      outline-color: var(--project-orange) !important;
+    }
+
+    @media (max-width: 760px) {
+      .background-context { opacity: 0.09 !important; }
+      h1::after { margin-top: 14px; }
+    }
+  </style>
+
+
+<style id="project-homepage-color-hierarchy-v2">
+  /* Final project-page colour match. Layout/content intentionally untouched. */
+  :root {
+    --project-bg: #010305;
+    --project-bg-mid: #020507;
+    --project-bg-deep: #000102;
+    --project-panel: #03070a;
+    --project-title-blue: #49636f;
+    --project-heading-blue: #6a828d;
+    --project-subheading: #bcc5ca;
+    --project-body-grey: #849198;
+    --project-muted-grey: #747d83;
+  }
+
+  html { background: var(--project-bg) !important; }
+
+  body {
+    background:
+      radial-gradient(900px 620px at 90% 0%, rgba(13, 25, 33, 0.038), transparent 76%),
+      radial-gradient(760px 540px at 4% 58%, rgba(7, 15, 21, 0.017), transparent 82%),
+      linear-gradient(180deg, var(--project-bg) 0%, var(--project-bg-mid) 52%, var(--project-bg-deep) 100%) !important;
+  }
+
+  .summary-panel {
+    background:
+      radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.08), transparent 72%),
+      linear-gradient(180deg, rgba(3, 7, 10, 0.985), rgba(1, 4, 7, 0.985)) !important;
+  }
+
+  /* Home-page hierarchy: blue titles, grey prose, orange interaction. */
+  h1 {
+    color: var(--project-title-blue) !important;
+  }
+
+  .summary-card h2,
+  .section-heading {
+    color: var(--project-heading-blue) !important;
+  }
+
+  .visual-card h3,
+  .system-row strong,
+  .next-project-title {
+    color: var(--project-subheading) !important;
+  }
+
+  .summary-intro,
+  .summary-card p,
+  .visual-card p,
+  .system-row span,
+  .next-project-label,
+  .all-projects-link,
+  .project-files-link,
+  .home-link,
+  .archive-link,
+  .image-caption,
+  figcaption,
+  .caption,
+  li {
+    color: var(--project-body-grey) !important;
+  }
+
+  .image-label,
+  .meta,
+  .eyebrow,
+  .kicker {
+    color: var(--project-muted-grey) !important;
+  }
+
+  /* Preserve the established orange action language. */
+  .pdf-link,
+  .pdf-link:visited {
+    color: var(--project-orange) !important;
+    border-bottom-color: var(--project-orange-line) !important;
+  }
+
+  .pdf-link:hover,
+  .pdf-link:focus-visible,
+  a:hover,
+  a:focus-visible {
+    text-decoration-color: var(--project-orange) !important;
+  }
+</style>
+
+</head>
+
+<body>
+  <div class="background-context" aria-hidden="true">
+    <div class="ghost-header">
+      <p class="ghost-name">Brooklyn<br>Claeys</p>
+    </div>
+
+    <div class="ghost-grid">
+      <div class="ghost-block"></div>
+      <div class="ghost-block"></div>
+      <div class="ghost-block"></div>
+    </div>
+  </div>
+
+  <main class="overlay-wrap">
+    <article class="summary-panel" aria-label="Mini delivery robot project summary">
+      <div class="panel-top">
+        <h1>Mini Delivery<br>System</h1>
+      </div>
+
+      <p class="summary-intro">
+        The autonomous mini delivery robot was built as part of an ENG 200 design project. It was designed to navigate a taped course, avoid obstacles, detect pickup and drop-off states, and actuate a servo-driven payload lift. My contribution focused on the CAD and 3D-printed physical design, including the robot body, front opening, servo-supported lift geometry, payload interface, and clearance around sensors, wiring, and lift motion.
+      </p>
+
+      <section class="visual-grid" aria-label="Primary robot visuals">
+        <article class="visual-card">
+          <div class="media-frame hero">
+            <img loading=lazy decoding=async class="photo-crop robot-main" src="../../photos-main/ROBOT.jpg" alt="Mini delivery robot prototype on the course">
+          </div>
+          <h3>Integrated Prototype</h3>
+          <p>Final robot assembly on the course, showing the body layout, exposed sensor region, wiring volume, and front lift area as one physical system.</p>
+        </article>
+
+        <article class="visual-card">
+          <div class="media-frame video-main">
+            <video class="video-crop course-video" autoplay muted loop playsinline preload="metadata" poster="robot_project_files/01_selected_images/robot_course_line_following_test_04_thumbnail.jpg">
+              <source src="robot_project_files/05_videos/robot_course_line_following_test_04.mp4" type="video/mp4">
+            </video>
+          </div>
+          <h3>Course Navigation Test</h3>
+          <p>Course footage used to check whether the body layout, sensor placement, and navigation logic could work together on the taped path.</p>
+        </article>
+      </section>
+
+      <section class="summary-grid">
+        <section class="summary-card full">
+          <h2 class="section-heading">Design Constraints</h2>
+
+          <div class="system-list">
+            <div class="system-row">
+              <strong>Context</strong>
+              <span>ENG 200 team design-build, with this page focused on my CAD, 3D-printed lift, casing, and physical integration work.</span>
+            </div>
+
+            <div class="system-row">
+              <strong>Task</strong>
+              <span>Navigate the course, avoid obstacles, detect pickup and drop-off states, hold a 118 mm payload, and release it at the destination.</span>
+            </div>
+
+            <div class="system-row">
+              <strong>My Scope</strong>
+              <span>Modeled and revised the robot body, lift geometry, front opening, and printed payload-handling features around the electronics and course constraints.</span>
+            </div>
+
+            <div class="system-row">
+              <strong>Clearance</strong>
+              <span>The lift path needed room to move without blocking ultrasonic sensing, line following, wiring access, or payload engagement.</span>
+            </div>
+
+            <div class="system-row">
+              <strong>Design Decision</strong>
+              <span>The narrow pickup concept was too sensitive to payload alignment and front-end sensor exposure, so the lift geometry was revised toward a more forgiving top-lift layout.</span>
+            </div>
+
+            <div class="system-row">
+              <strong>Outcome</strong>
+              <span>Line following, status feedback, and lift actuation worked as separate subsystems. Full integration failed when payload detection and servo-lift timing did not align reliably during the final sequence.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="summary-card full">
+          <h2>CAD + Printed Mechanism</h2>
+          <p>
+            The main design problem was the front of the robot, where the lift path, payload interface, ultrasonic sensor view, motor support, and wiring all competed for the same space. I revised the body and lift geometry to keep the payload path open while preserving sensor visibility and access to the electronics.
+          </p>
+
+          <div class="cad-grid">
+            <article class="visual-card">
+              <div class="swap-card" tabindex="0" aria-label="CAD body revision comparison">
+                <div class="media-frame cad">
+                  <div class="swap-image">
+                    <img loading=lazy decoding=async class="technical-img image-after" src="robot_project_files/02_cad_screenshots/robot_cad_base_servo_mount_front.png" alt="Final CAD body for mini delivery robot with servo mount and front opening">
+                    <img loading=lazy decoding=async class="technical-img image-before" src="robot_project_files/02_cad_screenshots/robot_cad_base_servo_mount_translucent.png" alt="First CAD body iteration showing servo mount and internal space">
+                    <span class="image-label label-before">Iteration 1</span>
+                  </div>
+                </div>
+              </div>
+              <h3>Body and Sensor Clearance</h3>
+              <p>Added a motor-support platform and increased spacing around the front sensors.</p>
+            </article>
+
+            <article class="visual-card">
+              <div class="swap-card" tabindex="0" aria-label="CAD lift support revision comparison">
+                <div class="media-frame cad">
+                  <div class="swap-image">
+                    <img loading=lazy decoding=async class="technical-img image-after" src="robot_project_files/02_cad_screenshots/robot_cad_lift_base_long_member.png" alt="Final long lift-base CAD for the mini delivery robot">
+                    <img loading=lazy decoding=async class="technical-img image-before" src="robot_project_files/02_cad_screenshots/robot_cad_payload_bucket_iteration.png" alt="First lift and payload interface CAD iteration">
+                    <span class="image-label label-before">Iteration 1</span>
+                  </div>
+                </div>
+              </div>
+              <h3>Lift Support Geometry</h3>
+              <p>Lowered the servo platform to increase clearance for the forklift.</p>
+            </article>
+
+            <article class="visual-card">
+              <div class="swap-card" tabindex="0" aria-label="CAD side profile revision comparison">
+                <div class="media-frame cad">
+                  <div class="swap-image">
+                    <img loading=lazy decoding=async class="technical-img image-after" src="robot_project_files/02_cad_screenshots/robot_cad_lift_arm_side_profile.png" alt="Side-profile CAD of lift arm component for the mini delivery robot">
+                    <img loading=lazy decoding=async class="technical-img image-before" src="robot_project_files/02_cad_screenshots/robot_cad_lift_side.png" alt="First side-lift CAD iteration for the mini delivery robot">
+                    <span class="image-label label-before">Iteration 1</span>
+                  </div>
+                </div>
+              </div>
+              <h3>Side Profile</h3>
+              <p>Integrated the servo directly into the forklift for a simpler drive connection.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="summary-card full">
+          <h2>Subsystem Testing</h2>
+          <p>
+            The team tested the lift, sensor feedback, and course navigation separately before combining them in the final sequence. These checks were used to debug the pickup and drop-off sequence and isolate mechanical issues from payload-detection and timing problems.
+          </p>
+
+          <div class="visual-grid tight">
+            <article class="visual-card">
+              <div class="media-frame test">
+                <img loading=lazy decoding=async class="photo-crop status-photo" src="robot_project_files/01_selected_images/robot_navigation_status_light_test_03_thumbnail.jpg" alt="Robot sensor feedback and navigation status test">
+              </div>
+              <h3>Sensor Feedback Check</h3>
+              <p>Checked sensor and status response during navigation and drop-off detection.</p>
+            </article>
+
+            <article class="visual-card">
+              <div class="media-frame test">
+                <video class="video-crop lift-video" autoplay muted loop playsinline preload="metadata" poster="robot_project_files/01_selected_images/robot_servo_payload_lift_test_05_thumbnail.jpg">
+                  <source src="robot_project_files/05_videos/robot_servo_payload_lift_test_05.mp4" type="video/mp4">
+                </video>
+              </div>
+              <h3>Servo Lift Check</h3>
+              <p>Checked payload engagement and forklift motion through the lift range.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <footer
+        class="project-footer"
+        aria-label="Project navigation"
+      >
+        <a class="all-projects-link" href="../../index.html">
+            <span aria-hidden="true">←</span>
+            <span>Back to all projects</span>
+          </a>
+
+        <a class="next-project-link" href="../garden/garden.html">
+          <span class="next-project-label">Next project</span>
+          <span class="next-project-title">Portable Indoor Garden</span>
+        </a>
+      </footer>
+    </article>
+  </main>
+</body>
+</html>

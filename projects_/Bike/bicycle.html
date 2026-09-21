@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Four-body multibody bicycle dynamics model in MATLAB: coordinate transforms, Newton–Euler equations and inverse dynamics across 16 instrumented ride trials (PURE research).">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Modelling and Analysis of 3D Bicycle Dynamics | Brooklyn Claeys">
+  <meta property="og:description" content="Four-body multibody bicycle dynamics model in MATLAB: coordinate transforms, Newton–Euler equations and inverse dynamics across 16 instrumented ride trials (PURE research).">
+    <meta property="og:image" content="../../photos-main/bike_sensors.JPG">
+  <meta name="twitter:image" content="../../photos-main/bike_sensors.JPG">
+<meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#020609">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+
+  <title>Modelling and Analysis of 3D Bicycle Dynamics | Brooklyn Claeys</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg: #0b0707;
+      --panel: #100c0c;
+      --panel-soft: rgba(244, 240, 234, 0.026);
+      --text: #f4f0ea;
+      --muted: #aaa39a;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.13);
+      --accent-line: #123a5a;
+      --accent-text: #6fa0c8;
+      --paper: #f4f2ed;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+      scrollbar-color:
+        rgba(244, 240, 234, 0.28)
+        rgba(11, 7, 7, 0.78);
+      scrollbar-width: thin;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(11, 7, 7, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(244, 240, 234, 0.24);
+      border: 2px solid rgba(11, 7, 7, 0.78);
+      border-radius: 999px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .background-context {
+      position: fixed;
+      inset: 0;
+      padding: 42px clamp(22px, 4.6vw, 72px);
+      opacity: 0.10;
+      filter: blur(1.5px);
+      pointer-events: none;
+    }
+
+    .ghost-header {
+      height: 250px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .ghost-name {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(80px, 12vw, 150px);
+      line-height: 0.76;
+      text-transform: uppercase;
+    }
+
+    .ghost-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(18px, 2vw, 30px);
+      margin-top: 48px;
+    }
+
+    .ghost-block {
+      height: 340px;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+    }
+
+    .overlay-wrap {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 42px 22px;
+    }
+
+    .summary-panel {
+      width: min(960px, 90vw);
+      max-height: 88vh;
+      overflow: auto;
+      padding: clamp(26px, 3.8vw, 48px);
+      background: rgba(11, 7, 7, 0.965);
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .panel-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .pdf-link {
+      display: inline-block;
+      width: fit-content;
+      margin-top: 2px;
+      padding-bottom: 4px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 11px;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(34px, 4.8vw, 56px);
+      line-height: 0.90;
+      font-weight: 400;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .project-type {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .summary-intro {
+      max-width: 860px;
+      margin: 0 0 28px;
+      color: rgba(244, 240, 234, 0.76);
+      font-size: 13px;
+      line-height: 1.58;
+      letter-spacing: 0.025em;
+    }
+
+    .summary-grid,
+    .visual-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .visual-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 24px;
+    }
+
+    .visual-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+
+    .summary-card {
+      padding: 18px;
+      background: var(--panel-soft);
+      border: 1px solid var(--line-soft);
+    }
+
+    .summary-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .summary-card h2 {
+      margin: 0 0 14px;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-heading {
+      margin: 0 0 16px;
+      color: rgba(244, 240, 234, 0.86);
+      font-family: var(--sans);
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.025em;
+      text-transform: none;
+    }
+
+    .summary-card > p {
+      max-width: 850px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      letter-spacing: 0.035em;
+    }
+
+    .summary-card > p + p {
+      margin-top: 12px;
+    }
+
+    .visual-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 11px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .visual-card h3 {
+      margin: 0;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.095em;
+      text-transform: uppercase;
+    }
+
+    .visual-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.42;
+      letter-spacing: 0.035em;
+    }
+
+    .media-frame {
+      position: relative;
+      width: 100%;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid var(--line-soft);
+      box-shadow: none;
+    }
+
+    .media-frame.wide {
+      min-height: 330px;
+    }
+
+    .media-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      object-fit: contain;
+    }
+
+    .visual-grid.two .media-frame.wide {
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+
+    .visual-grid.two .media-frame img {
+      object-fit: cover;
+    }
+
+    .hover-stack img {
+      transition: opacity 220ms ease;
+    }
+
+    .hover-stack img:last-of-type {
+      opacity: 0;
+    }
+
+    .hover-stack:hover img:first-of-type,
+    .hover-stack:focus-within img:first-of-type {
+      opacity: 0;
+    }
+
+    .hover-stack:hover img:last-of-type,
+    .hover-stack:focus-within img:last-of-type {
+      opacity: 1;
+    }
+
+    .kinematic-media img {
+      transform: scale(1.1);
+      transform-origin: center;
+    }
+
+    .placeholder-label {
+      max-width: 220px;
+      padding: 14px;
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1.45;
+      letter-spacing: 0.10em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .system-list {
+      display: grid;
+      margin-top: 4px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .system-row {
+      display: grid;
+      grid-template-columns: 0.29fr 1fr;
+      gap: 18px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .system-row strong,
+    .system-row span {
+      font-size: 11px;
+      line-height: 1.48;
+      letter-spacing: 0.04em;
+    }
+
+    .system-row strong {
+      color: var(--text);
+      font-weight: 500;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .system-row span {
+      color: var(--muted);
+    }
+
+    .project-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      margin-top: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .all-projects-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.48);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .all-projects-link:hover {
+      color: var(--text);
+    }
+
+    .next-project-link {
+      display: grid;
+      justify-items: end;
+      gap: 7px;
+      text-align: right;
+    }
+
+    .next-project-label {
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .next-project-title {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .next-project-link:hover .next-project-title {
+      color: var(--accent-text);
+    }
+
+    @media (max-width: 760px) {
+      .background-context {
+        opacity: 0.08;
+        filter: blur(1px);
+      }
+
+      .overlay-wrap {
+        padding: 18px;
+      }
+
+      .summary-panel {
+        width: min(100%, 620px);
+        max-height: 92vh;
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 36px;
+        line-height: 0.92;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .visual-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .visual-grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .system-row {
+        grid-template-columns: 0.4fr 1fr;
+        gap: 12px;
+      }
+
+      .media-frame,
+      .media-frame.wide {
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .panel-top {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta {
+        max-width: none;
+        padding-top: 0;
+        text-align: left;
+      }
+
+      .system-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+
+      .project-footer {
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+      }
+
+      .next-project-title {
+        font-size: 12px;
+      }
+    }
+  
+
+/* Unified project header */
+    .panel-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 20px;
+    }
+
+    .project-header-copy {
+      min-width: 0;
+    }
+
+    .project-header-copy .project-type {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .project-header-copy .project-type + .project-type {
+      margin-top: 5px;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      align-self: start;
+      display: inline-block;
+      width: fit-content;
+      margin: 2px 0 0;
+      padding-bottom: 4px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    @media (max-width: 520px) {
+      .panel-top {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+      }
+
+      .pdf-link {
+        justify-self: end;
+      }
+    }
+</style>
+
+  <style id="approved-project-accent-fix">
+    /* Approved finishing accents only — preserves the original corrected project-page design. */
+    :root {
+      --portfolio-orange: #FF7A32;
+      --portfolio-orange-hover: #FF9B65;
+      --portfolio-orange-line: rgba(255,122,50,.72);
+    }
+    .pdf-link, .pdf-link:visited {
+      color: var(--portfolio-orange) !important;
+      border-bottom-color: var(--portfolio-orange-line) !important;
+    }
+    .pdf-link:hover, .pdf-link:focus-visible {
+      color: var(--portfolio-orange-hover) !important;
+      border-bottom-color: var(--portfolio-orange-hover) !important;
+    }
+    a:hover, button:hover {
+      --accent-text: var(--portfolio-orange);
+    }
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--portfolio-orange-line) !important;
+    }
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title,
+    .archive-link:hover, .archive-link:focus-visible {
+      color: var(--portfolio-orange) !important;
+    }
+    :focus-visible { outline-color: var(--portfolio-orange) !important; }
+  </style>
+  <style id="project-homepage-aesthetic-match">
+    /* Project-page visual match to the approved homepage. Layout/content intentionally untouched. */
+    :root {
+      --project-bg: #000102;
+      --project-bg-deep: #000000;
+      --project-panel: #010407;
+      --project-panel-soft: rgba(5, 14, 21, 0.54);
+      --project-text: #edf0f2;
+      --project-muted: #87939a;
+      --project-blue: #405b68;
+      --project-blue-hover: #6a828d;
+      --project-line: rgba(54, 75, 86, 0.18);
+      --project-line-soft: rgba(54, 75, 86, 0.095);
+      --project-orange: #FF7A32;
+      --project-orange-hover: #FF9B65;
+      --project-orange-soft: rgba(255, 122, 50, 0.14);
+      --project-orange-line: rgba(255, 122, 50, 0.76);
+    }
+
+    html {
+      background: var(--project-bg) !important;
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--project-text) !important;
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.055), transparent 78%),
+        radial-gradient(760px 560px at 4% 58%, rgba(8, 20, 28, 0.035), transparent 80%),
+        linear-gradient(180deg, var(--project-bg) 0%, #010305 50%, var(--project-bg-deep) 100%) !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-color: rgba(106, 130, 141, 0.36) rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(106, 130, 141, 0.30) !important;
+      border-color: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(106, 130, 141, 0.48) !important;
+    }
+
+    ::selection {
+      color: var(--project-text);
+      background: rgba(255, 122, 50, 0.28);
+    }
+
+    /* Keep the original background composition but shift it into the homepage palette. */
+    .background-context {
+      opacity: 0.13 !important;
+      filter: blur(1.35px) !important;
+    }
+
+    .ghost-header {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .ghost-name {
+      color: rgba(106, 130, 141, 0.34) !important;
+    }
+
+    .ghost-block {
+      background: rgba(3, 8, 12, 0.82) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    /* Same blue-black depth as the homepage rather than the old brown/black panel. */
+    .summary-panel {
+      background:
+        radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.10), transparent 72%),
+        linear-gradient(180deg, rgba(3, 8, 12, 0.985), rgba(1, 4, 7, 0.985)) !important;
+      border-color: var(--project-line) !important;
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(64, 91, 104, 0.025) !important;
+    }
+
+    h1 {
+      color: var(--project-text) !important;
+      text-wrap: balance;
+    }
+
+    /* Small permanent orange cue: present on every project, including pages without PDFs. */
+    h1::after {
+      content: '';
+      display: block;
+      width: 34px;
+      height: 2px;
+      margin-top: 17px;
+      background: var(--project-orange);
+      box-shadow: 0 0 12px rgba(255, 122, 50, 0.10);
+    }
+
+    .summary-intro,
+    .summary-card p,
+    .visual-card p,
+    .system-row span,
+    .next-project-label,
+    .all-projects-link,
+    .project-files-link,
+    .home-link {
+      color: var(--project-muted) !important;
+    }
+
+    .summary-card {
+      background:
+        linear-gradient(180deg, rgba(5, 14, 21, 0.58), rgba(2, 7, 11, 0.52)) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .summary-card h2,
+    .section-heading {
+      color: var(--project-blue-hover) !important;
+    }
+
+    .visual-card {
+      border-top-color: var(--project-line-soft) !important;
+    }
+
+    .visual-card h3,
+    .system-row strong {
+      color: #c9d2d6 !important;
+    }
+
+    .system-list,
+    .project-footer,
+    .cta-row {
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .system-row {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    /* Image framing follows the homepage: cool neutral border at rest, orange only when interactive. */
+    .media-frame {
+      background: var(--project-bg) !important;
+      border-color: var(--project-line-soft) !important;
+      box-shadow:
+        inset 0 0 0 14px var(--project-panel),
+        inset 0 0 0 15px var(--project-line-soft) !important;
+    }
+
+    .media-frame.cad {
+      /* Preserve the existing light CAD plate while harmonizing its outer edge. */
+      border-color: rgba(64, 91, 104, 0.24) !important;
+    }
+
+    .swap-card .media-frame {
+      transition: border-color 180ms ease, box-shadow 200ms ease, transform 200ms ease !important;
+    }
+
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--project-orange-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.18),
+        0 0 22px var(--project-orange-soft) !important;
+      transform: translateY(-1px);
+    }
+
+    .swap-card:hover .media-frame.cad,
+    .swap-card:focus-visible .media-frame.cad {
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px var(--project-orange-line),
+        0 0 22px var(--project-orange-soft) !important;
+    }
+
+    /* Blue is the structural accent. Orange means action. */
+    .pdf-link,
+    .pdf-link:visited {
+      color: var(--project-orange) !important;
+      border-bottom-color: var(--project-orange-line) !important;
+    }
+
+    .pdf-link:hover,
+    .pdf-link:focus-visible {
+      color: var(--project-orange-hover) !important;
+      border-bottom-color: var(--project-orange-hover) !important;
+    }
+
+    .archive-link {
+      border-top-color: var(--project-blue) !important;
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible,
+    .archive-link:hover,
+    .archive-link:focus-visible,
+    .all-projects-link:hover,
+    .all-projects-link:focus-visible,
+    .project-files-link:hover,
+    .project-files-link:focus-visible,
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title {
+      color: var(--project-orange) !important;
+      border-color: var(--project-orange-line) !important;
+    }
+
+    .next-project-title {
+      color: var(--project-text) !important;
+    }
+
+    :focus-visible {
+      outline-color: var(--project-orange) !important;
+    }
+
+    @media (max-width: 760px) {
+      .background-context { opacity: 0.09 !important; }
+      h1::after { margin-top: 14px; }
+    }
+  </style>
+
+
+<style id="project-homepage-color-hierarchy-v2">
+  /* Final project-page colour match. Layout/content intentionally untouched. */
+  :root {
+    --project-bg: #010305;
+    --project-bg-mid: #020507;
+    --project-bg-deep: #000102;
+    --project-panel: #03070a;
+    --project-title-blue: #49636f;
+    --project-heading-blue: #6a828d;
+    --project-subheading: #bcc5ca;
+    --project-body-grey: #849198;
+    --project-muted-grey: #747d83;
+  }
+
+  html { background: var(--project-bg) !important; }
+
+  body {
+    background:
+      radial-gradient(900px 620px at 90% 0%, rgba(13, 25, 33, 0.038), transparent 76%),
+      radial-gradient(760px 540px at 4% 58%, rgba(7, 15, 21, 0.017), transparent 82%),
+      linear-gradient(180deg, var(--project-bg) 0%, var(--project-bg-mid) 52%, var(--project-bg-deep) 100%) !important;
+  }
+
+  .summary-panel {
+    background:
+      radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.08), transparent 72%),
+      linear-gradient(180deg, rgba(3, 7, 10, 0.985), rgba(1, 4, 7, 0.985)) !important;
+  }
+
+  /* Home-page hierarchy: blue titles, grey prose, orange interaction. */
+  h1 {
+    color: var(--project-title-blue) !important;
+  }
+
+  .summary-card h2,
+  .section-heading {
+    color: var(--project-heading-blue) !important;
+  }
+
+  .visual-card h3,
+  .system-row strong,
+  .next-project-title {
+    color: var(--project-subheading) !important;
+  }
+
+  .summary-intro,
+  .summary-card p,
+  .visual-card p,
+  .system-row span,
+  .next-project-label,
+  .all-projects-link,
+  .project-files-link,
+  .home-link,
+  .archive-link,
+  .image-caption,
+  figcaption,
+  .caption,
+  li {
+    color: var(--project-body-grey) !important;
+  }
+
+  .image-label,
+  .meta,
+  .eyebrow,
+  .kicker {
+    color: var(--project-muted-grey) !important;
+  }
+
+  /* Preserve the established orange action language. */
+  .pdf-link,
+  .pdf-link:visited {
+    color: var(--project-orange) !important;
+    border-bottom-color: var(--project-orange-line) !important;
+  }
+
+  .pdf-link:hover,
+  .pdf-link:focus-visible,
+  a:hover,
+  a:focus-visible {
+    text-decoration-color: var(--project-orange) !important;
+  }
+</style>
+
+
+<style id="project-story-layer-v5">
+/* Intro/story layer is intentionally contained inside the original project panel. */
+.project-story-intro{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+  gap:clamp(30px,4.5vw,58px);
+  align-items:center;
+  width:100%;
+  margin:0 0 clamp(38px,5vw,56px);
+  padding:clamp(8px,1vw,12px) 0 clamp(38px,5vw,52px);
+  border-bottom:1px solid var(--project-line-soft,rgba(64,91,104,.14));
+  overflow:visible;
+}
+.project-story-copy{min-width:0;max-width:620px}
+.project-story-kicker{margin:0 0 14px;color:var(--project-orange,#FF7A32)!important;font:500 9px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.project-story-title{margin:0;color:var(--project-title-blue,#49636f)!important;font-family:var(--sans);font-size:clamp(36px,4.8vw,60px);line-height:.94;font-weight:400;letter-spacing:.025em;text-transform:uppercase;text-wrap:balance}
+.project-story-subtitle{margin:13px 0 0;color:var(--project-heading-blue,#6a828d)!important;font:500 10px/1.4 var(--sans);letter-spacing:.09em;text-transform:uppercase}
+.project-story-statement{margin:clamp(22px,3vw,30px) 0 0;max-width:58ch;color:#a8b3b8!important;font-family:var(--display,Georgia,serif);font-size:clamp(17px,1.65vw,22px);line-height:1.4;letter-spacing:.005em}
+.project-story-note{display:block;margin-top:13px;max-width:58ch;color:var(--project-muted-grey,#747d83)!important;font:500 9px/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase}
+.project-story-actions{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:26px}
+.project-story-action{display:inline-flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid transparent;color:var(--project-body-grey,#849198)!important;font:500 9px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;transition:color 180ms ease,border-color 180ms ease,transform 280ms cubic-bezier(.22,1,.36,1)}
+.project-story-action.primary{color:var(--project-orange,#FF7A32)!important;border-bottom-color:rgba(255,122,50,.42)}
+.project-story-action:hover,.project-story-action:focus-visible{color:var(--project-orange-hover,#ff9a63)!important;border-bottom-color:var(--project-orange,#FF7A32);transform:translateY(-1px);outline:none}
+.project-story-visual{min-width:0;margin:0}
+.project-story-frame{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--project-panel,#03070a);border:1px solid rgba(74,101,114,.22);box-shadow:0 20px 48px rgba(0,0,0,.23)}
+.project-story-frame::before{content:'';position:absolute;z-index:2;left:0;top:0;width:38px;height:38px;border-left:1px solid rgba(255,122,50,.62);border-top:1px solid rgba(255,122,50,.62);pointer-events:none}
+.project-story-frame img{display:block;width:100%;height:100%;object-fit:var(--story-fit,cover);object-position:var(--story-position,center);background:var(--story-bg,transparent);filter:saturate(.94) brightness(.94) contrast(1.02);transform:scale(var(--story-scale,1))}
+.project-story-caption{margin:9px 0 0;color:var(--project-muted-grey,#747d83)!important;font:500 8px/1.4 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.technical-depth-cue{display:flex;align-items:center;gap:11px;margin:0 0 22px;color:var(--project-muted-grey,#747d83)!important;font:500 9px/1 var(--sans);letter-spacing:.11em;text-transform:uppercase;scroll-margin-top:28px}
+.technical-depth-cue::before{content:'';width:25px;height:1px;background:var(--project-orange,#FF7A32)}
+
+/* Natural motion: one directional entrance. No blur, no transform feedback loop. */
+.story-motion .project-story-copy,.story-motion .project-story-visual,.story-motion .story-flow-target{
+  opacity:.001;
+  transform:translate3d(var(--story-enter-x,0),var(--story-enter-y,14px),0);
+  transition:transform 900ms cubic-bezier(.22,1,.36,1),opacity 620ms ease-out;
+}
+.story-motion .project-story-copy{--story-enter-x:-42px;--story-enter-y:0}
+.story-motion .project-story-visual{--story-enter-x:42px;--story-enter-y:0;transition-delay:90ms}
+.story-motion .story-flow-target:nth-of-type(even){--story-enter-x:28px}
+.story-motion .story-flow-target:nth-of-type(odd){--story-enter-x:-28px}
+.story-motion .story-in-view{opacity:1;transform:translate3d(0,0,0)}
+/* Only the large heading drifts out as the story chapter leaves. Paragraphs remain readable/fitted. */
+.project-story-title{translate:var(--story-title-drift,0px) 0;will-change:translate}
+.project-story-kicker{translate:var(--story-kicker-drift,0px) 0;will-change:translate}
+
+@media(max-width:820px){
+ .project-story-intro{grid-template-columns:1fr;gap:28px;padding-bottom:38px}
+ .project-story-copy{max-width:none}.project-story-visual{width:min(100%,640px)}
+ .project-story-frame{aspect-ratio:16/8;max-height:240px}
+ .project-story-statement{max-width:68ch;font-size:17px;line-height:1.36;margin-top:18px}
+ .project-story-note{margin-top:10px}
+}
+@media(max-width:560px){
+ .project-story-title{font-size:clamp(34px,11vw,48px)}
+ .project-story-actions{align-items:flex-start;flex-direction:column;gap:5px}
+ .project-story-visual{width:100%}.project-story-frame{max-height:200px}
+ .project-story-note{display:none}
+ .story-motion .project-story-copy,.story-motion .project-story-visual,.story-motion .story-flow-target{opacity:1;transform:none;transition:none}
+ .project-story-title,.project-story-kicker{translate:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .story-motion .project-story-copy,.story-motion .project-story-visual,.story-motion .story-flow-target{opacity:1!important;transform:none!important;transition:none!important}
+ .project-story-title,.project-story-kicker{translate:none!important}
+}
+
+/* Intro navigation: simple footer rhythm before the technical chapter. */
+.project-story-actions{display:none!important}
+.project-story-footer{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:18px;margin-top:clamp(4px,1vw,10px);padding-top:20px;border-top:1px solid var(--project-line-soft,rgba(64,91,104,.14))}
+.project-story-footer a{color:var(--project-body-grey,#849198)!important;font:500 9px/1.25 var(--sans);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;transition:color 180ms ease,translate 260ms cubic-bezier(.22,1,.36,1)}
+.project-story-footer a:hover,.project-story-footer a:focus-visible{color:var(--project-orange-hover,#ff9a63)!important;outline:none}
+.project-story-home{justify-self:start}
+.project-story-next{justify-self:end;text-align:right}
+.project-story-scroll{justify-self:center;display:grid!important;justify-items:center;gap:7px;color:var(--project-heading-blue,#6a828d)!important;text-align:center}
+.project-story-scroll .story-scroll-arrow{display:block;color:var(--project-orange,#FF7A32);font-size:20px;line-height:1;transition:translate 300ms cubic-bezier(.22,1,.36,1)}
+.project-story-scroll:hover .story-scroll-arrow,.project-story-scroll:focus-visible .story-scroll-arrow{translate:0 4px}
+@media(max-width:620px){.project-story-footer{grid-template-columns:1fr 1fr;align-items:start}.project-story-scroll{grid-column:1/-1;grid-row:1;justify-self:start;justify-items:start;margin-bottom:8px}.project-story-home{grid-column:1;grid-row:2}.project-story-next{grid-column:2;grid-row:2}}
+</style>
+
+
+<style id="technical-chapter-handoff-v1">
+/* A scroll chapter transition between the reflective intro and the existing technical page. */
+.technical-chapter-handoff{
+  --chapter-p:0;
+  position:relative;
+  left:50%;
+  width:100vw;
+  min-height:clamp(300px,48vh,470px);
+  margin:clamp(18px,4vh,42px) 0 clamp(30px,5vh,58px) -50vw;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  isolation:isolate;
+  scroll-margin-top:0;
+}
+.technical-chapter-handoff::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(720px 300px at 50% 48%,rgba(33,58,72,.18),transparent 72%),
+    linear-gradient(180deg,#010305 0%,#02070b 52%,#010305 100%);
+  transform:scaleY(calc(.055 + (var(--chapter-p) * .945)));
+  transform-origin:center;
+  box-shadow:inset 0 1px rgba(93,126,148,.10),inset 0 -1px rgba(93,126,148,.10);
+  will-change:transform;
+}
+.technical-chapter-handoff::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(760px,72vw);
+  height:1px;
+  z-index:-1;
+  background:linear-gradient(90deg,transparent,rgba(255,122,50,.50) 22%,rgba(93,126,148,.34) 78%,transparent);
+  transform:translate(-50%,-50%) scaleX(calc(.08 + (var(--chapter-p) * .92)));
+  transform-origin:center;
+  will-change:transform;
+}
+.technical-chapter-inner{
+  display:grid;
+  justify-items:center;
+  gap:12px;
+  padding:28px;
+  text-align:center;
+  transform:translateY(calc((1 - var(--chapter-p)) * 34px));
+  will-change:transform;
+}
+.technical-chapter-label{
+  color:var(--project-heading-blue,#6a828d)!important;
+  font:500 clamp(17px,1.7vw,23px)/1 var(--sans);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.technical-chapter-arrow{
+  color:var(--project-orange,#FF7A32);
+  font:300 24px/1 var(--sans);
+  transform:translateY(calc(var(--chapter-p) * 6px));
+}
+@media(max-width:620px){
+  .technical-chapter-handoff{min-height:250px;margin-top:20px;margin-bottom:34px}
+  .technical-chapter-handoff::after{width:84vw}
+}
+@media(prefers-reduced-motion:reduce){
+  .technical-chapter-handoff{--chapter-p:1!important}
+  .technical-chapter-handoff::before,.technical-chapter-handoff::after,.technical-chapter-inner,.technical-chapter-arrow{transform:none!important}
+}
+</style>
+
+
+<style id="project-story-handoff-refinement-v2">
+/* Intro footer stays quiet; the technical chapter only appears as the user naturally scrolls into it. */
+.project-story-footer{grid-template-columns:1fr 1fr!important;align-items:end!important}
+.project-story-home{justify-self:start!important}
+.project-story-next{justify-self:end!important;text-align:right!important}
+.project-story-scroll{display:none!important}
+
+/* Shorter, continuous chapter handoff: no empty half-screen and no duplicate arrows. */
+.technical-chapter-handoff{
+  --chapter-p:0;
+  min-height:clamp(150px,22vh,210px)!important;
+  margin:clamp(8px,1.8vh,16px) 0 clamp(24px,3.2vh,36px) -50vw!important;
+}
+.technical-chapter-handoff::before{
+  opacity:var(--chapter-p);
+  transform:scaleY(calc(.012 + (var(--chapter-p) * .988)))!important;
+}
+.technical-chapter-handoff::after{
+  opacity:var(--chapter-p);
+  transform:translate(-50%,-50%) scaleX(var(--chapter-p))!important;
+}
+.technical-chapter-inner{
+  opacity:clamp(0,calc((var(--chapter-p) - .34) * 2.1),1);
+  transform:translateY(calc((1 - var(--chapter-p)) * 18px))!important;
+}
+.technical-chapter-arrow{display:none!important}
+.technical-chapter-label{font-size:clamp(14px,1.35vw,18px)!important;letter-spacing:.14em!important}
+@media(max-width:620px){
+  .project-story-footer{grid-template-columns:1fr 1fr!important}
+  .project-story-home{grid-column:1!important;grid-row:1!important}
+  .project-story-next{grid-column:2!important;grid-row:1!important}
+  .technical-chapter-handoff{min-height:135px!important;margin-top:8px!important;margin-bottom:24px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .technical-chapter-handoff::before,.technical-chapter-handoff::after,.technical-chapter-inner{opacity:1!important}
+}
+</style>
+
+  <link rel="stylesheet" href="../../assets/pdf-page-top.css">
+
+<style id="technical-defer-style">
+.technical-defer{min-height:42vh;display:grid;place-content:center;justify-items:center;gap:14px;padding:clamp(70px,12vh,140px) 24px;background:#010305;color:#747d83;text-align:center}
+.technical-defer__line{width:1px;height:clamp(48px,8vh,86px);background:linear-gradient(to bottom,rgba(255,122,50,.75),rgba(255,122,50,0))}
+.technical-defer__label,.technical-defer__status{margin:0;font:500 9px/1.4 "Inter",Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.technical-defer__status{min-height:1.4em;color:#849198;text-transform:none;letter-spacing:.04em}
+.technical-defer__status a{color:#FF7A32;text-decoration:none;border-bottom:1px solid rgba(255,122,50,.45)}
+.technical-defer--loaded{min-height:18vh;padding-block:34px 26px}
+.technical-defer--loaded .technical-defer__label,.technical-defer--loaded .technical-defer__line{opacity:.28}
+@media(max-width:620px){.technical-defer{min-height:34vh}}
+</style>
+
+
+<style id="deferred-scroll-cue-fix">
+.pdf-page-chapter__nav .detail{cursor:default;pointer-events:none;text-decoration:none}
+</style>
+
+<style id="single-document-scroll-fix">
+/* The deferred technical chapter belongs to the document flow: no nested scroll container. */
+#technical-deferred-content{overflow:visible!important;height:auto!important;max-height:none!important;}
+#technical-deferred-content .overlay-wrap{min-height:0!important;height:auto!important;max-height:none!important;display:block!important;place-items:unset!important;overflow:visible!important;width:100%!important;padding-left:22px!important;padding-right:22px!important;}
+#technical-deferred-content .summary-panel{width:min(1040px,92vw)!important;height:auto!important;max-height:none!important;overflow:visible!important;margin-left:auto!important;margin-right:auto!important;}
+</style>
+
+</head>
+
+<body>
+<section class="pdf-page-chapter pdf-page--bike" aria-label="Portfolio summary page">
+  <div class="pdf-page-original-wrap"><img class="pdf-page-original" src="../../assets/pdf-pages/bicycle.webp" width="3600" height="2025" fetchpriority="high" decoding="async" alt="Project summary slide: hand-drawn coordinate-system sketches, the instrumented bicycle, roll and yaw time histories, the labelled SolidWorks model, and rotation matrices."></div>
+  <div class="pdf-page-text">
+<p class="ppt-kicker">Current • Research</p>
+<h1>3D Bicycle Dynamics</h1>
+<p class="ppt-sub">PURE-Sponsored Research | Dr. Roes Budiman</p>
+<h2>Four-Body Model + Experimental Inputs</h2>
+<p>Front and rear IMU data, wheel-speed measurements, and 16 instrumented riding trials were mapped into a four-body bicycle model. I processed the measured motion, mapped SolidWorks geometry and mass properties into the analytical coordinate system, and updated the frame and rider representation used in the dynamics model.</p>
+<h2>Multibody Kinematics + Coupled Dynamics</h2>
+<p>The wheel, fork and frame move in different coordinate systems, so their motion had to be transformed into a common formulation. I independently derived the coordinate transforms, checked them against Dr. Budiman’s geometric method, and carried them into the coupled Newton–Euler force, moment and constraint equations.</p>
+<h2>MATLAB Implementation + Model Diagnostics</h2>
+<p>I developed and continue to revise the MATLAB implementation, including experimental data processing, inverse dynamics, batch analysis and model diagnostics. I built checks for residuals, rank and conditioning to separate modelling or numerical issues from actual bicycle behaviour. A forward-dynamics model is in development, with current work focused on debugging the equations, parameters and signal processing.</p>
+</div>
+  <nav class="pdf-page-chapter__nav" aria-label="Project navigation"><a class="prev" href="../../index.html">← Home</a><span class="detail" aria-hidden="true">↓ Scroll for technical detail</span><a class="next" href="../bmeirt-shoulder/shoulder.html">Next Project →</a></nav>
+</section>
+
+  
+<section class="technical-defer" id="technical-sentinel" data-source="bicycle-technical-payload.js" aria-label="Technical detail loading point">
+  <div class="technical-defer__line" aria-hidden="true"></div>
+  <p class="technical-defer__label">Continue scrolling for technical detail</p>
+  <p class="technical-defer__status" id="technical-load-status" aria-live="polite"></p>
+</section>
+<div id="technical-deferred-content"></div>
+<script type="application/json" id="bike-technical-fallback">{"html":"<style id=tech-width-bike>#technical-deferred-content .overlay-wrap{padding-left:clamp(16px,2vw,28px)!important;padding-right:clamp(16px,2vw,28px)!important}#technical-deferred-content .summary-panel{width:min(1240px,96vw)!important;max-width:1240px!important}</style><style id=technical-archive-scale-v11>@media (min-width:821px){#technical-deferred-content .overlay-wrap{padding:16px 8px!important;min-height:0!important;place-items:start center!important}#technical-deferred-content .summary-panel{width:min(1180px,calc((100vw - 20px)/1.1))!important;max-width:1180px!important;max-height:none!important;overflow:visible!important;zoom:1.1}}@media (max-width:820px){#technical-deferred-content .summary-panel{max-height:none!important;overflow:visible!important}}</style><div aria-hidden=\"true\" class=\"background-context\">\n<div class=\"ghost-header\">\n<p class=\"ghost-name\">\n        Brooklyn<br/>\n        Claeys\n      </p>\n</div>\n<div class=\"ghost-grid\">\n<div class=\"ghost-block\"></div>\n<div class=\"ghost-block\"></div>\n<div class=\"ghost-block\"></div>\n</div>\n</div>\n<main class=\"overlay-wrap\">\n<article aria-label=\"Modelling and Analysis of 3D Bicycle Dynamics project summary\" class=\"summary-panel\">\n<div class=\"panel-top\" id=\"technical-detail\">\n<div class=\"project-header-copy\">\n<h1>\n            3D Bicycle<br/>\n            Dynamics\n          </h1>\n<p class=\"project-type\">PURE Undergraduate Research</p>\n<p class=\"project-type\">University of Calgary</p>\n</div>\n\n</div>\n<p class=\"summary-intro\">\n        My research involved developing and verifying a four-body model of\n        bicycle motion alongside Dr. Roes Budiman's analytical work. Working\n        with MSc student Haoyuan Jin, I collected and processed experimental\n        ride data and used the existing SolidWorks model to obtain the geometry\n        and mass properties required for the analysis. I then implemented the\n        analytical model in MATLAB, including experimental inverse-dynamics and\n        forward-dynamics workflows used to test the consistency of the equations,\n        measured motion, physical parameters, and current constraint structure.\n      </p>\n<section class=\"summary-grid\">\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">Four Body Model</h2>\n<div class=\"visual-grid two\">\n<article class=\"visual-card\">\n<div class=\"media-frame wide\">\n<img loading=lazy decoding=async alt=\"Instrumented bicycle used for experimental data collection\" src=\"../../photos-main/bike_sensors.JPG\"/>\n</div>\n<h3>Instrumented Bicycle</h3>\n<p>\n                Experimental bicycle setup used to collect the motion histories\n                supplied to the inverse-dynamics model.\n              </p>\n</article>\n<article class=\"visual-card\">\n<div class=\"media-frame wide hover-stack\" tabindex=\"0\">\n<img loading=lazy decoding=async alt=\"SolidWorks bicycle assembly used for physical parameterization\" src=\"photos/bike_cad.png\"/>\n<img loading=lazy decoding=async alt=\"Labelled four-body bicycle CAD model\" src=\"../../photos-main/labeled_bike_CAD.JPG\"/>\n</div>\n<h3>Four Coordinate Systems</h3>\n<p>\n                Front wheel, fork, frame and rider, and rear wheel labelled on\n                the SolidWorks model with the body-fixed coordinate systems used\n                throughout the derivation.\n              </p>\n</article>\n</div>\n<div class=\"system-list\">\n<div class=\"system-row\">\n<strong>Experimental Inputs</strong>\n<span>\n                Three-axis orientation and linear acceleration recorded at the\n                front and rear of the bicycle, together with rotational-speed\n                histories for both wheels.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>CAD Inputs</strong>\n<span>\n                Bicycle geometry, rigid-body masses, centre-of-mass locations,\n                and principal inertias obtained from the existing SolidWorks\n                model, scaled to consistent units, and mapped into the analytical\n                body-coordinate definitions.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>Model Bodies</strong>\n<span>\n                Front wheel, fork, frame and rider, and rear wheel represented\n                as four connected rigid bodies, each with its own body-fixed\n                coordinate system used throughout the derivation.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>Current Model Status</strong>\n<span>\n                The formulation continues to change as constraints, parameter mapping, and physical assumptions are checked. Current results are treated as model-development evidence, not as final physical validation.\n              </span>\n</div>\n</div>\n</section>\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">Multibody Kinematics</h2>\n<p>\n            With Dr. Budiman, I assigned the body-coordinate definitions and\n            simplified the model through the current kinematic assumptions. Dr.\n            Budiman developed the shared-body relationships using geometric\n            projections, while I independently derived the same relationships\n            using coordinate transformations between the moving body frames. The\n            two methods produced the same result, providing an independent check\n            of the kinematic derivation before it was carried into the dynamic model.\n          </p>\n<article class=\"visual-card\">\n<div class=\"media-frame wide hover-stack kinematic-media\" tabindex=\"0\">\n<img loading=lazy decoding=async alt=\"Fork-to-frame coordinate transformation matrices and velocity-transfer equations\" src=\"photos/matrixtsfm.png\"/>\n<img loading=lazy decoding=async alt=\"Bicycle coordinate-system transformation diagram\" src=\"../../photos-main/coordinate_tsf.webp\"/>\n</div>\n<h3>Kinematic Transfer</h3>\n<p>\n              Body-coordinate definitions, angle conventions, and the rotation\n              matrices used to transfer the shared-joint and centre-of-mass\n              velocity relationships between coordinate systems.\n            </p>\n</article>\n</section>\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">Coupled Dynamics</h2>\n<p>\n            Newton-Euler force and moment balances describe the external forces,\n            internal reactions, applied torques, and inertial terms acting on\n            each rigid body. Because the four bodies share joints and wheel-ground\n            contact conditions, the unknown reactions and accelerations form one\n            coupled dynamic system.\n          </p>\n<p>\n            The equations include weight, wheel-ground contact, internal joint\n            reactions, applied wheel and steering moments, and the inertial terms\n            created by three-dimensional motion. SolidWorks principal inertias\n            were aligned with the mathematical coordinate conventions and mapped\n            into the appropriate body frames.\n          </p>\n<p>\n            I aligned notation across the derivations, organized the equations\n            by body and axis, established fixed equation and unknown-vector orders,\n            checked the equation and unknown counts, and incorporated revisions\n            to the contact-force structure before assembling the numerical system.\n          </p>\n<article class=\"visual-card\">\n<div class=\"media-frame wide\">\n<img loading=lazy decoding=async alt=\"Combined free-body diagrams for the bicycle rigid bodies\" src=\"photos/fbd.webp\"/>\n</div>\n<h3>Free-Body Model</h3>\n<p>\n              Front wheel, fork, frame and rider, and rear-wheel free-body diagrams\n              showing the external loads and the internal reactions transferred\n              between connected bodies.\n            </p>\n</article>\n</section>\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">MATLAB Model + Diagnostics</h2>\n<p>\n            I use the existing SolidWorks assembly as a source of geometry and mass properties, then map those values into the analytical body-coordinate definitions. The analytical model itself is collaborative work led by Dr. Budiman; my contribution includes independent kinematic checks, parameter mapping, experimental-data processing, MATLAB implementation, and numerical diagnostics.\n          </p>\n<p>\n            Sixteen instrumented ride trials are processed through the experimental workflow. The current implementation includes inverse-dynamics and forward-dynamics development, with residual, rank, conditioning, contact, friction, replay, and timestep checks used to distinguish numerical or implementation problems from physically meaningful behaviour. The model remains under verification and is not presented as fully validated.\n          </p>\n<div class=\"system-list\">\n<div class=\"system-row\"><strong>Experimental Set</strong><span>16 instrumented ride trials with front/rear motion histories and wheel-speed measurements.</span></div>\n<div class=\"system-row\"><strong>Implementation</strong><span>Measured-motion processing, inverse-dynamics solves, forward simulation development, and batch analysis in MATLAB.</span></div>\n<div class=\"system-row\"><strong>Diagnostics</strong><span>Residuals, rank and conditioning, contact and required-friction checks, inverse-to-forward replay, and timestep sensitivity.</span></div>\n<div class=\"system-row\"><strong>Claim Boundary</strong><span>Current outputs are development and verification evidence; full physical validation is not claimed.</span></div>\n</div>\n<article class=\"visual-card\">\n<div class=\"media-frame wide\">\n<img loading=lazy decoding=async alt=\"Representative analytical equations and MATLAB validation graphs\" src=\"photos/eqsgraphs.png\"/>\n</div>\n<h3>MATLAB Validation</h3>\n<p>\n              Historical equation-balance plots from an earlier inverse-dynamics version. They are retained as development evidence and are not presented as the current formulation or final validation.\n            </p>\n</article>\n</section>\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">Current Research State</h2>\n<p>\n            The research now links measured ride data, mapped physical parameters, multibody kinematics, and MATLAB inverse/forward workflows in one evolving model. The strongest current result is the verification process itself: the model is being checked through independent kinematics, numerical diagnostics, replay tests, parameter audits, and physically interpretable contact/friction checks before behavioural conclusions are accepted.\n          </p>\n<div class=\"system-list\">\n<div class=\"system-row\"><strong>Current Evidence</strong><span>16 instrumented trials, independently checked coordinate transformations, mapped SolidWorks parameters, and repeatable numerical diagnostics across the MATLAB workflow.</span></div>\n<div class=\"system-row\"><strong>Forward Dynamics</strong><span>A forward-dynamics workflow is under active development and verification; current behaviour is not presented as physically validated.</span></div>\n<div class=\"system-row\"><strong>My Contribution</strong><span>Independent kinematic verification, experimental-data processing, SolidWorks parameter mapping, MATLAB inverse/forward implementation, diagnostics, documentation, and research communication.</span></div>\n</div>\n</section>\n</section>\n<footer aria-label=\"Project navigation\" class=\"project-footer\">\n<a class=\"all-projects-link\" href=\"../../index.html\">\n<span aria-hidden=\"true\">←</span>\n<span>Back to all projects</span>\n</a>\n<!-- Update this path if the final Yankauer page uses a different filename. -->\n<a class=\"next-project-link\" href=\"../bmeirt-shoulder/shoulder.html\">\n<span class=\"next-project-label\">Next project</span>\n<span class=\"next-project-title\">Yankauer Robotic Arm</span>\n</a>\n</footer>\n</article>\n</main>","scripts":["\n(()=>{\n  if(!('IntersectionObserver' in window)) return;\n  const intro=document.querySelector('.project-story-intro');\n  if(!intro) return;\n  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;\n  if(reduce||innerWidth<561) return;\n  document.documentElement.classList.add('story-motion');\n  const targets=[intro.querySelector('.project-story-copy'),intro.querySelector('.project-story-visual'),...document.querySelectorAll('.summary-card,.visual-grid,.cad-grid,.analysis-grid,.figure-grid,.model-grid')].filter(Boolean);\n  targets.slice(2).forEach(el=>el.classList.add('story-flow-target'));\n  const io=new IntersectionObserver((entries,observer)=>{\n    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('story-in-view');observer.unobserve(entry.target)}})\n  },{threshold:.12,rootMargin:'0px 0px -7% 0px'});\n  targets.forEach(el=>io.observe(el));\n\n  const title=intro.querySelector('.project-story-title'), kicker=intro.querySelector('.project-story-kicker');\n  let top=0,height=1,ticking=false;\n  const measure=()=>{const r=intro.getBoundingClientRect();top=r.top+scrollY;height=Math.max(r.height,1)};\n  const clamp=n=>Math.max(0,Math.min(1,n));\n  const paint=()=>{ticking=false;const p=clamp((scrollY-(top+height*.22))/(height*.9));const dir=-1;title?.style.setProperty('--story-title-drift',(dir*p*Math.min(innerWidth*.12,120)).toFixed(1)+'px');kicker?.style.setProperty('--story-kicker-drift',(dir*p*Math.min(innerWidth*.05,44)).toFixed(1)+'px')};\n  const request=()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}};\n  measure();request();addEventListener('scroll',request,{passive:true});addEventListener('resize',()=>{measure();request()},{passive:true});\n})();\n","\n(()=>{\n  const handoff=document.querySelector('.technical-chapter-handoff');\n  if(!handoff || matchMedia('(prefers-reduced-motion: reduce)').matches) return;\n  const clamp=v=>Math.max(0,Math.min(1,v));\n  let raf=0;\n  const paint=()=>{\n    raf=0;\n    const r=handoff.getBoundingClientRect();\n    const vh=innerHeight;\n    const p=clamp((vh*.88-r.top)/(vh*.34+r.height*.55));\n    handoff.style.setProperty('--chapter-p',p.toFixed(4));\n  };\n  const request=()=>{if(!raf) raf=requestAnimationFrame(paint)};\n  addEventListener('scroll',request,{passive:true});\n  addEventListener('resize',request,{passive:true});\n  paint();\n})();\n"]}</script>
+<script id="deferred-technical-loader">
+(()=>{
+  const sentinel=document.getElementById('technical-sentinel');
+  const mount=document.getElementById('technical-deferred-content');
+  const status=document.getElementById('technical-load-status');
+  const fallbackNode=document.getElementById('bike-technical-fallback');
+  if(!sentinel||!mount) return;
+
+  const source=sentinel.dataset.source;
+  let loaded=false;
+  let observer=null;
+  let fallbackTimer=null;
+
+  const mountPayload=(payload)=>{
+    if(loaded||!payload) return;
+    loaded=true;
+    if(fallbackTimer) clearTimeout(fallbackTimer);
+    mount.innerHTML=payload.html||'';
+    (payload.scripts||[]).forEach(code=>{
+      const script=document.createElement('script');
+      script.textContent=code;
+      document.body.appendChild(script);
+    });
+    sentinel.classList.add('technical-defer--loaded');
+    if(status) status.textContent='';
+    requestAnimationFrame(()=>{
+      const target=document.getElementById('technical-detail')||mount.querySelector('main');
+      if(target && target.getBoundingClientRect().top < window.innerHeight*0.45){
+        target.scrollIntoView({block:'start'});
+      }
+    });
+  };
+
+  const mountFallback=()=>{
+    if(loaded||!fallbackNode) return;
+    try{ mountPayload(JSON.parse(fallbackNode.textContent)); }
+    catch(err){ if(status) status.textContent='Technical detail could not load.'; }
+  };
+
+  window.__portfolioMountTechnical=mountPayload;
+
+  const loadTechnical=()=>{
+    if(loaded) return;
+    if(observer) observer.disconnect();
+    if(status) status.textContent='Loading technical detail…';
+    const script=document.createElement('script');
+    script.src=source;
+    script.async=true;
+    script.onerror=mountFallback;
+    document.body.appendChild(script);
+    fallbackTimer=setTimeout(mountFallback,2500);
+  };
+
+  if('IntersectionObserver' in window){
+    observer=new IntersectionObserver((entries)=>{
+      if(entries.some(entry=>entry.isIntersecting)) loadTechnical();
+    },{threshold:0.01,rootMargin:'0px'});
+    observer.observe(sentinel);
+  }else{
+    const onScroll=()=>{
+      if(loaded) return;
+      const r=sentinel.getBoundingClientRect();
+      if(r.top<=window.innerHeight && r.bottom>=0){
+        window.removeEventListener('scroll',onScroll);
+        loadTechnical();
+      }
+    };
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  }
+})();
+</script>
+
+</body>
+</html>

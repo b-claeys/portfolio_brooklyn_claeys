@@ -1,0 +1,83 @@
+/* Top project pages use the original PDF page as a single composition.
+   Scale the whole page only; never reflow or resize individual images/text. */
+.pdf-page-chapter{
+  box-sizing:border-box;
+  width:100%;
+  min-height:100svh;
+  margin:0;
+  padding:clamp(14px,2vw,28px) clamp(10px,1.6vw,24px) 10px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  background:#020609;
+  color:#849198;
+}
+.pdf-page-original-wrap{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-width:0;
+}
+.pdf-page-original{
+  display:block;
+  width:min(1280px,96vw);
+  height:auto;
+  max-width:none;
+  object-fit:contain;
+  object-position:center;
+}
+.pdf-page-chapter__nav{
+  width:min(1280px,96vw);
+  margin:0 auto;
+  padding:10px 0 2px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:18px;
+  align-items:center;
+  border-top:1px solid rgba(91,117,130,.22);
+  font:500 10px/1.25 Arial,sans-serif;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.pdf-page-chapter__nav a{color:#849198;text-decoration:none}
+.pdf-page-chapter__nav a:hover,.pdf-page-chapter__nav a:focus-visible{color:#ff9a63;outline:none}
+.pdf-page-chapter__nav .prev{justify-self:start}
+.pdf-page-chapter__nav .detail{justify-self:center;color:#6a828d}
+.pdf-page-chapter__nav .next{justify-self:end;text-align:right}
+#technical-detail{scroll-margin-top:12px}
+
+/* Split view: preserve the exact PDF composition and simply fit the full page. */
+@media(max-width:1100px){
+  .pdf-page-chapter{min-height:auto;justify-content:flex-start;padding:14px 10px 8px}
+  .pdf-page-original,.pdf-page-chapter__nav{width:min(1080px,98vw)}
+}
+
+/* Mobile: still preserve the original composition. No image rearrangement or text reflow. */
+@media(max-width:680px){
+  .pdf-page-chapter{padding:10px 6px 8px;gap:8px}
+  .pdf-page-original,.pdf-page-chapter__nav{width:calc(100vw - 12px)}
+  .pdf-page-chapter__nav{grid-template-columns:1fr 1fr;row-gap:9px;font-size:10px}
+  .pdf-page-chapter__nav .detail{grid-column:1/-1;grid-row:1}
+  .pdf-page-chapter__nav .prev{grid-column:1;grid-row:2}
+  .pdf-page-chapter__nav .next{grid-column:2;grid-row:2}
+}
+
+/* Live-text version of each summary slide.
+   Desktop: visually hidden, still exposed to screen readers, search and Ctrl-F.
+   Mobile: replaces the scaled slide image, whose type would render at roughly 4-5 px. */
+.pdf-page-chapter{position:relative}
+.pdf-page-text{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+@media(max-width:680px){
+  /* Keep the exact PDF composition visible; readable live text follows it. */
+  .pdf-page-chapter .pdf-page-original-wrap{display:flex!important}
+  .pdf-page-chapter .pdf-page-text{position:static!important;width:auto!important;height:auto!important;margin:0 auto!important;padding:18px 18px 10px!important;overflow:visible!important;clip:auto!important;clip-path:none!important;white-space:normal!important;width:100%!important;max-width:640px;box-sizing:border-box;color:#c3ccd1;font:400 16px/1.62 Inter,"Helvetica Neue",Arial,sans-serif;border-top:1px solid rgba(91,117,130,.18)}
+  .pdf-page-text h1{margin:2px 0 10px;font:600 clamp(34px,10vw,46px)/1.02 "Cormorant Garamond",Georgia,serif;color:#ff7a32;letter-spacing:.01em}
+  .pdf-page-text h2{margin:26px 0 8px;font:600 19px/1.25 Inter,"Helvetica Neue",Arial,sans-serif;color:#7f99a7}
+  .pdf-page-text p{margin:0 0 12px}
+  .pdf-page-text ul{margin:0 0 12px;padding-left:20px}
+  .pdf-page-text li{margin:0 0 6px}
+  .pdf-page-text .ppt-kicker{margin:0 0 6px;font:600 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#6a828d}
+  .pdf-page-text .ppt-sub{margin:-2px 0 6px;font-style:italic;color:#9aa8b0}
+}

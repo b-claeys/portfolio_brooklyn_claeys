@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ESP32-controlled environmental chamber that reproduces live weather-station temperature and humidity for crop testing, with mean absolute errors of 0.28 °C and 1.94 RH points over a 77.2 min settled window.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Environmental Control Chamber | Brooklyn Claeys">
+  <meta property="og:description" content="ESP32-controlled environmental chamber that reproduces live weather-station temperature and humidity for crop testing, with mean absolute errors of 0.28 °C and 1.94 RH points over a 77.2 min settled window.">
+    <meta property="og:image" content="../../photos-main/chamber_live_dashboard.jpg">
+  <meta name="twitter:image" content="../../photos-main/chamber_live_dashboard.jpg">
+<meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#020609">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+
+  <title>Environmental Control Chamber | Brooklyn Claeys</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg: #0b0707;
+      --panel: #100c0c;
+      --panel-soft: rgba(244, 240, 234, 0.026);
+      --text: #f4f0ea;
+      --muted: #aaa39a;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.13);
+      --accent-line: #123a5a;
+      --accent-text: #6fa0c8;
+      --paper: #f4f2ed;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+      scrollbar-color:
+        rgba(244, 240, 234, 0.28)
+        rgba(11, 7, 7, 0.78);
+      scrollbar-width: thin;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(11, 7, 7, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(244, 240, 234, 0.24);
+      border: 2px solid rgba(11, 7, 7, 0.78);
+      border-radius: 999px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .background-context {
+      position: fixed;
+      inset: 0;
+      padding: 42px clamp(22px, 4.6vw, 72px);
+      opacity: 0.1;
+      filter: blur(1.5px);
+      pointer-events: none;
+    }
+
+    .ghost-header {
+      height: 250px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .ghost-name {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(80px, 12vw, 150px);
+      line-height: 0.76;
+      text-transform: uppercase;
+    }
+
+    .ghost-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(18px, 2vw, 30px);
+      margin-top: 48px;
+    }
+
+    .ghost-block {
+      height: 340px;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+    }
+
+    .overlay-wrap {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 42px 22px;
+    }
+
+    .summary-panel {
+      width: min(960px, 90vw);
+      max-height: 88vh;
+      overflow: auto;
+      padding: clamp(26px, 3.8vw, 48px);
+      background: rgba(11, 7, 7, 0.965);
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .panel-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(34px, 4.8vw, 56px);
+      line-height: 0.9;
+      font-weight: 400;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      width: fit-content;
+      padding-bottom: 4px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 11px;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .project-type {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .summary-intro {
+      max-width: 850px;
+      margin: 0 0 28px;
+      color: rgba(244, 240, 234, 0.76);
+      font-size: 13px;
+      line-height: 1.58;
+      letter-spacing: 0.025em;
+    }
+
+    .summary-grid,
+    .design-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .summary-card {
+      padding: 18px;
+      background: var(--panel-soft);
+      border: 1px solid var(--line-soft);
+    }
+
+    .summary-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .summary-card h2 {
+      margin: 0 0 14px;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-heading {
+      margin: 0 0 16px;
+      color: rgba(244, 240, 234, 0.86);
+      font-family: var(--display);
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.025em;
+      text-transform: none;
+    }
+
+    .summary-card > p {
+      max-width: 850px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      letter-spacing: 0.035em;
+    }
+
+    .visual-card,
+    .evidence-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 11px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .visual-card h3,
+    .evidence-card h3 {
+      margin: 0;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.095em;
+      text-transform: uppercase;
+    }
+
+    .visual-card p,
+    .evidence-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.42;
+      letter-spacing: 0.035em;
+    }
+
+    .media-frame {
+      position: relative;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      box-shadow:
+        inset 0 0 0 14px var(--panel),
+        inset 0 0 0 15px var(--line-soft);
+    }
+
+    .media-frame img,
+    .media-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-card {
+      margin-bottom: 24px;
+    }
+
+    .hero-frame {
+      position: relative;
+      aspect-ratio: 21 / 8;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .hero-frame video {
+      position: absolute;
+      left: 0;
+      top: -50%;
+      width: 100%;
+      height: 200%;
+      object-fit: cover;
+      object-position: center center;
+      background: #000;
+    }
+
+    .system-list {
+      display: grid;
+      margin-top: 4px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .system-row {
+      display: grid;
+      grid-template-columns: 0.29fr 1fr;
+      gap: 18px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .system-row strong,
+    .system-row span {
+      font-size: 11px;
+      line-height: 1.48;
+      letter-spacing: 0.04em;
+    }
+
+    .system-row strong {
+      color: var(--text);
+      font-weight: 500;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .system-row span {
+      color: var(--muted);
+    }
+
+    .design-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .design-grid .media-frame {
+      height: 340px;
+    }
+
+    .swap-card,
+    .swap-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .swap-card {
+      outline: none;
+    }
+
+    .swap-image img {
+      position: absolute;
+      inset: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .default-image {
+      opacity: 1;
+    }
+
+    .hover-image {
+      opacity: 0;
+    }
+
+    .swap-card:hover .default-image,
+    .swap-card:focus-visible .default-image {
+      opacity: 0;
+    }
+
+    .swap-card:hover .hover-image,
+    .swap-card:focus-visible .hover-image {
+      opacity: 1;
+    }
+
+    .cad-image {
+      object-fit: contain;
+      object-position: center;
+      padding: 10px;
+      background: var(--paper);
+      filter: saturate(0.78) contrast(1.02) brightness(0.99);
+    }
+
+    .chamber-image {
+      object-fit: cover;
+      object-position: center;
+      background: #000;
+      filter: saturate(0.86) contrast(1.03) brightness(0.92);
+    }
+
+    .validation-card {
+      margin-top: 18px;
+    }
+
+    .validation-frame {
+      aspect-ratio: 5 / 3;
+      background: #050505;
+      box-shadow:
+        inset 0 0 0 8px #050505,
+        inset 0 0 0 9px var(--line-soft);
+    }
+
+    .validation-frame img {
+      object-fit: contain;
+      object-position: center;
+      padding: 6px;
+      background: #050505;
+    }
+
+    .project-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      margin-top: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .all-projects-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.48);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .all-projects-link:hover {
+      color: var(--text);
+    }
+
+    .next-project-link {
+      display: grid;
+      justify-items: end;
+      gap: 7px;
+      text-align: right;
+    }
+
+    .next-project-label {
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .next-project-title {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .next-project-link:hover .next-project-title {
+      color: var(--accent-text);
+    }
+
+    @media (max-width: 760px) {
+      .background-context {
+        opacity: 0.08;
+        filter: blur(1px);
+      }
+
+      .overlay-wrap {
+        padding: 18px;
+      }
+
+      .summary-panel {
+        width: min(100%, 620px);
+        max-height: 92vh;
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 36px;
+        line-height: 0.92;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .system-row {
+        grid-template-columns: 0.4fr 1fr;
+        gap: 12px;
+      }
+
+      .design-grid {
+        gap: 12px;
+      }
+
+      .design-grid .media-frame {
+        height: 260px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .design-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .design-grid .media-frame {
+        height: 300px;
+      }
+
+      .validation-frame {
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .panel-top {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-link {
+        justify-self: start;
+      }
+
+      .system-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+
+      .project-footer {
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+      }
+
+      .next-project-title {
+        font-size: 12px;
+      }
+    }
+  
+
+/* Unified project header */
+    .panel-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 20px;
+    }
+
+    .project-header-copy {
+      min-width: 0;
+    }
+
+    .project-header-copy .project-type {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .project-header-copy .project-type + .project-type {
+      margin-top: 5px;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      align-self: start;
+      display: inline-block;
+      width: fit-content;
+      margin: 2px 0 0;
+      padding-bottom: 4px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    @media (max-width: 520px) {
+      .panel-top {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+      }
+
+      .pdf-link {
+        justify-self: end;
+      }
+    }
+</style>
+
+  <style id="approved-project-accent-fix">
+    /* Approved finishing accents only — preserves the original corrected project-page design. */
+    :root {
+      --portfolio-orange: #FF7A32;
+      --portfolio-orange-hover: #FF9B65;
+      --portfolio-orange-line: rgba(255,122,50,.72);
+    }
+    .pdf-link, .pdf-link:visited {
+      color: var(--portfolio-orange) !important;
+      border-bottom-color: var(--portfolio-orange-line) !important;
+    }
+    .pdf-link:hover, .pdf-link:focus-visible {
+      color: var(--portfolio-orange-hover) !important;
+      border-bottom-color: var(--portfolio-orange-hover) !important;
+    }
+    a:hover, button:hover {
+      --accent-text: var(--portfolio-orange);
+    }
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--portfolio-orange-line) !important;
+    }
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title,
+    .archive-link:hover, .archive-link:focus-visible {
+      color: var(--portfolio-orange) !important;
+    }
+    :focus-visible { outline-color: var(--portfolio-orange) !important; }
+  </style>
+  <style id="project-homepage-aesthetic-match">
+    /* Project-page visual match to the approved homepage. Layout/content intentionally untouched. */
+    :root {
+      --project-bg: #000102;
+      --project-bg-deep: #000000;
+      --project-panel: #010407;
+      --project-panel-soft: rgba(5, 14, 21, 0.54);
+      --project-text: #edf0f2;
+      --project-muted: #87939a;
+      --project-blue: #405b68;
+      --project-blue-hover: #6a828d;
+      --project-line: rgba(54, 75, 86, 0.18);
+      --project-line-soft: rgba(54, 75, 86, 0.095);
+      --project-orange: #FF7A32;
+      --project-orange-hover: #FF9B65;
+      --project-orange-soft: rgba(255, 122, 50, 0.14);
+      --project-orange-line: rgba(255, 122, 50, 0.76);
+    }
+
+    html {
+      background: var(--project-bg) !important;
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--project-text) !important;
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.055), transparent 78%),
+        radial-gradient(760px 560px at 4% 58%, rgba(8, 20, 28, 0.035), transparent 80%),
+        linear-gradient(180deg, var(--project-bg) 0%, #010305 50%, var(--project-bg-deep) 100%) !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-color: rgba(106, 130, 141, 0.36) rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(106, 130, 141, 0.30) !important;
+      border-color: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(106, 130, 141, 0.48) !important;
+    }
+
+    ::selection {
+      color: var(--project-text);
+      background: rgba(255, 122, 50, 0.28);
+    }
+
+    /* Keep the original background composition but shift it into the homepage palette. */
+    .background-context {
+      opacity: 0.13 !important;
+      filter: blur(1.35px) !important;
+    }
+
+    .ghost-header {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .ghost-name {
+      color: rgba(106, 130, 141, 0.34) !important;
+    }
+
+    .ghost-block {
+      background: rgba(3, 8, 12, 0.82) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    /* Same blue-black depth as the homepage rather than the old brown/black panel. */
+    .summary-panel {
+      background:
+        radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.10), transparent 72%),
+        linear-gradient(180deg, rgba(3, 8, 12, 0.985), rgba(1, 4, 7, 0.985)) !important;
+      border-color: var(--project-line) !important;
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(64, 91, 104, 0.025) !important;
+    }
+
+    h1 {
+      color: var(--project-text) !important;
+      text-wrap: balance;
+    }
+
+    /* Small permanent orange cue: present on every project, including pages without PDFs. */
+    h1::after {
+      content: '';
+      display: block;
+      width: 34px;
+      height: 2px;
+      margin-top: 17px;
+      background: var(--project-orange);
+      box-shadow: 0 0 12px rgba(255, 122, 50, 0.10);
+    }
+
+    .summary-intro,
+    .summary-card p,
+    .visual-card p,
+    .system-row span,
+    .next-project-label,
+    .all-projects-link,
+    .project-files-link,
+    .home-link {
+      color: var(--project-muted) !important;
+    }
+
+    .summary-card {
+      background:
+        linear-gradient(180deg, rgba(5, 14, 21, 0.58), rgba(2, 7, 11, 0.52)) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .summary-card h2,
+    .section-heading {
+      color: var(--project-blue-hover) !important;
+    }
+
+    .visual-card {
+      border-top-color: var(--project-line-soft) !important;
+    }
+
+    .visual-card h3,
+    .system-row strong {
+      color: #c9d2d6 !important;
+    }
+
+    .system-list,
+    .project-footer,
+    .cta-row {
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .system-row {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    /* Image framing follows the homepage: cool neutral border at rest, orange only when interactive. */
+    .media-frame {
+      background: var(--project-bg) !important;
+      border-color: var(--project-line-soft) !important;
+      box-shadow:
+        inset 0 0 0 14px var(--project-panel),
+        inset 0 0 0 15px var(--project-line-soft) !important;
+    }
+
+    .media-frame.cad {
+      /* Preserve the existing light CAD plate while harmonizing its outer edge. */
+      border-color: rgba(64, 91, 104, 0.24) !important;
+    }
+
+    .swap-card .media-frame {
+      transition: border-color 180ms ease, box-shadow 200ms ease, transform 200ms ease !important;
+    }
+
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--project-orange-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.18),
+        0 0 22px var(--project-orange-soft) !important;
+      transform: translateY(-1px);
+    }
+
+    .swap-card:hover .media-frame.cad,
+    .swap-card:focus-visible .media-frame.cad {
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px var(--project-orange-line),
+        0 0 22px var(--project-orange-soft) !important;
+    }
+
+    /* Blue is the structural accent. Orange means action. */
+    .pdf-link,
+    .pdf-link:visited {
+      color: var(--project-orange) !important;
+      border-bottom-color: var(--project-orange-line) !important;
+    }
+
+    .pdf-link:hover,
+    .pdf-link:focus-visible {
+      color: var(--project-orange-hover) !important;
+      border-bottom-color: var(--project-orange-hover) !important;
+    }
+
+    .archive-link {
+      border-top-color: var(--project-blue) !important;
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible,
+    .archive-link:hover,
+    .archive-link:focus-visible,
+    .all-projects-link:hover,
+    .all-projects-link:focus-visible,
+    .project-files-link:hover,
+    .project-files-link:focus-visible,
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title {
+      color: var(--project-orange) !important;
+      border-color: var(--project-orange-line) !important;
+    }
+
+    .next-project-title {
+      color: var(--project-text) !important;
+    }
+
+    :focus-visible {
+      outline-color: var(--project-orange) !important;
+    }
+
+    @media (max-width: 760px) {
+      .background-context { opacity: 0.09 !important; }
+      h1::after { margin-top: 14px; }
+    }
+  </style>
+
+
+<style id="project-homepage-color-hierarchy-v2">
+  /* Final project-page colour match. Layout/content intentionally untouched. */
+  :root {
+    --project-bg: #010305;
+    --project-bg-mid: #020507;
+    --project-bg-deep: #000102;
+    --project-panel: #03070a;
+    --project-title-blue: #49636f;
+    --project-heading-blue: #6a828d;
+    --project-subheading: #bcc5ca;
+    --project-body-grey: #849198;
+    --project-muted-grey: #747d83;
+  }
+
+  html { background: var(--project-bg) !important; }
+
+  body {
+    background:
+      radial-gradient(900px 620px at 90% 0%, rgba(13, 25, 33, 0.038), transparent 76%),
+      radial-gradient(760px 540px at 4% 58%, rgba(7, 15, 21, 0.017), transparent 82%),
+      linear-gradient(180deg, var(--project-bg) 0%, var(--project-bg-mid) 52%, var(--project-bg-deep) 100%) !important;
+  }
+
+  .summary-panel {
+    background:
+      radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.08), transparent 72%),
+      linear-gradient(180deg, rgba(3, 7, 10, 0.985), rgba(1, 4, 7, 0.985)) !important;
+  }
+
+  /* Home-page hierarchy: blue titles, grey prose, orange interaction. */
+  h1 {
+    color: var(--project-title-blue) !important;
+  }
+
+  .summary-card h2,
+  .section-heading {
+    color: var(--project-heading-blue) !important;
+  }
+
+  .visual-card h3,
+  .system-row strong,
+  .next-project-title {
+    color: var(--project-subheading) !important;
+  }
+
+  .summary-intro,
+  .summary-card p,
+  .visual-card p,
+  .system-row span,
+  .next-project-label,
+  .all-projects-link,
+  .project-files-link,
+  .home-link,
+  .archive-link,
+  .image-caption,
+  figcaption,
+  .caption,
+  li {
+    color: var(--project-body-grey) !important;
+  }
+
+  .image-label,
+  .meta,
+  .eyebrow,
+  .kicker {
+    color: var(--project-muted-grey) !important;
+  }
+
+  /* Preserve the established orange action language. */
+  .pdf-link,
+  .pdf-link:visited {
+    color: var(--project-orange) !important;
+    border-bottom-color: var(--project-orange-line) !important;
+  }
+
+  .pdf-link:hover,
+  .pdf-link:focus-visible,
+  a:hover,
+  a:focus-visible {
+    text-decoration-color: var(--project-orange) !important;
+  }
+</style>
+
+  <link rel="stylesheet" href="../../assets/pdf-page-top.css">
+
+<style id="technical-defer-style">
+.technical-defer{min-height:42vh;display:grid;place-content:center;justify-items:center;gap:14px;padding:clamp(70px,12vh,140px) 24px;background:#010305;color:#747d83;text-align:center}
+.technical-defer__line{width:1px;height:clamp(48px,8vh,86px);background:linear-gradient(to bottom,rgba(255,122,50,.75),rgba(255,122,50,0))}
+.technical-defer__label,.technical-defer__status{margin:0;font:500 9px/1.4 "Inter",Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.technical-defer__status{min-height:1.4em;color:#849198;text-transform:none;letter-spacing:.04em}
+.technical-defer__status a{color:#FF7A32;text-decoration:none;border-bottom:1px solid rgba(255,122,50,.45)}
+.technical-defer--loaded{min-height:18vh;padding-block:34px 26px}
+.technical-defer--loaded .technical-defer__label,.technical-defer--loaded .technical-defer__line{opacity:.28}
+@media(max-width:620px){.technical-defer{min-height:34vh}}
+</style>
+
+
+<style id="deferred-scroll-cue-fix">
+.pdf-page-chapter__nav .detail{cursor:default;pointer-events:none;text-decoration:none}
+</style>
+
+<style id="single-document-scroll-fix">
+/* The deferred technical chapter belongs to the document flow: no nested scroll container. */
+#technical-deferred-content{overflow:visible!important;height:auto!important;max-height:none!important;}
+#technical-deferred-content .overlay-wrap{min-height:0!important;height:auto!important;max-height:none!important;display:block!important;place-items:unset!important;overflow:visible!important;width:100%!important;padding-left:22px!important;padding-right:22px!important;}
+#technical-deferred-content .summary-panel{width:min(1040px,92vw)!important;height:auto!important;max-height:none!important;overflow:visible!important;margin-left:auto!important;margin-right:auto!important;}
+</style>
+
+</head>
+
+<body>
+<section class="pdf-page-chapter pdf-page--chamber" aria-label="Portfolio summary page">
+  <div class="pdf-page-original-wrap"><img class="pdf-page-original" src="../../assets/pdf-pages/chamber.webp" width="3600" height="2025" fetchpriority="high" decoding="async" alt="Project summary slide: the chamber beside its live dashboard, the controller wiring, the chamber interior, and a plot of field versus chamber temperature and humidity."></div>
+  <div class="pdf-page-text">
+<p class="ppt-kicker">2026 • Personal Project</p>
+<h1>Environmental Control Chamber</h1>
+<p>I built an ESP32-controlled environmental chamber to reproduce changing field temperature and humidity conditions for weather-sensitive crop testing. Heating, cooling, humidification, airflow and water delivery respond to manual or live weather-station targets.</p>
+<h2>Controls + Electrical</h2>
+<ul><li>Ecowitt API + manual target inputs</li><li>ESP32 sensor feedback + control logic</li><li>MOSFET-switched 12 V actuator branches</li><li>Float-switch + sensor-fault interlocks</li><li>Live dashboard + CSV test logging</li></ul>
+<h2>System Design</h2>
+<p>A dual-wall enclosure limits heat transfer, while an internal plenum mixes conditioned air before it enters the chamber. Vent placement directs airflow through the upper test volume, with heating, cooling, humidification and water delivery integrated around the same airflow path.</p>
+<h2>Results</h2>
+<ul><li>77.2 min settled evaluation window</li><li>0.28 °C temperature MAE</li><li>1.94 percentage points RH MAE</li></ul>
+</div>
+  <nav class="pdf-page-chapter__nav" aria-label="Project navigation"><a class="prev" href="../../index.html">← Home</a><span class="detail" aria-hidden="true">↓ Scroll for technical detail</span><a class="next" href="../Table/table_summary.html">Next Project →</a></nav>
+</section>
+
+  
+<section class="technical-defer" id="technical-sentinel" data-source="chamber-technical-payload.js" aria-label="Technical detail loading point">
+  <div class="technical-defer__line" aria-hidden="true"></div>
+  <p class="technical-defer__label">Continue scrolling for technical detail</p>
+  <p class="technical-defer__status" id="technical-load-status" aria-live="polite"></p>
+</section>
+<div id="technical-deferred-content"></div>
+<script type="application/json" id="chamber-technical-fallback">{"html":"<style id=tech-width-chamber>#technical-deferred-content .overlay-wrap{padding-left:clamp(16px,2vw,28px)!important;padding-right:clamp(16px,2vw,28px)!important}#technical-deferred-content .summary-panel{width:min(1240px,96vw)!important;max-width:1240px!important}</style><style id=technical-archive-scale-v11>@media (min-width:821px){#technical-deferred-content .overlay-wrap{padding:16px 8px!important;min-height:0!important;place-items:start center!important}#technical-deferred-content .summary-panel{width:min(1180px,calc((100vw - 20px)/1.1))!important;max-width:1180px!important;max-height:none!important;overflow:visible!important;zoom:1.1}}@media (max-width:820px){#technical-deferred-content .summary-panel{max-height:none!important;overflow:visible!important}}</style><div aria-hidden=\"true\" class=\"background-context\">\n<div class=\"ghost-header\">\n<p class=\"ghost-name\">\n        Brooklyn<br/>\n        Claeys\n      </p>\n</div>\n<div class=\"ghost-grid\">\n<div class=\"ghost-block\"></div>\n<div class=\"ghost-block\"></div>\n<div class=\"ghost-block\"></div>\n</div>\n</div>\n<main class=\"overlay-wrap\" id=\"technical-detail\">\n<article aria-label=\"Environmental Control Chamber project summary\" class=\"summary-panel\">\n<div class=\"panel-top\">\n<div class=\"project-header-copy\">\n<h1>\n            Environmental<br/>\n            Control Chamber\n          </h1>\n<p class=\"project-type\">Personal Project</p>\n</div>\n\n</div>\n<p class=\"summary-intro\">\n        I designed and built an ESP32-controlled environmental chamber to\n        reproduce target temperature, humidity, airflow, and surface-wetness\n        conditions from live weather-station data or manually defined setpoints.\n        The system was developed with a farmer to reduce repeated field visits\n        during weather-sensitive crop-disease testing by reproducing outdoor\n        conditions in a remotely monitored chamber.\n      </p>\n<section class=\"hero-card\">\n<article class=\"visual-card\">\n<div class=\"media-frame hero-frame\">\n<video autoplay=\"\" controls=\"\" loop=\"\" muted=\"\" playsinline=\"\" poster=\"showcase_poster.jpg\" preload=\"metadata\">\n<source src=\"Showcase1.mp4\" type=\"video/mp4\"/>\n</video>\n</div>\n<h3>Field-Matching Test</h3>\n<p>\n            Dashboard and chamber response during a field-matching test, showing\n            target conditions, measured conditions, and actuator response.\n          </p>\n</article>\n</section>\n<section class=\"summary-grid\">\n<section class=\"summary-card full\">\n<h2 class=\"section-heading\">Project Overview</h2>\n<div class=\"system-list\">\n<div class=\"system-row\">\n<strong>Sensing + Targets</strong>\n<span>\n                Temperature, relative humidity, and soil moisture measured inside\n                the chamber and compared against live Ecowitt weather-station data\n                or manually defined target values.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>Actuation</strong>\n<span>\n                Peltier cooling, resistive heating, blower and circulation fans,\n                a humidifier, and water-delivery pump used to regulate temperature,\n                humidity, airflow, and surface wetness.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>Mechanical Design</strong>\n<span>\n                Clear dual-wall enclosure with an insulating air gap, silicone\n                and weather-strip sealing, and a magnetic door closure. A plenum\n                mixes conditioned air before chamber entry, with vent placement\n                directing flow across the upper test volume and away from the soil.\n              </span>\n</div>\n<div class=\"system-row\">\n<strong>Electrical + Software</strong>\n<span>\n                An ESP32 switches separate 12 V actuator branches through MOSFETs\n                and shared power distribution. The control logic prevents\n                simultaneous heating and cooling, applies timed humidifier and pump\n                pulses with lockout periods, rejects invalid sensor readings,\n                updates the dashboard, and logs test data.\n              </span>\n</div>\n</div>\n</section>\n<section class=\"summary-card full\">\n<h2>CAD Design</h2>\n<div class=\"design-grid\">\n<article class=\"visual-card\">\n<div aria-label=\"Chamber assembly and airflow duct CAD views\" class=\"swap-card\" tabindex=\"0\">\n<div class=\"media-frame\">\n<div class=\"swap-image\">\n<img loading=lazy decoding=async alt=\"Front isometric CAD view of the chamber\" class=\"default-image cad-image\" src=\"Environmental_Chamber_Portfolio_Working_Files/02_CAD_and_Design/01_Chamber_Assembly_Front_Isometric.png\"/>\n<img loading=lazy decoding=async alt=\"Isometric CAD view of the chamber airflow duct\" class=\"hover-image cad-image\" src=\"Environmental_Chamber_Portfolio_Working_Files/02_CAD_and_Design/03_Airflow_Duct_Isometric.png\"/>\n</div>\n</div>\n</div>\n<h3>Vents + Airflow Path</h3>\n<p>\n                Vent and plenum geometry used to route conditioned air from the\n                thermal module into the chamber and distribute it across the upper\n                test volume.\n              </p>\n</article>\n<article class=\"visual-card\">\n<div class=\"media-frame\">\n<img loading=lazy decoding=async alt=\"Completed environmental control chamber\" class=\"chamber-image\" src=\"Environmental_Chamber_Portfolio_Working_Files/01_Physical_Chamber_Photos/01_Chamber_Final_Hero.jpg\"/>\n</div>\n<h3>Full Chamber</h3>\n<p>\n                Dual-wall enclosure with silicone and weather-strip sealing,\n                magnetic door closure, clear sample access, and space for the\n                thermal, humidification, water-delivery, and sensing hardware.\n              </p>\n</article>\n</div>\n</section>\n<section class=\"summary-card full\">\n<h2>Testing + Validation</h2>\n<p>\n            System tests measured how chamber temperature, humidity, and surface\n            wetness changed in response to each actuator. I used these runs to tune\n            activation timing and pulse duration, add heating and cooling mutual\n            exclusion, and set humidifier and pump lockout periods so the chamber\n            approached target conditions without repeated overshoot. The control\n            sequence also includes a startup period before field matching begins,\n            allowing the sensors and chamber conditions to stabilize before tracking.\n          </p>\n<article class=\"evidence-card validation-card\">\n<div aria-label=\"Full field-matching and pump wetness-response validation graphs\" class=\"swap-card\" tabindex=\"0\">\n<div class=\"media-frame validation-frame\">\n<div class=\"swap-image\">\n<img loading=lazy decoding=async alt=\"Full field temperature and humidity matching run\" class=\"default-image\" src=\"Environmental_Chamber_Portfolio_Working_Files/04_Results_and_Validation/01_Field_Matching_Full_Run.png\"/>\n<img loading=lazy decoding=async alt=\"Measured pump and wetness response\" class=\"hover-image\" src=\"Environmental_Chamber_Portfolio_Working_Files/04_Results_and_Validation/06_Pump_Wetness_Response.webp\"/>\n</div>\n</div>\n</div>\n<h3>System Response</h3>\n<p>\n              Field-matching run: mean absolute error of 0.28°C for temperature\n              and 1.94 percentage points for relative humidity over the 77.2-minute\n              settled window. Pump testing recorded the corresponding surface-wetness\n              response after water delivery.\n            </p>\n</article>\n</section>\n</section>\n<footer aria-label=\"Project navigation\" class=\"project-footer\">\n<a class=\"all-projects-link\" href=\"../../index.html\">\n<span aria-hidden=\"true\">←</span>\n<span>Back to all projects</span>\n</a>\n<a class=\"next-project-link\" href=\"../Table/table_summary.html\">\n<span class=\"next-project-label\">Next project</span>\n<span class=\"next-project-title\">Scissor-Lift Workbench</span>\n</a>\n</footer>\n</article>\n</main>","scripts":["\n    document.addEventListener(\"DOMContentLoaded\", function () {\n      document.querySelectorAll(\"video[autoplay]\").forEach(function (video) {\n        video.muted = true;\n        video.volume = 0;\n        video.playsInline = true;\n\n        video.addEventListener(\"volumechange\", function () {\n          if (!video.muted || video.volume !== 0) {\n            video.muted = true;\n            video.volume = 0;\n          }\n        });\n\n        const playPromise = video.play();\n\n        if (playPromise !== undefined) {\n          playPromise.catch(function () {\n            video.controls = true;\n          });\n        }\n      });\n    });\n  "]}</script>
+<script id="deferred-technical-loader">
+(()=>{
+  const sentinel=document.getElementById('technical-sentinel');
+  const mount=document.getElementById('technical-deferred-content');
+  const status=document.getElementById('technical-load-status');
+  const fallbackNode=document.getElementById('chamber-technical-fallback');
+  if(!sentinel||!mount) return;
+  const source=sentinel.dataset.source;
+  let loaded=false, observer=null, fallbackTimer=null;
+  const mountPayload=(payload)=>{
+    if(loaded||!payload) return;
+    loaded=true;
+    if(fallbackTimer) clearTimeout(fallbackTimer);
+    mount.innerHTML=payload.html||'';
+    (payload.scripts||[]).forEach(code=>{const s=document.createElement('script');s.textContent=code;document.body.appendChild(s);});
+    sentinel.classList.add('technical-defer--loaded');
+    if(status) status.textContent='';
+    requestAnimationFrame(()=>{
+      const target=document.getElementById('technical-detail')||mount.querySelector('main');
+      if(target&&target.getBoundingClientRect().top<window.innerHeight*0.45) target.scrollIntoView({block:'start'});
+    });
+  };
+  const mountFallback=()=>{
+    if(loaded||!fallbackNode) return;
+    try{mountPayload(JSON.parse(fallbackNode.textContent));}
+    catch(err){if(status) status.textContent='Technical detail could not load.';}
+  };
+  window.__portfolioMountTechnical=mountPayload;
+  const loadTechnical=()=>{
+    if(loaded) return;
+    if(observer) observer.disconnect();
+    if(status) status.textContent='Loading technical detail…';
+    const s=document.createElement('script');
+    s.src=source;s.async=true;s.onerror=mountFallback;document.body.appendChild(s);
+    fallbackTimer=setTimeout(mountFallback,2500);
+  };
+  if('IntersectionObserver' in window){
+    observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)) loadTechnical();},{threshold:0.01,rootMargin:'0px'});
+    observer.observe(sentinel);
+  }else{
+    const onScroll=()=>{if(loaded)return;const r=sentinel.getBoundingClientRect();if(r.top<=innerHeight&&r.bottom>=0){removeEventListener('scroll',onScroll);loadTechnical();}};
+    addEventListener('scroll',onScroll,{passive:true});onScroll();
+  }
+})();
+</script>
+
+</body>
+</html>

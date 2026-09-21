@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Lead-screw-driven scissor lift workbench modelled in SolidWorks: crossed linkage, lead screw and nut block, mates, drawings and bill of materials (ENME 339 group project).">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Scissor Lift Workbench | Brooklyn Claeys">
+  <meta property="og:description" content="Lead-screw-driven scissor lift workbench modelled in SolidWorks: crossed linkage, lead screw and nut block, mates, drawings and bill of materials (ENME 339 group project).">
+    <meta property="og:image" content="../../photos-main/table_main.png">
+  <meta name="twitter:image" content="../../photos-main/table_main.png">
+<meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#020609">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23020609'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23ff7a32'%3EBC%3C/text%3E%3C/svg%3E">
+  <title>Scissor Lift Workbench | Brooklyn Claeys</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /*
+      If you have licensed TT Interphases webfont files, place them in /fonts
+      and uncomment this block. Otherwise the site falls back to Inter/system sans.
+*/
+
+    :root {
+      --bg: #0b0707;
+      --panel: #100c0c;
+      --panel-soft: rgba(244, 240, 234, 0.026);
+      --text: #f4f0ea;
+      --muted: #aaa39a;
+      --line: rgba(244, 240, 234, 0.30);
+      --line-soft: rgba(244, 240, 234, 0.13);
+
+      --accent: #00162A;
+      --accent-line: #123A5A;
+      --accent-text: #6FA0C8;
+
+      --display: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Inter', 'Helvetica Neue', 'TT Interphases', Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+      scrollbar-color: rgba(244, 240, 234, 0.28) rgba(11, 7, 7, 0.78);
+      scrollbar-width: thin;
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(11, 7, 7, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(244, 240, 234, 0.24);
+      border: 2px solid rgba(11, 7, 7, 0.78);
+      border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(244, 240, 234, 0.38);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .background-context {
+      position: fixed;
+      inset: 0;
+      padding: 42px clamp(22px, 4.6vw, 72px);
+      opacity: 0.1;
+      filter: blur(1.5px);
+      pointer-events: none;
+    }
+
+    .ghost-header {
+      height: 250px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .ghost-name {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(80px, 12vw, 150px);
+      line-height: 0.76;
+      text-transform: uppercase;
+    }
+
+    .ghost-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(18px, 2vw, 30px);
+      margin-top: 48px;
+    }
+
+    .ghost-block {
+      height: 340px;
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+    }
+
+    .overlay-wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 42px 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .summary-panel {
+      width: min(960px, 90vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: rgba(11, 7, 7, 0.965);
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+      padding: clamp(26px, 3.8vw, 48px);
+    }
+
+    .panel-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 620px;
+      font-family: var(--sans);
+      font-size: clamp(34px, 4.8vw, 56px);
+      line-height: 0.9;
+      font-weight: 400;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      width: fit-content;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    .summary-intro {
+      max-width: 840px;
+      margin: 0 0 28px;
+      color: rgba(244, 240, 234, 0.76);
+      font-size: 13px;
+      line-height: 1.58;
+      font-weight: 400;
+      letter-spacing: 0.025em;
+    }
+
+    .section-heading {
+      margin: 0 0 16px;
+      color: rgba(244, 240, 234, 0.86);
+      font-family: var(--display);
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0.025em;
+    }
+
+    .visual-grid,
+    .summary-grid,
+    .evidence-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .visual-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 24px;
+    }
+
+    .visual-grid.tight {
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .evidence-grid.two-by-two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-card,
+    .evidence-section {
+      background: var(--panel-soft);
+      border: 1px solid var(--line-soft);
+      padding: 18px;
+    }
+
+    .summary-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .visual-card,
+    .evidence-card {
+      display: grid;
+      gap: 11px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .visual-card h3,
+    .evidence-card h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.095em;
+    }
+
+    .visual-card p,
+    .evidence-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.42;
+      letter-spacing: 0.035em;
+    }
+
+    .image-frame {
+      width: 100%;
+      height: 285px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(244, 240, 234, 0.045), transparent 62%),
+        var(--panel);
+      border: 1px solid var(--line-soft);
+      box-shadow:
+        inset 0 0 0 14px var(--panel),
+        inset 0 0 0 15px var(--line-soft);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .image-frame.hero {
+      height: 285px;
+      padding: 0;
+      box-shadow:
+        inset 0 0 0 20px var(--panel),
+        inset 0 0 0 21px var(--line-soft);
+    }
+
+    .image-frame.drawing {
+      background: rgba(244, 240, 234, 0.035);
+    }
+
+    .image-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(0.82) contrast(1.02) brightness(0.9);
+      opacity: 0.97;
+    }
+
+    .image-frame.drawing img {
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(0.58) contrast(1.0) brightness(0.94);
+    }
+
+    .image-frame.hero img {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .image-frame.cad-assembly img {
+      object-position: 34% center;
+    }
+
+    .image-frame.motion-render {
+      height: 260px;
+    }
+
+    .image-frame.motion-render img {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .swap-card,
+    .swap-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .swap-card {
+      outline: none;
+    }
+
+    .swap-image img {
+      position: absolute;
+      inset: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .swap-image .default-image {
+      opacity: 1;
+    }
+
+    .swap-image .hover-image {
+      opacity: 0;
+    }
+
+    .swap-card:hover .default-image,
+    .swap-card:focus-visible .default-image {
+      opacity: 0;
+    }
+
+    .swap-card:hover .hover-image,
+    .swap-card:focus-visible .hover-image {
+      opacity: 1;
+    }
+
+    .image-frame.drawing .swap-image .assembly-drawing {
+      object-fit: cover;
+      object-position: 50% 0%;
+      filter: saturate(0.58) contrast(1.0) brightness(0.94);
+    }
+
+    .image-frame .cad-render,
+    .swap-image .cad-render {
+      object-fit: contain;
+      object-position: center;
+      background: #f3f4f7;
+      filter: saturate(0.88) contrast(1.02) brightness(0.98);
+    }
+
+    .image-link {
+  display: block;
+  position: relative;
+  color: inherit;
+  cursor: zoom-in;
+}
+
+.image-link .image-frame {
+  transition: border-color 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.image-link::after {
+  content: "+";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: rgba(244, 240, 234, 0.72);
+  background: rgba(11, 7, 7, 0.72);
+  border: 1px solid rgba(244, 240, 234, 0.18);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 160ms ease, transform 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.image-link:hover .image-frame,
+.image-link:focus-visible .image-frame {
+  border-color: var(--accent-line);
+  box-shadow:
+    inset 0 0 0 14px var(--panel),
+    inset 0 0 0 15px var(--accent-line);
+}
+
+.image-link:hover::after,
+.image-link:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--accent-text);
+  border-color: var(--accent-line);
+}
+
+    .summary-card h2,
+    .evidence-section h2 {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .summary-card p,
+    .evidence-section > p {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1.55;
+      letter-spacing: 0.035em;
+    }
+
+    .summary-card p + p {
+      margin-top: 12px;
+    }
+
+    .system-list {
+      display: grid;
+      margin-top: 4px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .system-row {
+      display: grid;
+      grid-template-columns: 0.31fr 1fr;
+      gap: 18px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(244, 240, 234, 0.10);
+    }
+
+    .system-row strong,
+    .system-row span {
+      font-size: 11px;
+      line-height: 1.45;
+      letter-spacing: 0.04em;
+    }
+
+    .system-row strong {
+      color: var(--text);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.075em;
+    }
+
+    .system-row span {
+      color: var(--muted);
+    }
+
+    .evidence-section {
+      margin-top: 18px;
+    }
+
+    .evidence-section.compact {
+      padding-top: 6px;
+    }
+
+    .evidence-section > p {
+      max-width: 820px;
+      margin-bottom: 18px;
+    }
+
+    .cta-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 22px;
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .home-link,
+    .archive-link {
+      padding: 10px 0;
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.085em;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .home-link {
+      justify-self: start;
+      color: rgba(244, 240, 234, 0.48);
+      border-bottom: 1px solid transparent;
+    }
+
+    .home-link:hover {
+      color: var(--muted);
+      border-bottom-color: var(--line-soft);
+    }
+
+    .archive-link {
+      justify-self: center;
+      min-width: 220px;
+      color: var(--text);
+      text-align: center;
+      border-top: 1px solid var(--accent-line);
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .archive-link:hover {
+      color: var(--accent-text);
+      border-top-color: var(--accent-text);
+      border-bottom-color: var(--accent-line);
+    }
+
+    @media (max-width: 760px) {
+      .background-context {
+        opacity: 0.08;
+        filter: blur(1px);
+      }
+
+      .overlay-wrap {
+        min-height: 100vh;
+        place-items: center;
+        padding: 18px;
+      }
+
+      .summary-panel {
+        width: min(100%, 620px);
+        max-height: 92vh;
+        padding: 24px;
+      }
+
+      .panel-top {
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 36px;
+        line-height: 0.92;
+        letter-spacing: 0.05em;
+      }
+
+      .summary-intro {
+        margin-bottom: 24px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .visual-grid,
+      .evidence-grid.two-by-two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .summary-card,
+      .evidence-section {
+        padding: 16px;
+      }
+
+      .system-row {
+        grid-template-columns: 0.42fr 1fr;
+        gap: 12px;
+      }
+
+      .image-frame,
+      .image-frame.hero,
+      .image-frame.motion-render {
+        height: 160px;
+      }
+
+      .image-frame.hero.drawing .swap-image .assembly-drawing {
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .visual-card p,
+      .evidence-card p {
+        font-size: 10px;
+        line-height: 1.35;
+      }
+
+      .cta-row {
+        grid-template-columns: 1fr auto 1fr;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 20px;
+      }
+
+      .archive-link {
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .panel-top,
+      .cta-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-link,
+      .home-link,
+      .archive-link {
+        justify-self: start;
+      }
+
+      .archive-link {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .system-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+    }
+  
+    /* Shared portfolio project footer */
+    .project-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      margin-top: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .footer-left {
+      display: grid;
+      justify-items: start;
+      gap: 10px;
+    }
+
+    .all-projects-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.48);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .all-projects-link:hover {
+      color: var(--text);
+    }
+
+    .project-files-link {
+      width: fit-content;
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .project-files-link:hover {
+      color: var(--muted);
+      border-bottom-color: var(--line-soft);
+    }
+
+    .next-project-link {
+      display: grid;
+      justify-items: end;
+      gap: 7px;
+      text-align: right;
+    }
+
+    .next-project-label {
+      color: rgba(244, 240, 234, 0.42);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .next-project-title {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 160ms ease;
+    }
+
+    .next-project-link:hover .next-project-title {
+      color: var(--accent-text);
+    }
+
+    @media (max-width: 520px) {
+      .project-footer {
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+      }
+
+      .next-project-title {
+        font-size: 12px;
+      }
+    }
+
+  
+
+/* Unified project header */
+    .panel-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 20px;
+    }
+
+    .project-header-copy {
+      min-width: 0;
+    }
+
+    .project-header-copy .project-type {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .project-header-copy .project-type + .project-type {
+      margin-top: 5px;
+    }
+
+    .pdf-link {
+      justify-self: end;
+      align-self: start;
+      display: inline-block;
+      width: fit-content;
+      margin: 2px 0 0;
+      padding-bottom: 4px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .pdf-link:hover {
+      color: var(--accent-text);
+      border-color: var(--accent-line);
+    }
+
+    @media (max-width: 520px) {
+      .panel-top {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+      }
+
+      .pdf-link {
+        justify-self: end;
+      }
+    }
+
+    /* Preserve the complete SolidWorks assembly in-frame; do not crop the CAD renders. */
+    .image-frame.hero > img.cad-render,
+    .image-frame > img.cad-render,
+    .swap-image img.cad-render {
+      object-fit: contain !important;
+      object-position: center !important;
+      background: #f3f4f7;
+    }
+</style>
+
+
+  <style id="approved-project-accent-fix">
+    /* Approved finishing accents only — preserves the original corrected project-page design. */
+    :root {
+      --portfolio-orange: #FF7A32;
+      --portfolio-orange-hover: #FF9B65;
+      --portfolio-orange-line: rgba(255,122,50,.72);
+    }
+    .pdf-link, .pdf-link:visited {
+      color: var(--portfolio-orange) !important;
+      border-bottom-color: var(--portfolio-orange-line) !important;
+    }
+    .pdf-link:hover, .pdf-link:focus-visible {
+      color: var(--portfolio-orange-hover) !important;
+      border-bottom-color: var(--portfolio-orange-hover) !important;
+    }
+    a:hover, button:hover {
+      --accent-text: var(--portfolio-orange);
+    }
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--portfolio-orange-line) !important;
+    }
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title,
+    .archive-link:hover, .archive-link:focus-visible {
+      color: var(--portfolio-orange) !important;
+    }
+    :focus-visible { outline-color: var(--portfolio-orange) !important; }
+  </style>
+  <style id="project-homepage-aesthetic-match">
+    /* Project-page visual match to the approved homepage. Layout/content intentionally untouched. */
+    :root {
+      --project-bg: #000102;
+      --project-bg-deep: #000000;
+      --project-panel: #010407;
+      --project-panel-soft: rgba(5, 14, 21, 0.54);
+      --project-text: #edf0f2;
+      --project-muted: #87939a;
+      --project-blue: #405b68;
+      --project-blue-hover: #6a828d;
+      --project-line: rgba(54, 75, 86, 0.18);
+      --project-line-soft: rgba(54, 75, 86, 0.095);
+      --project-orange: #FF7A32;
+      --project-orange-hover: #FF9B65;
+      --project-orange-soft: rgba(255, 122, 50, 0.14);
+      --project-orange-line: rgba(255, 122, 50, 0.76);
+    }
+
+    html {
+      background: var(--project-bg) !important;
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--project-text) !important;
+      background:
+        radial-gradient(850px 520px at 88% 0%, rgba(8, 17, 23, 0.055), transparent 78%),
+        radial-gradient(760px 560px at 4% 58%, rgba(8, 20, 28, 0.035), transparent 80%),
+        linear-gradient(180deg, var(--project-bg) 0%, #010305 50%, var(--project-bg-deep) 100%) !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-color: rgba(106, 130, 141, 0.36) rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(106, 130, 141, 0.30) !important;
+      border-color: rgba(0, 1, 2, 0.92) !important;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(106, 130, 141, 0.48) !important;
+    }
+
+    ::selection {
+      color: var(--project-text);
+      background: rgba(255, 122, 50, 0.28);
+    }
+
+    /* Keep the original background composition but shift it into the homepage palette. */
+    .background-context {
+      opacity: 0.13 !important;
+      filter: blur(1.35px) !important;
+    }
+
+    .ghost-header {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .ghost-name {
+      color: rgba(106, 130, 141, 0.34) !important;
+    }
+
+    .ghost-block {
+      background: rgba(3, 8, 12, 0.82) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    /* Same blue-black depth as the homepage rather than the old brown/black panel. */
+    .summary-panel {
+      background:
+        radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.10), transparent 72%),
+        linear-gradient(180deg, rgba(3, 8, 12, 0.985), rgba(1, 4, 7, 0.985)) !important;
+      border-color: var(--project-line) !important;
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(64, 91, 104, 0.025) !important;
+    }
+
+    h1 {
+      color: var(--project-text) !important;
+      text-wrap: balance;
+    }
+
+    /* Small permanent orange cue: present on every project, including pages without PDFs. */
+    h1::after {
+      content: '';
+      display: block;
+      width: 34px;
+      height: 2px;
+      margin-top: 17px;
+      background: var(--project-orange);
+      box-shadow: 0 0 12px rgba(255, 122, 50, 0.10);
+    }
+
+    .summary-intro,
+    .summary-card p,
+    .visual-card p,
+    .system-row span,
+    .next-project-label,
+    .all-projects-link,
+    .project-files-link,
+    .home-link {
+      color: var(--project-muted) !important;
+    }
+
+    .summary-card {
+      background:
+        linear-gradient(180deg, rgba(5, 14, 21, 0.58), rgba(2, 7, 11, 0.52)) !important;
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .summary-card h2,
+    .section-heading {
+      color: var(--project-blue-hover) !important;
+    }
+
+    .visual-card {
+      border-top-color: var(--project-line-soft) !important;
+    }
+
+    .visual-card h3,
+    .system-row strong {
+      color: #c9d2d6 !important;
+    }
+
+    .system-list,
+    .project-footer,
+    .cta-row {
+      border-color: var(--project-line-soft) !important;
+    }
+
+    .system-row {
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    /* Image framing follows the homepage: cool neutral border at rest, orange only when interactive. */
+    .media-frame {
+      background: var(--project-bg) !important;
+      border-color: var(--project-line-soft) !important;
+      box-shadow:
+        inset 0 0 0 14px var(--project-panel),
+        inset 0 0 0 15px var(--project-line-soft) !important;
+    }
+
+    .media-frame.cad {
+      /* Preserve the existing light CAD plate while harmonizing its outer edge. */
+      border-color: rgba(64, 91, 104, 0.24) !important;
+    }
+
+    .swap-card .media-frame {
+      transition: border-color 180ms ease, box-shadow 200ms ease, transform 200ms ease !important;
+    }
+
+    .swap-card:hover .media-frame,
+    .swap-card:focus-visible .media-frame {
+      border-color: var(--project-orange-line) !important;
+      box-shadow:
+        0 0 0 1px rgba(255, 122, 50, 0.18),
+        0 0 22px var(--project-orange-soft) !important;
+      transform: translateY(-1px);
+    }
+
+    .swap-card:hover .media-frame.cad,
+    .swap-card:focus-visible .media-frame.cad {
+      box-shadow:
+        inset 0 0 0 10px var(--cad-bg),
+        inset 0 0 0 11px var(--project-orange-line),
+        0 0 22px var(--project-orange-soft) !important;
+    }
+
+    /* Blue is the structural accent. Orange means action. */
+    .pdf-link,
+    .pdf-link:visited {
+      color: var(--project-orange) !important;
+      border-bottom-color: var(--project-orange-line) !important;
+    }
+
+    .pdf-link:hover,
+    .pdf-link:focus-visible {
+      color: var(--project-orange-hover) !important;
+      border-bottom-color: var(--project-orange-hover) !important;
+    }
+
+    .archive-link {
+      border-top-color: var(--project-blue) !important;
+      border-bottom-color: var(--project-line-soft) !important;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible,
+    .archive-link:hover,
+    .archive-link:focus-visible,
+    .all-projects-link:hover,
+    .all-projects-link:focus-visible,
+    .project-files-link:hover,
+    .project-files-link:focus-visible,
+    .next-project-link:hover .next-project-title,
+    .next-project-link:focus-visible .next-project-title {
+      color: var(--project-orange) !important;
+      border-color: var(--project-orange-line) !important;
+    }
+
+    .next-project-title {
+      color: var(--project-text) !important;
+    }
+
+    :focus-visible {
+      outline-color: var(--project-orange) !important;
+    }
+
+    @media (max-width: 760px) {
+      .background-context { opacity: 0.09 !important; }
+      h1::after { margin-top: 14px; }
+    }
+  </style>
+
+
+<style id="project-homepage-color-hierarchy-v2">
+  /* Final project-page colour match. Layout/content intentionally untouched. */
+  :root {
+    --project-bg: #010305;
+    --project-bg-mid: #020507;
+    --project-bg-deep: #000102;
+    --project-panel: #03070a;
+    --project-title-blue: #49636f;
+    --project-heading-blue: #6a828d;
+    --project-subheading: #bcc5ca;
+    --project-body-grey: #849198;
+    --project-muted-grey: #747d83;
+  }
+
+  html { background: var(--project-bg) !important; }
+
+  body {
+    background:
+      radial-gradient(900px 620px at 90% 0%, rgba(13, 25, 33, 0.038), transparent 76%),
+      radial-gradient(760px 540px at 4% 58%, rgba(7, 15, 21, 0.017), transparent 82%),
+      linear-gradient(180deg, var(--project-bg) 0%, var(--project-bg-mid) 52%, var(--project-bg-deep) 100%) !important;
+  }
+
+  .summary-panel {
+    background:
+      radial-gradient(700px 320px at 8% 0%, rgba(20, 43, 56, 0.08), transparent 72%),
+      linear-gradient(180deg, rgba(3, 7, 10, 0.985), rgba(1, 4, 7, 0.985)) !important;
+  }
+
+  /* Home-page hierarchy: blue titles, grey prose, orange interaction. */
+  h1 {
+    color: var(--project-title-blue) !important;
+  }
+
+  .summary-card h2,
+  .section-heading {
+    color: var(--project-heading-blue) !important;
+  }
+
+  .visual-card h3,
+  .system-row strong,
+  .next-project-title {
+    color: var(--project-subheading) !important;
+  }
+
+  .summary-intro,
+  .summary-card p,
+  .visual-card p,
+  .system-row span,
+  .next-project-label,
+  .all-projects-link,
+  .project-files-link,
+  .home-link,
+  .archive-link,
+  .image-caption,
+  figcaption,
+  .caption,
+  li {
+    color: var(--project-body-grey) !important;
+  }
+
+  .image-label,
+  .meta,
+  .eyebrow,
+  .kicker {
+    color: var(--project-muted-grey) !important;
+  }
+
+  /* Preserve the established orange action language. */
+  .pdf-link,
+  .pdf-link:visited {
+    color: var(--project-orange) !important;
+    border-bottom-color: var(--project-orange-line) !important;
+  }
+
+  .pdf-link:hover,
+  .pdf-link:focus-visible,
+  a:hover,
+  a:focus-visible {
+    text-decoration-color: var(--project-orange) !important;
+  }
+</style>
+
+</head>
+
+<body>
+  <div class="background-context" aria-hidden="true">
+    <div class="ghost-header">
+      <p class="ghost-name">Brooklyn<br>Claeys</p>
+    </div>
+
+
+<div class="ghost-grid">
+  <div class="ghost-block"></div>
+  <div class="ghost-block"></div>
+  <div class="ghost-block"></div>
+</div>
+
+
+  </div>
+
+  <main class="overlay-wrap">
+    <article class="summary-panel" aria-label="Scissor lift workbench project summary">
+      <div class="panel-top">
+        <div class="project-header-copy">
+          <h1>Scissor Lift<br>Workbench</h1>
+        </div>
+
+        
+      </div>
+
+
+  <p class="summary-intro">
+    This was completed as part of an ENME 339 group design project. I modeled the main table structure, support bars, pivot pins, lead screw, nut block, and mate relationships for a lead-screw-driven scissor lift workbench in SolidWorks. The mechanism converts handle rotation into controlled vertical table motion through a threaded nut block and crossed scissor linkage, with the assembly constrained to move through its intended height range without overconstraint or interference. The project also included engineering drawings and a bill of materials for the table mechanism.
+  </p>
+
+  <section class="visual-grid" aria-label="Primary project visuals">
+    <article class="visual-card">
+      <div class="image-frame hero">
+        <img loading="lazy" decoding="async" class="cad-render" src="photos/table.png" alt="SolidWorks assembly render of the scissor lift workbench">
+      </div>
+      <h3>Full Assembly</h3>
+    </article>
+
+    <article class="visual-card">
+      <div class="swap-card" tabindex="0" aria-label="Lowered and raised scissor lift positions">
+        <div class="image-frame hero">
+          <div class="swap-image">
+            <img loading=lazy decoding=async class="default-image cad-render" src="photos/tablemin.png" alt="Lowered SolidWorks render of the scissor lift workbench">
+            <img loading=lazy decoding=async class="hover-image cad-render" src="photos/table_max.png" alt="Raised SolidWorks render of the scissor lift workbench">
+          </div>
+        </div>
+      </div>
+      <h3>Lowered + Raised Positions</h3>
+    </article>
+  </section>
+
+  <section class="summary-grid">
+    <section class="summary-card full">
+      <h2 class="section-heading">Mechanism Breakdown</h2>
+
+      <div class="system-list">
+        <div class="system-row">
+          <strong>Targets</strong>
+          <span>1.5 m by 2.0 m tabletop, approximate 50–140 cm lift range, and 150 kg target payload.</span>
+        </div>
+
+        <div class="system-row">
+          <strong>Structure</strong>
+          <span>Main table frame, tabletop, lower frame, support bars, pivot pins, stop blocks, and scissor lift components.</span>
+        </div>
+
+        <div class="system-row">
+          <strong>Lift</strong>
+          <span>Crossed scissor linkage raises the tabletop as the lower linkage is driven inward.</span>
+        </div>
+
+        <div class="system-row">
+          <strong>Actuation</strong>
+          <span>Manual lead screw and threaded nut block convert handle rotation into horizontal nut-block translation.</span>
+        </div>
+
+        <div class="system-row">
+          <strong>Motion</strong>
+          <span>SolidWorks screw, concentric, coincident, and limit mates control the motion without overconstraining the assembly.</span>
+        </div>
+
+        <div class="system-row">
+          <strong>Clearance</strong>
+          <span>Collapsed-position checks were used because the screw, nut block, rods, frame, and scissor arms are packed closest together.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-card full">
+      <h2>Lead Screw + Nut Block</h2>
+      <p>
+        The mechanism uses a manual lead screw and threaded nut block to convert handle rotation into horizontal translation of the lower linkage. I modeled the screw, nut block, support geometry, and related assembly relationships as part of the group CAD design.
+      </p>
+      <div class="visual-grid tight">
+        <article class="visual-card">
+          <div class="image-frame">
+            <img loading="lazy" decoding="async" class="cad-render" src="photos/tablemin.png" alt="Lowered SolidWorks configuration of the scissor lift workbench">
+          </div>
+          <h3>Collapsed Configuration</h3>
+        </article>
+        <article class="visual-card">
+          <div class="image-frame">
+            <img loading="lazy" decoding="async" class="cad-render" src="photos/table_max.png" alt="Raised SolidWorks configuration of the scissor lift workbench">
+          </div>
+          <h3>Raised Configuration</h3>
+        </article>
+      </div>
+    </section>
+
+    <section class="summary-card full">
+      <h2>SolidWorks Motion / Mates</h2>
+      <p>
+        I used screw, concentric, coincident, and limit mates to define the intended mechanism motion without overconstraining the assembly. Raised and collapsed configurations were checked through the target travel range, with particular attention to the tightly packaged screw, nut block, rods, frame, and scissor arms.
+      </p>
+    </section>
+  </section>
+
+  <section class="summary-card full" aria-label="Project documentation note">
+    <h2>Project Documentation</h2>
+    <p>Engineering drawings and a bill of materials were produced for the ENME 339 group project. The portfolio shows the CAD mechanism itself here rather than publishing the original course drawing sheets, whose default template/title-block fields were not presentation-ready.</p>
+  </section>
+
+      <footer
+        class="project-footer"
+        aria-label="Project navigation"
+      >
+        <a class="all-projects-link" href="../../index.html">
+            <span aria-hidden="true">←</span>
+            <span>Home</span>
+          </a>
+
+        <a class="next-project-link" href="../Bike/bicycle.html">
+          <span class="next-project-label">Next project</span>
+          <span class="next-project-title">3D Bicycle Dynamics Research</span>
+        </a>
+      </footer>
+</article>
+
+  </main>
+</body>
+</html>
